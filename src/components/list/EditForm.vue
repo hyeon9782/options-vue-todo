@@ -28,6 +28,7 @@
 <script lang="ts">
 import StatusMark from '@/components/list/StatusMark.vue'
 export default {
+  name: 'EditForm',
   components: {
     StatusMark
   },

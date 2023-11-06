@@ -24,6 +24,7 @@
 import EditForm from '@/components/list/EditForm.vue'
 import StatusMark from '@/components/list/StatusMark.vue'
 export default {
+  name: 'TodoItem',
   components: {
     EditForm,
     StatusMark
