@@ -9,3 +9,8 @@ export type Todo = {
 export type NewTodo = Omit<Todo, 'id'>
 
 export type UpdateTodo = Todo
+
+export type SearchTodos = {
+  keyword: string
+  category: string
+}

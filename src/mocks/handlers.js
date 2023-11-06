@@ -28,8 +28,30 @@ let idx = 3
 
 export const handlers = [
   // 할일 목록
-  http.get('/todos', () => {
-    return Response.json(todos)
+  http.get('/todos', ({ request }) => {
+    const url = new URL(request.url)
+
+    const keyword = url.searchParams.get('keyword') || ''
+    const category = url.searchParams.get('category') || ''
+
+    console.log(keyword)
+    console.log(category)
+    console.log(typeof keyword)
+
+    let newTodos = [...todos]
+
+    if (keyword !== null && keyword !== 'undefined') {
+      console.log('있어?')
+
+      newTodos = todos.filter((todo) => {
+        console.log(todo[category])
+        return todo[category].includes(keyword)
+      })
+    }
+
+    console.log(newTodos)
+
+    return Response.json(newTodos)
   }),
 
   // 할일 추가

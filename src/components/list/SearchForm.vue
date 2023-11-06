@@ -1,8 +1,8 @@
 <template>
-  <form @submit="searchTodo" class="search-form">
-    <select @change="changeCategory" :value="category" class="search-select">
-      <option v-for="(category, index) in categories" :key="index" :value="category">
-        {{ category }}
+  <form @submit.prevent="searchTodos" class="search-form">
+    <select @change="changeCategory" class="search-select">
+      <option v-for="(category, index) in categories" :key="index" :value="category.value">
+        {{ category.name }}
       </option>
     </select>
     <input
@@ -20,19 +20,46 @@ export default {
   name: 'SearchForm',
   data() {
     return {
-      categories: ['제목', '설명', '상태', '날짜'],
-      keyword: '',
-      category: '제목'
+      categories: [
+        {
+          name: '제목',
+          value: 'title'
+        },
+        {
+          name: '설명',
+          value: 'description'
+        },
+        {
+          name: '날짜',
+          value: 'deadline'
+        },
+        {
+          name: '상태',
+          value: 'status'
+        }
+      ],
+      keyword: ''
     }
   },
   methods: {
     ...mapMutations(['updateState']),
-    searchTodo() {
+    searchTodos() {
       console.log('검색')
+      console.log(this.keyword)
+      console.log(this.selectedCategory)
+
+      // this로 접근해서 값을 바인딩하는 것이 맞는 것인지
+      // event 객체를 받아서 form요소 안에 있는 input이나 select의 값을 가져오는 게 맞는 것인지
+      this.$store.dispatch('getTodos', {
+        keyword: this.keyword,
+        category: this.selectedCategory
+      })
     },
-    changeCategory() {
+    changeCategory(event) {
+      console.log(event.target.value)
+
       this.updateState({
-        selectedCategory: this.category
+        selectedCategory: event.target.value
       })
     }
   },

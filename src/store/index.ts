@@ -1,12 +1,12 @@
 import { createTodoAPI, deleteTodoAPI, getTodosAPI, updateTodoAPI } from '@/api/todos'
-import type { NewTodo, UpdateTodo } from '@/types'
+import type { NewTodo, UpdateTodo, SearchTodos } from '@/types'
 import Vuex from 'vuex'
 
 export const store = new Vuex.Store({
   namespace: true,
   state: () => ({
     todos: [],
-    selectedCategory: '제목'
+    selectedCategory: 'title'
   }),
   mutations: {
     updateState(state, payload) {
@@ -16,9 +16,9 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    async getTodos({ commit }) {
+    async getTodos({ commit }, payload: SearchTodos) {
       try {
-        const todos = await getTodosAPI()
+        const todos = await getTodosAPI(payload)
         commit('updateState', {
           todos
         })

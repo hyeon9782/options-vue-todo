@@ -1,8 +1,8 @@
 import { HTTP_METHOD, COMMON_HEADERS } from '@/constants/api'
-import type { NewTodo, UpdateTodo } from '@/types'
+import type { NewTodo, SearchTodos, UpdateTodo } from '@/types'
 
-async function getTodosAPI() {
-  return await fetch('/todos', {
+async function getTodosAPI({ keyword, category }: SearchTodos) {
+  return await fetch(`/todos?keyword=${keyword}&category=${category}`, {
     method: HTTP_METHOD.GET,
     headers: {
       ...COMMON_HEADERS
