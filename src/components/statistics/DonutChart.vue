@@ -17,9 +17,9 @@ export default {
   methods: {
     drawChart() {
       const width = 500
-      const height = 500
+      const height = 300
       const margin = 0
-      const radius = Math.min(width, height) / 4 - margin
+      const radius = Math.min(width, height) / 3 - margin
 
       const svg = d3
         .select(this.$refs.chart)

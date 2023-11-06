@@ -1,6 +1,6 @@
 <template lang="">
   <main>
-    <LineChart />
+    <LineChart :options="options" :series="series" />
     <DonutChart
       :data="[
         { name: '진행전', value: 10 },
@@ -17,6 +17,24 @@ export default {
   components: {
     LineChart,
     DonutChart
+  },
+  data() {
+    return {
+      options: {
+        chart: {
+          id: 'vuechart-example'
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+      },
+      series: [
+        {
+          name: 'series-1',
+          data: [30, 40, 45, 50, 49, 60, 70, 91]
+        }
+      ]
+    }
   }
 }
 </script>
