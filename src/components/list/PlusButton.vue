@@ -1,8 +1,24 @@
 <template lang="">
-  <button class="plus-button">+</button>
+  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" />
+  <button v-else @click="toggleEdit" class="plus-button">+</button>
 </template>
 <script lang="ts">
-export default {}
+import EditForm from '@/components/list/EditForm.vue'
+export default {
+  components: {
+    EditForm
+  },
+  data() {
+    return {
+      isEdit: false
+    }
+  },
+  methods: {
+    toggleEdit() {
+      this.isEdit = !this.isEdit
+    }
+  }
+}
 </script>
 <style lang="css">
 .plus-button {

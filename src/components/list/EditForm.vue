@@ -18,13 +18,19 @@
     </div>
     <div class="flex-box">
       <button class="edit-button">추가</button>
-      <button class="cancel-button">취소</button>
+      <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
     </div>
   </form>
 </template>
 
 <script lang="ts">
 export default {
+  props: {
+    toggleEdit: {
+      type: Function,
+      required: true
+    }
+  },
   data() {
     return {
       title: '',
