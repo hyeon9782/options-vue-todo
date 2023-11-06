@@ -34,7 +34,6 @@ export default {
 
 <style lang="css">
 .header-container {
-  background: gray;
   padding: 20px 0;
 }
 

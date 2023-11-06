@@ -39,13 +39,15 @@ export default {
 }
 
 .search-select {
-  padding: 5px 10px;
+  width: 20%;
+  padding: 10px 20px;
   border-radius: 15px;
   border: none;
   background: white;
 }
 
 .search-input {
+  width: 80%;
   padding: 5px 10px;
   border-radius: 15px;
   border: none;
