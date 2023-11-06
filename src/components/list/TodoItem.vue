@@ -1,6 +1,6 @@
 <template lang="">
-  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
-  <div v-else class="todo-item" @click="toggleEdit">
+  <EditForm v-show="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
+  <div v-show="!isEdit" class="todo-item" @click="toggleEdit">
     <div class="flex-between">
       <div class="todo-title">
         {{ todo.title }}
@@ -49,6 +49,8 @@ export default {
   background: lightblue;
   padding: 20px;
   border-radius: 15px;
+  height: 120px;
+  box-sizing: border-box;
 }
 
 .flex-between {
@@ -59,15 +61,27 @@ export default {
 .todo-title {
   font-weight: bold;
   font-size: 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
 }
 
 .todo-deadline {
+  width: 20%;
+}
+
+.todo-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
 }
 
 .todo-status {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  width: 70px;
+  width: 20%;
 }
 </style>

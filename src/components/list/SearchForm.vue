@@ -16,6 +16,7 @@
 
 <script lang="ts">
 export default {
+  name: 'SearchForm',
   data() {
     return {
       categories: ['제목', '설명', '상태', '날짜'],

@@ -2,20 +2,34 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
-import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
+import { store } from './store'
 
-const app = createApp(App)
+async function deferRender() {
+  if (process.env.NODE_ENV !== 'development') {
+    return
+  }
 
-app.use(router)
+  const { worker } = await import('./mocks/browser')
 
-app.use(VueApexCharts)
-
-app.use(Vuex)
-
-app.mount('#app')
-
-app.config.errorHandler = (err: any) => {
-  console.log(err)
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start()
 }
+
+deferRender().then(() => {
+  const app = createApp(App)
+
+  app.use(router)
+
+  app.use(VueApexCharts)
+
+  app.use(store)
+
+  app.mount('#app')
+
+  app.config.errorHandler = (err: any) => {
+    console.log(err)
+  }
+})
