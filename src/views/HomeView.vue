@@ -1,9 +1,14 @@
 <template>
-  <main>목록 화면</main>
+  <main>
+    <SearchForm />
+  </main>
 </template>
 
 <script lang="ts">
-export default {}
+import SearchForm from '@/components/list/SearchForm.vue'
+export default {
+  components: { SearchForm }
+}
 </script>
 
 <style lang="css"></style>
