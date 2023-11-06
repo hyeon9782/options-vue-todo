@@ -48,8 +48,9 @@ export const handlers = [
   }),
 
   // 할일 수정
-  http.put('/todos', ({ body }) => {
+  http.put('/todos', async ({ request }) => {
     console.log('msw 수정')
+    const body = await request.json()
     console.log(body)
     todos = todos.map((todo) => {
       return todo.id === body.id ? body : todo
@@ -59,12 +60,12 @@ export const handlers = [
   }),
 
   // 할일 삭제
-  http.delete('/todos', ({ body }) => {
+  http.delete('/todos', ({ params }) => {
     console.log('msw 삭제')
-    console.log(body)
-    todos = todos.filter((todo) => {
-      todo.id !== body.id
-    })
-    return Response.json(body)
+    console.log(params)
+    // todos = todos.filter((todo) => {
+    //   todo.id !== body.id
+    // })
+    return Response.json({})
   })
 ]

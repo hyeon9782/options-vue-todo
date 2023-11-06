@@ -19,7 +19,7 @@
       </select>
     </div>
     <div class="flex-box">
-      <button @click.prevent="addTodo" class="edit-button">추가</button>
+      <button @click.prevent="todo ? updateTodo() : addTodo()" class="edit-button">추가</button>
       <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
     </div>
   </form>
@@ -51,40 +51,48 @@ export default {
     }
   },
   methods: {
-    async addTodo() {
-      console.log('form 추가')
-
-      await fetch('/todos', {
-        method: 'POST',
-        body: JSON.stringify({
+    addTodo() {
+      this.$store
+        .dispatch('createTodo', {
           title: this.title,
           description: this.description,
           deadline: this.deadline,
           status: this.selectedStatus
         })
-      })
-        .then((res) => res.json())
         .then(() => {
-          this.getTodos()
+          this.clearForm()
         })
     },
-    async getTodos() {
-      try {
-        console.log('list')
-        const res = await fetch('/todos').then((res) => res.json())
-        this.todoList = [...res]
-        console.log(res)
-      } catch (error) {
-        console.error(error)
-      }
+    updateTodo() {
+      console.log(this.todo.id)
+
+      this.$store
+        .dispatch('updateTodo', {
+          id: this.todo.id,
+          title: this.title,
+          description: this.description,
+          deadline: this.deadline,
+          status: this.selectedStatus
+        })
+        .then(() => {
+          this.toggleEdit()
+        })
     },
-    updateTodo() {}
+    clearForm() {
+      this.title = ''
+      this.description = ''
+      this.deadline = ''
+      this.selectedStatus = '선택'
+    }
   },
   created() {
     this.title = this.todo.title
     this.description = this.todo.description
     this.deadline = this.todo.deadline
     this.selectedStatus = this.todo.status
+  },
+  unmounted() {
+    this.clearForm()
   }
 }
 </script>

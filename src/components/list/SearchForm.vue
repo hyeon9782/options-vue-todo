@@ -1,6 +1,6 @@
 <template>
   <form @submit="searchTodo" class="search-form">
-    <select v-model="selectedCategory" class="search-select">
+    <select @change="changeCategory" :value="category" class="search-select">
       <option v-for="(category, index) in categories" :key="index" :value="category">
         {{ category }}
       </option>
@@ -15,18 +15,30 @@
 </template>
 
 <script lang="ts">
+import { mapMutations } from 'vuex'
 export default {
   name: 'SearchForm',
   data() {
     return {
       categories: ['제목', '설명', '상태', '날짜'],
       keyword: '',
-      selectedCategory: '제목'
+      category: '제목'
     }
   },
   methods: {
+    ...mapMutations(['updateState']),
     searchTodo() {
       console.log('검색')
+    },
+    changeCategory() {
+      this.updateState({
+        selectedCategory: this.category
+      })
+    }
+  },
+  computed: {
+    selectedCategory() {
+      return this.$store.state.selectedCategory
     }
   }
 }
