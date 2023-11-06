@@ -16,14 +16,14 @@ export default {
           id: 0,
           title: '테스트 Todo 1 제목',
           description: '테스트 Todo 1 설명',
-          deadline: '2023.10.01',
+          deadline: '2023-10-01',
           status: '진행전'
         },
         {
           id: 1,
           title: '테스트 Todo 2 제목',
           description: '테스트 Todo 2 설명',
-          deadline: '2023.10.03',
+          deadline: '2023-10-03',
           status: '완료'
         }
       ]

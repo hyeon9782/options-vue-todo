@@ -3,12 +3,12 @@
     <div class="header-title">TODO List</div>
     <nav class="header-nav">
       <ul class="header-ul">
-        <li class="header-li" :class="{ active: isActive }">
-          <RouterLink to="/">목록</RouterLink>
-        </li>
-        <li class="header-li" :class="{ active: isActive }">
-          <RouterLink to="/statistics">통계</RouterLink>
-        </li>
+        <RouterLink to="/">
+          <li class="header-li" :class="{ active: $route.path === '/' }">목록</li>
+        </RouterLink>
+        <RouterLink to="/statistics">
+          <li class="header-li" :class="{ active: $route.path === '/statistics' }">통계</li>
+        </RouterLink>
       </ul>
     </nav>
   </header>
@@ -19,15 +19,6 @@ import { RouterLink } from 'vue-router'
 export default {
   components: {
     RouterLink
-  },
-  data() {
-    return {
-      isActive: true
-    }
-  },
-  mounted() {
-    this.isActive = this.$route.path === '/'
-    console.log(this.$route.path)
   }
 }
 </script>

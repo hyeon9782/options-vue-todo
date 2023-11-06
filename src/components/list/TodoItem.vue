@@ -1,5 +1,5 @@
 <template lang="">
-  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" />
+  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
   <div v-else class="todo-item" @click="toggleEdit">
     <div class="flex-between">
       <div class="todo-title">
@@ -14,6 +14,7 @@
         {{ todo.description }}
       </div>
       <div class="todo-status">
+        <StatusMark :status="todo.status" />
         {{ todo.status }}
       </div>
     </div>
@@ -21,9 +22,11 @@
 </template>
 <script>
 import EditForm from '@/components/list/EditForm.vue'
+import StatusMark from '@/components/list/StatusMark.vue'
 export default {
   components: {
-    EditForm
+    EditForm,
+    StatusMark
   },
   props: {
     todo: Object
@@ -58,5 +61,12 @@ export default {
 }
 
 .todo-deadline {
+}
+
+.todo-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70px;
 }
 </style>

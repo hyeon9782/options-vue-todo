@@ -12,23 +12,32 @@
       <select v-model="selectedStatus" class="edit-select">
         <option disabled>선택</option>
         <option v-for="(status, index) in statusArray" :value="status" :key="index">
+          <StatusMark :status="status" />
+
           {{ status }}
         </option>
       </select>
     </div>
     <div class="flex-box">
-      <button class="edit-button">추가</button>
+      <button @click.prevent="editTodo" class="edit-button">추가</button>
       <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
     </div>
   </form>
 </template>
 
 <script lang="ts">
+import StatusMark from '@/components/list/StatusMark.vue'
 export default {
+  components: {
+    StatusMark
+  },
   props: {
     toggleEdit: {
       type: Function,
       required: true
+    },
+    todo: {
+      type: Object
     }
   },
   data() {
@@ -39,6 +48,15 @@ export default {
       selectedStatus: '선택',
       statusArray: ['진행전', '진행중', '완료']
     }
+  },
+  methods: {
+    editTodo() {}
+  },
+  created() {
+    this.title = this.todo.title
+    this.description = this.todo.description
+    this.deadline = this.todo.deadline
+    this.selectedStatus = this.todo.status
   }
 }
 </script>
