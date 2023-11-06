@@ -19,7 +19,9 @@
       </select>
     </div>
     <div class="flex-box">
-      <button @click.prevent="todo ? updateTodo() : addTodo()" class="edit-button">추가</button>
+      <button @click.prevent="todo ? updateTodo() : addTodo()" class="edit-button">
+        {{ todo ? '수정' : '추가' }}
+      </button>
       <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
     </div>
   </form>
@@ -86,10 +88,12 @@ export default {
     }
   },
   created() {
-    this.title = this.todo.title
-    this.description = this.todo.description
-    this.deadline = this.todo.deadline
-    this.selectedStatus = this.todo.status
+    if (this.todo) {
+      this.title = this.todo.title
+      this.description = this.todo.description
+      this.deadline = this.todo.deadline
+      this.selectedStatus = this.todo.status
+    }
   },
   unmounted() {
     this.clearForm()

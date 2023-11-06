@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="searchTodos" class="search-form">
-    <select @change="changeCategory" class="search-select">
+    <select @change="changeCategory" :value="selectedCategory" class="search-select">
       <option v-for="(category, index) in categories" :key="index" :value="category.value">
         {{ category.name }}
       </option>

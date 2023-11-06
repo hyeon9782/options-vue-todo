@@ -17,7 +17,7 @@ export default {
     recentWeekDates() {
       const today = new Date()
       const recentWeekDates = []
-
+      // 오늘 날짜 포함하도록
       for (let i = 0; i < 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() - i)
