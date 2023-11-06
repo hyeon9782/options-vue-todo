@@ -24,7 +24,7 @@ let todos = [
   }
 ]
 
-let idx = 2
+let idx = 3
 
 export const handlers = [
   // 할일 목록
@@ -33,10 +33,17 @@ export const handlers = [
   }),
 
   // 할일 추가
-  http.post('/todos', ({ body }) => {
+  http.post('/todos', async ({ request }) => {
     console.log('msw 추가')
+    const body = await request.json()
     console.log(body)
-    todos.push(body)
+    todos.push({
+      id: idx++,
+      ...body
+    })
+
+    console.log(todos)
+
     return Response.json(body)
   }),
 
@@ -45,14 +52,9 @@ export const handlers = [
     console.log('msw 수정')
     console.log(body)
     todos = todos.map((todo) => {
-      if (todo.id === body.id) {
-        return {
-          ...body,
-          id: idx++
-        }
-      }
-      return todo
+      return todo.id === body.id ? body : todo
     })
+
     return Response.json(body)
   }),
 

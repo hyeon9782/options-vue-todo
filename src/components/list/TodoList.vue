@@ -1,6 +1,6 @@
 <template>
   <div class="todo-list">
-    <TodoItem v-for="(todo, index) in todoList" :key="index" :todo="todo" />
+    <TodoItem v-for="(todo, index) in todos" :key="index" :todo="todo" />
   </div>
 </template>
 <script lang="ts">
@@ -10,39 +10,17 @@ export default {
   components: {
     TodoItem
   },
+  created() {
+    this.fetchTodos()
+  },
   methods: {
-    async getTodos() {
-      try {
-        console.log('list')
-        const res = await fetch('/todos').then((res) => res.json())
-        this.todoList = [...res]
-        console.log(res)
-      } catch (error) {
-        console.error(error)
-      }
+    fetchTodos() {
+      this.$store.dispatch('getTodos', {})
     }
   },
-  created() {
-    this.getTodos()
-  },
-  data() {
-    return {
-      todoList: [
-        // {
-        //   id: 0,
-        //   title: '테스트 Todo 1 제목',
-        //   description: '테스트 Todo 1 설명',
-        //   deadline: '2023-10-01',
-        //   status: '진행전'
-        // },
-        // {
-        //   id: 1,
-        //   title: '테스트 Todo 2 제목',
-        //   description: '테스트 Todo 2 설명',
-        //   deadline: '2023-10-03',
-        //   status: '완료'
-        // }
-      ]
+  computed: {
+    todos() {
+      return this.$store.state.todos
     }
   }
 }

@@ -19,7 +19,7 @@
       </select>
     </div>
     <div class="flex-box">
-      <button @click.prevent="editTodo" class="edit-button">추가</button>
+      <button @click.prevent="addTodo" class="edit-button">추가</button>
       <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
     </div>
   </form>
@@ -51,7 +51,34 @@ export default {
     }
   },
   methods: {
-    editTodo() {}
+    async addTodo() {
+      console.log('form 추가')
+
+      await fetch('/todos', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: this.title,
+          description: this.description,
+          deadline: this.deadline,
+          status: this.selectedStatus
+        })
+      })
+        .then((res) => res.json())
+        .then(() => {
+          this.getTodos()
+        })
+    },
+    async getTodos() {
+      try {
+        console.log('list')
+        const res = await fetch('/todos').then((res) => res.json())
+        this.todoList = [...res]
+        console.log(res)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    updateTodo() {}
   },
   created() {
     this.title = this.todo.title
