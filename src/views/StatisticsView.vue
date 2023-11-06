@@ -1,37 +1,75 @@
 <template lang="">
   <main>
     <LineChart :options="options" :series="series" />
-    <DonutChart
-      :data="[
-        { name: '진행전', value: 10 },
-        { name: '진행중', value: 20 },
-        { name: '완료', value: 30 }
-      ]"
-    />
+    <DonutChart :data="donutData" />
   </main>
 </template>
 <script lang="ts">
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
+
 export default {
   components: {
     LineChart,
     DonutChart
   },
-  data() {
-    return {
-      options: {
+  computed: {
+    recentWeekDates() {
+      const today = new Date()
+      const recentWeekDates = []
+
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() - i)
+        recentWeekDates.push(date.toISOString().split('T')[0])
+      }
+
+      console.log(recentWeekDates)
+
+      return recentWeekDates
+    },
+    options() {
+      return {
         chart: {
           id: 'vuechart-example'
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          categories: this.recentWeekDates
         }
-      },
-      series: [
+      }
+    },
+    series() {
+      const countList = []
+      this.recentWeekDates.forEach((date) => {
+        const todosCount = this.$store.state.todos.filter((todo) => todo.deadline === date).length
+        countList.push(todosCount)
+      })
+      return [
         {
           name: 'series-1',
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
+          data: countList
+        }
+      ]
+    },
+    donutData() {
+      const pendingCount = this.$store.state.todos.filter((todo) => todo.status === '진행전').length
+      const progressCount = this.$store.state.todos.filter(
+        (todo) => todo.status === '진행중'
+      ).length
+      const completeCount = this.$store.state.todos.filter((todo) => todo.status === '완료').length
+
+      return [
+        {
+          name: '진행전',
+          value: pendingCount
+        },
+        {
+          name: '진행중',
+          value: progressCount
+        },
+        {
+          name: '완료',
+          value: completeCount
         }
       ]
     }

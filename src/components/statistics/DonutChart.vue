@@ -54,6 +54,7 @@ export default {
       const legendCircleSize = 20
       const legendSpacing = 10
 
+      // legend 색상이 도넛 차트 색상과 불일치
       const legend = svg
         .selectAll('.legend')
         .data(data_ready)
