@@ -32,10 +32,10 @@ export default defineComponent({
 
       const color = d3
         .scaleOrdinal()
-        .domain(this.data.map((d) => d.name))
+        .domain(this.data.map((d: any) => d.name))
         .range(d3.schemeDark2)
 
-      const pie = d3.pie().value((d) => d.value)
+      const pie = d3.pie().value((d: any) => d.value)
 
       const data_ready = pie(this.data)
 
@@ -47,7 +47,7 @@ export default defineComponent({
         .enter()
         .append('path')
         .attr('d', arcGenerator)
-        .attr('fill', (d) => color(d.data.name))
+        .attr('fill', (d: any) => color(d.data.name))
         .attr('stroke', 'white')
         .style('stroke-width', '2px')
         .style('opacity', 0.7)
@@ -62,7 +62,7 @@ export default defineComponent({
         .enter()
         .append('g')
         .attr('class', 'legend')
-        .attr('transform', function (d, i) {
+        .attr('transform', function (d: any, i: any) {
           const height = legendCircleSize + legendSpacing
           const offset = (height * color.domain().length) / 2
           const horz = 9 * legendCircleSize
@@ -80,7 +80,7 @@ export default defineComponent({
         .append('text')
         .attr('x', legendCircleSize + legendSpacing)
         .attr('y', 0 + legendSpacing / 2)
-        .text(function (d) {
+        .text(function (d: any) {
           return `${d.data.name} ${d.data.value}개`
         })
     }

@@ -16,12 +16,12 @@ export default defineComponent({
   },
   methods: {
     fetchTodos() {
-      this.$store.dispatch('getTodos', {})
+      ;(this as any).$store.dispatch('getTodos', {})
     }
   },
   computed: {
     todos() {
-      return this.$store.state.todos
+      return (this as any).$store.state.todos
     }
   }
 })

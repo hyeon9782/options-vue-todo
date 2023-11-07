@@ -1,6 +1,7 @@
-import { http } from 'msw'
+import type { Todo } from '@/types'
+import { HttpHandler, http } from 'msw'
 
-let todos = [
+let todos: Todo[] = [
   {
     id: 0,
     title: 'Vue 3 공부',
@@ -26,26 +27,25 @@ let todos = [
 
 let idx = 3
 
-export const handlers = [
+export const handlers: HttpHandler[] = [
   // 할일 목록
   http.get('/todos', ({ request }) => {
     const url = new URL(request.url)
 
-    const keyword = url.searchParams.get('keyword') || ''
-    const category = url.searchParams.get('category') || ''
+    const keyword: string = url.searchParams.get('keyword') || ''
+    const category: string = url.searchParams.get('category') || ''
 
     console.log(keyword)
     console.log(category)
     console.log(typeof keyword)
 
-    let newTodos = [...todos]
+    let newTodos: Todo[] = [...todos]
 
     if (keyword !== null && keyword !== 'undefined') {
       console.log('있어?')
 
       newTodos = todos.filter((todo) => {
-        console.log(todo[category])
-        return todo[category].includes(keyword)
+        return String(todo[category]).includes(keyword)
       })
     }
 
@@ -55,7 +55,7 @@ export const handlers = [
   }),
 
   // 할일 추가
-  http.post('/todos', async ({ request }) => {
+  http.post('/todos', async ({ request }: { request: Request }) => {
     console.log('msw 추가')
     const body = await request.json()
     console.log(body)
@@ -70,7 +70,7 @@ export const handlers = [
   }),
 
   // 할일 수정
-  http.put('/todos', async ({ request }) => {
+  http.put('/todos', async ({ request }: { request: Request }) => {
     console.log('msw 수정')
     const body = await request.json()
     console.log(body)

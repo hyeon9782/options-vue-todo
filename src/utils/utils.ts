@@ -1,12 +1,13 @@
-export function debounce(fn: Function, wait: number) {
-  let timer: any
-  return function (...args: any) {
+type TimerId = ReturnType<typeof setTimeout>
+export function debounce(fn: (...args: any[]) => void, wait: number) {
+  let timer: TimerId
+  return function (this: any, ...args: any[]) {
     if (timer) {
-      clearTimeout(timer) // clear any pre-existing timer
+      clearTimeout(timer)
     }
-    const context = this // get the current context
+    const context = this
     timer = setTimeout(() => {
-      fn.apply(context, args) // call the function if time expires
-    }, wait)
+      fn.apply(context, args)
+    }, wait) as TimerId
   }
 }

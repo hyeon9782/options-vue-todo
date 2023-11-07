@@ -4,6 +4,7 @@ export type Todo = {
   description: string
   deadline: string
   status: string
+  [key: string]: string | number
 }
 
 export type NewTodo = Omit<Todo, 'id'>

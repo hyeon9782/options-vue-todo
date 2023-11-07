@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { debounce } from '@/utils/utils.ts'
+import { debounce } from '@/utils/utils'
 import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.searchDebounce = debounce((event) => {
+    this.searchDebounce = debounce(() => {
       this.searchTodos()
     }, 1000)
   },
@@ -65,10 +65,10 @@ export default defineComponent({
       })
     },
     changeCategory(event: Event) {
-      console.log(event.target.value)
+      console.log((event.target as HTMLInputElement).value)
 
       this.updateState({
-        selectedCategory: event.target.value
+        selectedCategory: (event.target as HTMLInputElement).value
       })
     }
   },

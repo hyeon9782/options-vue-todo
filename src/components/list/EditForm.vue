@@ -19,7 +19,7 @@
       </select>
     </div>
     <div class="flex-box">
-      <button @click.prevent="todo ? updateTodo() : addTodo()" class="edit-button">
+      <button @click.prevent="todo ? updateTodo($event) : addTodo()" class="edit-button">
         {{ todo ? '수정' : '추가' }}
       </button>
       <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
@@ -30,6 +30,7 @@
 <script lang="ts">
 import StatusMark from '@/components/list/StatusMark.vue'
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'EditForm',
@@ -38,7 +39,7 @@ export default defineComponent({
   },
   props: {
     toggleEdit: {
-      type: Function,
+      type: Function as PropType<(event: MouseEvent) => void>,
       required: true
     },
     todo: {
@@ -56,7 +57,8 @@ export default defineComponent({
   },
   methods: {
     addTodo() {
-      this.$store
+      // 임시방편인데 더 좋은 방식은 없을까?
+      ;(this as any).$store
         .dispatch('createTodo', {
           title: this.title,
           description: this.description,
@@ -67,8 +69,8 @@ export default defineComponent({
           this.clearForm()
         })
     },
-    updateTodo() {
-      this.$store
+    updateTodo(e: MouseEvent) {
+      ;(this as any).$store
         .dispatch('updateTodo', {
           id: this.todo?.id,
           title: this.title,
@@ -77,7 +79,7 @@ export default defineComponent({
           status: this.selectedStatus
         })
         .then(() => {
-          this.toggleEdit()
+          this.toggleEdit(e)
         })
     },
     clearForm() {

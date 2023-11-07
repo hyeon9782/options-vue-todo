@@ -7,6 +7,7 @@
 <script lang="ts">
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
+import type { Todo } from '@/types'
 
 export default {
   components: {
@@ -39,9 +40,11 @@ export default {
       }
     },
     series() {
-      const countList = []
+      const countList: number[] = []
       this.recentWeekDates.forEach((date) => {
-        const todosCount = this.$store.state.todos.filter((todo) => todo.deadline === date).length
+        const todosCount = (this as any).$store.state.todos.filter(
+          (todo: Todo) => todo.deadline === date
+        ).length
         countList.push(todosCount)
       })
       return [
@@ -52,11 +55,15 @@ export default {
       ]
     },
     donutData() {
-      const pendingCount = this.$store.state.todos.filter((todo) => todo.status === '진행전').length
-      const progressCount = this.$store.state.todos.filter(
-        (todo) => todo.status === '진행중'
+      const pendingCount = (this as any).$store.state.todos.filter(
+        (todo: Todo) => todo.status === '진행전'
       ).length
-      const completeCount = this.$store.state.todos.filter((todo) => todo.status === '완료').length
+      const progressCount = (this as any).$store.state.todos.filter(
+        (todo: Todo) => todo.status === '진행중'
+      ).length
+      const completeCount = (this as any).$store.state.todos.filter(
+        (todo: Todo) => todo.status === '완료'
+      ).length
 
       return [
         {

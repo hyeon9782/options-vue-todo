@@ -39,7 +39,7 @@ export default defineComponent({
     }
   },
   methods: {
-    toggleEdit() {
+    toggleEdit(event: MouseEvent) {
       this.isEdit = !this.isEdit
     }
   }
