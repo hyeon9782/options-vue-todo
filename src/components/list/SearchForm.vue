@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="searchTodos" class="search-form">
+  <form @submit.prevent="searchDebounce" class="search-form">
     <select @change="changeCategory" :value="selectedCategory" class="search-select">
       <option v-for="(category, index) in categories" :key="index" :value="category.value">
         {{ category.name }}
@@ -7,6 +7,7 @@
     </select>
     <input
       v-model="keyword"
+      @input="searchDebounce"
       placeholder="검색어를 입력해주세요."
       type="text"
       class="search-input"
@@ -15,6 +16,7 @@
 </template>
 
 <script lang="ts">
+import { debounce } from '@/utils/utils.ts'
 import { mapMutations } from 'vuex'
 export default {
   name: 'SearchForm',
@@ -41,8 +43,14 @@ export default {
       keyword: ''
     }
   },
+  created() {
+    this.searchDebounce = debounce((event) => {
+      this.searchTodos()
+    }, 1000)
+  },
   methods: {
     ...mapMutations(['updateState']),
+    // 이벤트 헨들러를 디바운스하는 것이 맞는지, watch와 함께 디바운스하는 것이 맞는지
     searchTodos() {
       console.log('검색')
       console.log(this.keyword)
