@@ -29,7 +29,9 @@
 
 <script lang="ts">
 import StatusMark from '@/components/list/StatusMark.vue'
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'EditForm',
   components: {
     StatusMark
@@ -66,11 +68,9 @@ export default {
         })
     },
     updateTodo() {
-      console.log(this.todo.id)
-
       this.$store
         .dispatch('updateTodo', {
-          id: this.todo.id,
+          id: this.todo?.id,
           title: this.title,
           description: this.description,
           deadline: this.deadline,
@@ -98,7 +98,7 @@ export default {
   unmounted() {
     this.clearForm()
   }
-}
+})
 </script>
 
 <style lang="css">

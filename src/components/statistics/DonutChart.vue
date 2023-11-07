@@ -2,8 +2,9 @@
   <div ref="chart"></div>
 </template>
 <script lang="ts">
+import { defineComponent } from 'vue'
 import * as d3 from 'd3'
-export default {
+export default defineComponent({
   name: 'DonutChart',
   props: {
     data: {
@@ -84,5 +85,5 @@ export default {
         })
     }
   }
-}
+})
 </script>

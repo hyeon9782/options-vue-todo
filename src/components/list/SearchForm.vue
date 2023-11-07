@@ -18,7 +18,8 @@
 <script lang="ts">
 import { debounce } from '@/utils/utils.ts'
 import { mapMutations } from 'vuex'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'SearchForm',
   data() {
     return {
@@ -63,7 +64,7 @@ export default {
         category: this.selectedCategory
       })
     },
-    changeCategory(event) {
+    changeCategory(event: Event) {
       console.log(event.target.value)
 
       this.updateState({
@@ -76,7 +77,7 @@ export default {
       return this.$store.state.selectedCategory
     }
   }
-}
+})
 </script>
 
 <style lang="css">

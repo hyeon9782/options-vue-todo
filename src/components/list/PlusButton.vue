@@ -4,7 +4,8 @@
 </template>
 <script lang="ts">
 import EditForm from '@/components/list/EditForm.vue'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlusButton',
   components: {
     EditForm
@@ -19,7 +20,7 @@ export default {
       this.isEdit = !this.isEdit
     }
   }
-}
+})
 </script>
 <style lang="css">
 .plus-button {

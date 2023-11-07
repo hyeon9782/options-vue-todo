@@ -10,14 +10,15 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'StatusMark',
   props: {
     status: {
       type: String
     }
   }
-}
+})
 </script>
 <style lang="css">
 .status-mark {

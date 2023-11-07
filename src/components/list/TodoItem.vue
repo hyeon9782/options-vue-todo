@@ -20,10 +20,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import EditForm from '@/components/list/EditForm.vue'
 import StatusMark from '@/components/list/StatusMark.vue'
-export default {
+export default defineComponent({
   name: 'TodoItem',
   components: {
     EditForm,
@@ -42,7 +43,7 @@ export default {
       this.isEdit = !this.isEdit
     }
   }
-}
+})
 </script>
 <style lang="css">
 .todo-item {

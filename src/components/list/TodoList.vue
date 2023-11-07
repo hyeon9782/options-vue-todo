@@ -4,8 +4,9 @@
   </div>
 </template>
 <script lang="ts">
+import { defineComponent } from 'vue'
 import TodoItem from '@/components/list/TodoItem.vue'
-export default {
+export default defineComponent({
   name: 'TodoList',
   components: {
     TodoItem
@@ -23,7 +24,7 @@ export default {
       return this.$store.state.todos
     }
   }
-}
+})
 </script>
 <style lang="css">
 .todo-list {

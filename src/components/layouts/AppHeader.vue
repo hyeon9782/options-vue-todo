@@ -15,13 +15,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
-export default {
+export default defineComponent({
   name: 'AppHeader',
   components: {
     RouterLink
   }
-}
+})
 </script>
 
 <style lang="css">

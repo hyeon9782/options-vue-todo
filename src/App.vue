@@ -1,21 +1,21 @@
 <script lang="ts">
 import { RouterView } from 'vue-router'
 import AppHeader from '@/components/layouts/AppHeader.vue'
-import Wrapper from '@/components/layouts/Wrapper.vue'
+import AppWrapper from '@/components/layouts/AppWrapper.vue'
 export default {
   components: {
     RouterView,
     AppHeader,
-    Wrapper
+    AppWrapper
   }
 }
 </script>
 
 <template>
-  <Wrapper>
+  <AppWrapper>
     <AppHeader />
     <RouterView />
-  </Wrapper>
+  </AppWrapper>
 </template>
 
 <style scoped></style>
