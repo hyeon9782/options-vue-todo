@@ -17,7 +17,9 @@ export default defineComponent({
   },
   methods: {
     drawChart() {
-      const width = 500
+      console.log(window.innerWidth)
+
+      const width = window.innerWidth - 25
       const height = 300
       const margin = 0
       const radius = Math.min(width, height) / 3 - margin
@@ -65,7 +67,7 @@ export default defineComponent({
         .attr('transform', function (d: any, i: any) {
           const height = legendCircleSize + legendSpacing
           const offset = (height * color.domain().length) / 2
-          const horz = 9 * legendCircleSize
+          const horz = 7 * legendCircleSize
           const vert = i * height - offset
           return 'translate(' + horz + ',' + vert + ')'
         })

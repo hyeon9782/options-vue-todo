@@ -1,5 +1,5 @@
 <template lang="">
-  <main>
+  <main class="statistics-container">
     <LineChart :options="options" :series="series" />
     <DonutChart :data="donutData" />
   </main>
@@ -83,3 +83,9 @@ export default {
   }
 }
 </script>
+
+<style lang="css">
+.statistics-container {
+  width: 100%;
+}
+</style>

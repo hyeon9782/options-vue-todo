@@ -6,21 +6,21 @@ let todos: Todo[] = [
     id: 0,
     title: 'Vue 3 공부',
     description: 'Vue 2와 Vue 3의 차이점을 생각하며 공부해보자.',
-    deadline: '2023-10-01',
+    deadline: '2023-11-01',
     status: '진행전'
   },
   {
     id: 1,
     title: 'Vuex 공부',
     description: '효울적인 상태관리를 위해 전역 상태 관리 라이브러리를 공부해보자',
-    deadline: '2023-10-12',
+    deadline: '2023-11-03',
     status: '진행중'
   },
   {
     id: 2,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-10-17',
+    deadline: '2023-11-8',
     status: '완료'
   }
 ]

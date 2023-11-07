@@ -88,7 +88,7 @@ export default defineComponent({
 }
 
 .search-select {
-  width: 20%;
+  width: 25%;
   padding: 10px 20px;
   border-radius: 15px;
   border: none;
@@ -96,7 +96,7 @@ export default defineComponent({
 }
 
 .search-input {
-  width: 80%;
+  width: 75%;
   padding: 5px 10px;
   border-radius: 15px;
   border: none;

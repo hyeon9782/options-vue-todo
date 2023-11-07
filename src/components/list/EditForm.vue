@@ -1,15 +1,22 @@
 <template>
-  <form class="edit-form">
-    <input type="text" v-model="title" class="edit-input" placeholder="제목을 입력해주세요." />
+  <form class="edit-form" @submit.prevent="todo ? updateTodo($event) : addTodo()">
+    <input
+      type="text"
+      v-model="title"
+      class="edit-input"
+      placeholder="제목을 입력해주세요."
+      required
+    />
     <input
       type="text"
       v-model="description"
       class="edit-input"
       placeholder="설명을 입력해주세요."
+      required
     />
     <div class="flex-box">
-      <input type="date" v-model="deadline" class="edit-date" />
-      <select v-model="selectedStatus" class="edit-select">
+      <input type="date" v-model="deadline" class="edit-date" required />
+      <select v-model="selectedStatus" class="edit-select" required>
         <option disabled>선택</option>
         <option v-for="(status, index) in statusArray" :value="status" :key="index">
           <StatusMark :status="status" />
@@ -19,10 +26,10 @@
       </select>
     </div>
     <div class="flex-box">
-      <button @click.prevent="todo ? updateTodo($event) : addTodo()" class="edit-button">
+      <button @submit.prevent="todo ? updateTodo($event) : addTodo()" class="edit-button">
         {{ todo ? '수정' : '추가' }}
       </button>
-      <button @click.prevent="toggleEdit" class="cancel-button">취소</button>
+      <button @click.prevent="cancelEdit" class="cancel-button">취소</button>
     </div>
   </form>
 </template>
@@ -39,7 +46,7 @@ export default defineComponent({
   },
   props: {
     toggleEdit: {
-      type: Function as PropType<(event: MouseEvent) => void>,
+      type: Function as PropType<(event: Event) => void>,
       required: true
     },
     todo: {
@@ -69,7 +76,7 @@ export default defineComponent({
           this.clearForm()
         })
     },
-    updateTodo(e: MouseEvent) {
+    updateTodo(e: Event) {
       ;(this as any).$store
         .dispatch('updateTodo', {
           id: this.todo?.id,
@@ -82,6 +89,10 @@ export default defineComponent({
           this.toggleEdit(e)
         })
     },
+    cancelEdit(e: Event) {
+      this.toggleEdit(e)
+      this.clearForm()
+    },
     clearForm() {
       this.title = ''
       this.description = ''
@@ -90,15 +101,15 @@ export default defineComponent({
     }
   },
   created() {
+    console.log('todo 있니?')
+
     if (this.todo) {
+      console.log('todo 있다!')
       this.title = this.todo.title
       this.description = this.todo.description
       this.deadline = this.todo.deadline
       this.selectedStatus = this.todo.status
     }
-  },
-  unmounted() {
-    this.clearForm()
   }
 })
 </script>
@@ -116,6 +127,10 @@ export default defineComponent({
 .edit-input {
   padding: 5px 10px;
   width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  border-bottom: 2px solid black;
 }
 
 .flex-box {
@@ -124,11 +139,18 @@ export default defineComponent({
 }
 
 .edit-date {
-  width: 80%;
+  width: 75%;
+  border: none;
+  background-color: lightgreen;
+  text-align: center;
 }
 
 .edit-select {
-  width: 20%;
+  width: 25%;
+  border-radius: 15px;
+  border: none;
+  background: lightgreen;
+  padding: 10px;
 }
 
 .edit-button {
@@ -136,7 +158,7 @@ export default defineComponent({
   border-radius: 15px;
   border: none;
   padding: 5px 0;
-  width: 80%;
+  width: 75%;
 }
 
 .cancel-button {
@@ -144,6 +166,6 @@ export default defineComponent({
   border-radius: 15px;
   border: none;
   padding: 5px 0;
-  width: 20%;
+  width: 25%;
 }
 </style>

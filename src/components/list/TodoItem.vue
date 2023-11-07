@@ -1,6 +1,6 @@
 <template lang="">
-  <EditForm v-show="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
-  <div v-show="!isEdit" class="todo-item" @click="toggleEdit">
+  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
+  <div v-else class="todo-item" @click="toggleEdit">
     <div class="flex-between">
       <div class="todo-title">
         {{ todo.title }}
@@ -39,7 +39,7 @@ export default defineComponent({
     }
   },
   methods: {
-    toggleEdit(event: MouseEvent) {
+    toggleEdit(event: Event) {
       this.isEdit = !this.isEdit
     }
   }
