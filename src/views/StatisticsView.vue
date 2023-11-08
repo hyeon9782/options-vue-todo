@@ -8,6 +8,7 @@
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
 import type { Todo } from '@/types'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -16,15 +17,13 @@ export default {
   },
   computed: {
     recentWeekDates() {
-      const today = new Date()
+      const today = dayjs()
       const recentWeekDates = []
-      // 오늘 날짜 포함하도록
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(today)
-        date.setDate(today.getDate() - i)
-        console.log(date.toISOString())
 
-        recentWeekDates.push(date.toISOString().split('T')[0])
+      for (let i = 0; i < 7; i++) {
+        const date = today.subtract(i, 'day')
+
+        recentWeekDates.push(date.format('MM-DD'))
       }
 
       console.log(recentWeekDates)
@@ -44,9 +43,9 @@ export default {
     series() {
       const countList: number[] = []
       this.recentWeekDates.forEach((date) => {
-        const todosCount = (this as any).$store.state.todos.filter(
-          (todo: Todo) => todo.deadline === date
-        ).length
+        const todosCount = (this as any).$store.state.todos.filter((todo: Todo) => {
+          return todo.deadline.substring(5) === date
+        }).length
         countList.push(todosCount)
       })
       return [

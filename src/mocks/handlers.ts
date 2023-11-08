@@ -20,7 +20,7 @@ let todos: Todo[] = [
     id: 2,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-8',
+    deadline: '2023-11-08',
     status: '완료'
   }
 ]

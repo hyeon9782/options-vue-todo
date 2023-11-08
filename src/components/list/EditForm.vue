@@ -64,6 +64,8 @@ export default defineComponent({
   },
   methods: {
     addTodo() {
+      console.log(this.deadline)
+
       // 임시방편인데 더 좋은 방식은 없을까?
       ;(this as any).$store
         .dispatch('createTodo', {
