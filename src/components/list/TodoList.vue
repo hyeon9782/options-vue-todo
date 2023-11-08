@@ -12,6 +12,7 @@ export default defineComponent({
     TodoItem
   },
   created() {
+    // 할 일 목록 조회하기
     this.fetchTodos()
   },
   methods: {

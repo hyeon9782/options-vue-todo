@@ -27,6 +27,7 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    // 할 일 목록 가져오기
     async getTodos({ commit }: { commit: Commit }, payload: SearchTodos) {
       try {
         const todos = await getTodosAPI(payload)
@@ -37,6 +38,7 @@ export const store = new Vuex.Store({
         console.error(error)
       }
     },
+    // 할 일 생성하기
     async createTodo({ commit, state }: { commit: Commit; state: State }, todo: NewTodo) {
       try {
         const createdTodo = await createTodoAPI(todo)
@@ -49,6 +51,7 @@ export const store = new Vuex.Store({
         console.error(error)
       }
     },
+    // 할 일 수정하기
     async updateTodo({ commit, state }: { commit: Commit; state: State }, todo: UpdateTodo) {
       try {
         const updatedTodo = await updateTodoAPI(todo)
@@ -62,6 +65,7 @@ export const store = new Vuex.Store({
         console.error(error)
       }
     },
+    // 할 일 삭제하기
     deleteTodo({ commit }: { commit: Commit }, id: number) {
       try {
         const res = deleteTodoAPI(id)

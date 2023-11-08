@@ -19,13 +19,15 @@
       <select v-model="selectedStatus" class="edit-select" required>
         <option disabled>선택</option>
         <option v-for="(status, index) in statusArray" :value="status" :key="index">
-          <StatusMark :status="status" />
-
+          <div v-if="status === '진행전'">🔴</div>
+          <div v-else-if="status === '진행중'">🟢</div>
+          <div v-else>🔵</div>
           {{ status }}
         </option>
       </select>
     </div>
     <div class="flex-box">
+      <!-- 할 일 수정 또는 추가 -->
       <button @submit.prevent="todo ? updateTodo($event) : addTodo()" class="edit-button">
         {{ todo ? '수정' : '추가' }}
       </button>
@@ -35,15 +37,11 @@
 </template>
 
 <script lang="ts">
-import StatusMark from '@/components/list/StatusMark.vue'
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'EditForm',
-  components: {
-    StatusMark
-  },
   props: {
     toggleEdit: {
       type: Function as PropType<(event: Event) => void>,
@@ -169,5 +167,23 @@ export default defineComponent({
   border: none;
   padding: 5px 0;
   width: 25%;
+}
+
+.status-mark {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.pending {
+  background-color: red;
+}
+
+.progress {
+  background-color: blue;
+}
+
+.completed {
+  background-color: greenyellow;
 }
 </style>
