@@ -22,6 +22,8 @@ export default {
       for (let i = 0; i < 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() - i)
+        console.log(date.toISOString())
+
         recentWeekDates.push(date.toISOString().split('T')[0])
       }
 

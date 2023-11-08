@@ -17,10 +17,9 @@ export default defineComponent({
   },
   methods: {
     drawChart() {
-      console.log(window.innerWidth)
+      const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
 
-      const width = window.innerWidth - 25
-      const height = 300
+      const height = 250
       const margin = 0
       const radius = Math.min(width, height) / 3 - margin
 
