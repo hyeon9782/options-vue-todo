@@ -1,58 +1,69 @@
 <template>
   <header class="header-container">
-    <div class="header-title">TODO List</div>
-    <nav class="header-nav">
-      <ul class="header-ul">
-        <RouterLink to="/">
-          <li class="header-li" :class="{ active: $route.path === '/' }">목록</li>
-        </RouterLink>
-        <RouterLink to="/statistics">
-          <li class="header-li" :class="{ active: $route.path === '/statistics' }">통계</li>
-        </RouterLink>
-      </ul>
-    </nav>
+    <font-awesome-icon :icon="['fas', 'bars']" class="header-menu" />
+    <select :value="selectedMonth" class="header-month-select">
+      <option v-for="(month, index) in months" :key="index" :value="month">{{ month }}</option>
+    </select>
+    <div class="search-box" @click="toggleSearch">
+      <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+      <input v-if="showSearch" type="text" class="search-input" placeholder="Type to search" />
+    </div>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { RouterLink } from 'vue-router'
 export default defineComponent({
   name: 'AppHeader',
-  components: {
-    RouterLink
+  data() {
+    return {
+      months: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ],
+      showSearch: false,
+      selectedMonth: 'November'
+    }
+  },
+  methods: {
+    toggleSearch() {
+      this.showSearch = !this.showSearch
+    }
   }
 })
 </script>
 
 <style lang="css">
 .header-container {
-  padding: 20px 0;
-}
-
-.header-title {
-  text-align: center;
-  font-weight: bold;
-  font-size: xx-large;
-}
-
-.header-nav {
   padding: 10px 0;
-}
-
-.header-ul {
+  font-size: 1.5rem;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.header-li {
-  padding: 5px 10px;
-  border-radius: 5px;
-  background: blue;
+.header-menu {
+  color: lightblue;
 }
 
-.active {
-  background: red;
+.header-month-select {
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.search-input {
 }
 </style>

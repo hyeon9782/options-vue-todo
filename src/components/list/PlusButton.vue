@@ -1,36 +1,35 @@
 <template lang="">
-  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" />
-  <button v-else @click="toggleEdit" class="plus-button">+</button>
+  <router-link to="/edit" class="plus-button">
+    <font-awesome-icon :icon="['fas', 'plus']" />
+  </router-link>
 </template>
 <script lang="ts">
-import EditForm from '@/components/list/EditForm.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlusButton',
-  components: {
-    EditForm
-  },
   data() {
     return {
       isEdit: false
     }
   },
-  methods: {
-    toggleEdit(event: Event) {
-      this.isEdit = !this.isEdit
-    }
-  }
+  methods: {}
 })
 </script>
 <style lang="css">
 .plus-button {
-  background-color: lightblue;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: blue;
+  color: white;
   border: none;
-  border-radius: 10px;
-  width: 100%;
+  border-radius: 50%;
+  width: 50px;
   height: 50px;
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

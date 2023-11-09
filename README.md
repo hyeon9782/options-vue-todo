@@ -6,7 +6,6 @@
 - TypeScript를 사용해 타입 안정성을 강화했어요!
 - 검색 기능을 구현할 때 debouce를 사용해 API 호출을 절약했어요!
 - DonutChart에서 UI 로직과 데이터 전처리 로직을 분리해 가독성을 높였어요!
-- 간단한 Test Code를 작성했어요!
 
 ## Stack
 
