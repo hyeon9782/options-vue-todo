@@ -29,7 +29,7 @@ export default defineComponent({
     }
   },
   created() {
-    // todos 데이터 조회
+    // todos 데이터 조회 (새로 고침시 데이터를 가져오기 위해)
     this.fetchTodos()
   },
   computed: {

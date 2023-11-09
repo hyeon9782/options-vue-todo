@@ -7,15 +7,13 @@ import router from './router'
 import { store } from './store'
 
 async function deferRender() {
-  // if (process.env.NODE_ENV !== 'development') {
-  //   return
-  // }
-
-  const { worker } = await import('@/mocks/browser')
-
-  // `worker.start()` returns a Promise that resolves
-  // once the Service Worker is up and ready to intercept requests.
-  return worker.start()
+  if (typeof window === 'undefined') {
+    const { server } = await import('@/mocks/server')
+    server.listen()
+  } else {
+    const { worker } = await import('@/mocks/browser')
+    worker.start()
+  }
 }
 
 deferRender().then(() => {

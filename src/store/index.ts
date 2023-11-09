@@ -13,6 +13,7 @@ type Payload = {
   [key: string]: any
 }
 
+// 규모가 작은 애플리케이션이기 때문에 굳이 모듈화는 하지 않았습니다.
 export const store = new Vuex.Store({
   namespace: true,
   state: (): State => ({
@@ -43,7 +44,6 @@ export const store = new Vuex.Store({
       try {
         const createdTodo = await createTodoAPI(todo)
         console.log(createdTodo)
-        // 생성하고 getTodos를 한 번 더 호출하는 것과 updateState로 클라이언트의 값만 바꾸는 것 둘 중 뭐가 맞니?
         commit('updateState', {
           todos: [...state.todos, createdTodo]
         })

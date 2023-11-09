@@ -3,14 +3,14 @@
     <input
       type="text"
       v-model="title"
-      class="edit-input"
+      class="edit-input title-input"
       placeholder="제목을 입력해주세요."
       required
     />
     <input
       type="text"
       v-model="description"
-      class="edit-input"
+      class="edit-input description-input"
       placeholder="설명을 입력해주세요."
       required
     />
