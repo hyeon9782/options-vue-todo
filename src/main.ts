@@ -7,13 +7,8 @@ import router from './router'
 import { store } from './store'
 
 async function deferRender() {
-  if (typeof window === 'undefined') {
-    const { server } = await import('@/mocks/server')
-    server.listen()
-  } else {
-    const { worker } = await import('@/mocks/browser')
-    worker.start()
-  }
+  const { worker } = await import('@/mocks/browser')
+  worker.start()
 }
 
 deferRender().then(() => {
