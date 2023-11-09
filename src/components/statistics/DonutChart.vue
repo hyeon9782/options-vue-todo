@@ -1,87 +1,61 @@
 <template lang="">
-  <div ref="chart"></div>
+  <svg :width="width" :height="height">
+    <g :transform="'translate(' + width / 3 + ',' + height / 2 + ')'">
+      <path
+        :fill="color(i)"
+        :stroke="color(i)"
+        stroke-width="3"
+        :d="arc(d, i)"
+        v-for="(d, i) in arcs"
+        :key="i"
+      ></path>
+      <g
+        class="legend"
+        v-for="(d, i) in arcs"
+        :transform="'translate(140,' + (-45 + i * 30) + ')'"
+        :key="i"
+      >
+        <circle r="10" :style="{ fill: color(i) }"></circle>
+        <text x="30" y="5">{{ `${d.data.name} ${d.data.value}개` }}</text>
+      </g>
+    </g>
+  </svg>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import * as d3 from 'd3'
 export default defineComponent({
   name: 'DonutChart',
+  data() {
+    return {
+      width: window.innerWidth < 500 ? window.innerWidth - 25 : 500,
+      height: 250
+    }
+  },
   props: {
     data: {
       type: Array,
       required: true
     }
   },
-  mounted() {
-    this.drawChart()
-  },
-  methods: {
-    drawChart() {
-      const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
-      const height = 250
-      const radius = Math.min(width, height) / 2.5
-
-      const svg = d3
-        .select(this.$refs.chart)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', 'translate(' + width / 3 + ',' + height / 2 + ')')
-
-      const color = d3
+  computed: {
+    arcs() {
+      const pie = d3.pie().value((d: any) => d.value)
+      return pie(this.data)
+    },
+    color() {
+      const colorScale = d3
         .scaleOrdinal()
         .domain(this.data.map((d: any) => d.name))
         .range(d3.schemeDark2)
-
-      const pie = d3.pie().value((d: any) => d.value)
-
-      const data_ready = pie(this.data)
-
+      return (i: number) => colorScale(this.arcs[i].data.name)
+    },
+    arc() {
+      const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
+      const height = 250
+      const radius = Math.min(width, height) / 2.5
       const arcGenerator = d3.arc().innerRadius(70).outerRadius(radius)
-
-      svg
-        .selectAll('mySlices')
-        .data(data_ready)
-        .enter()
-        .append('path')
-        .attr('d', arcGenerator)
-        .attr('fill', (d: any) => color(d.data.name))
-        .attr('stroke', 'white')
-        .style('stroke-width', '2px')
-        .style('opacity', 0.7)
-
-      const legendCircleSize = 20
-      const legendSpacing = 10
-
-      // legend 색상이 도넛 차트 색상과 불일치
-      const legend = svg
-        .selectAll('.legend')
-        .data(data_ready)
-        .enter()
-        .append('g')
-        .attr('class', 'legend')
-        .attr('transform', (_: any, i: any) => {
-          const height = legendCircleSize + legendSpacing
-          const offset = (height * color.domain().length) / 2
-          const horz = 7 * legendCircleSize
-          const vert = i * height - offset
-          return 'translate(' + horz + ',' + vert + ')'
-        })
-
-      legend
-        .append('circle')
-        .attr('r', legendCircleSize / 2)
-        .style('fill', color)
-        .style('stroke', color)
-
-      legend
-        .append('text')
-        .attr('x', legendCircleSize + legendSpacing)
-        .attr('y', 0 + legendSpacing / 2)
-        .text((d: any) => {
-          return `${d.data.name} ${d.data.value}개`
-        })
+      return (_: any, i: number) => arcGenerator(this.arcs[i])
     }
   }
 })

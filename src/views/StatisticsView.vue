@@ -1,20 +1,25 @@
 <template lang="">
   <main class="statistics-container">
-    <LineChart :options="chartOptions" :series="chartSeries" />
-    <DonutChart :data="donutData" />
+    <NoData v-if="noData" />
+    <div v-else>
+      <LineChart :options="chartOptions" :series="chartSeries" />
+      <DonutChart :data="donutData" />
+    </div>
   </main>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
+import NoData from '@/components/statistics/NoData.vue'
 import type { Todo } from '@/types'
 import dayjs from 'dayjs'
 
 export default defineComponent({
   components: {
     LineChart,
-    DonutChart
+    DonutChart,
+    NoData
   },
   data() {
     return {
@@ -22,6 +27,10 @@ export default defineComponent({
         dayjs().subtract(i, 'day').format('MM-DD')
       )
     }
+  },
+  created() {
+    // todos 데이터 조회
+    this.fetchTodos()
   },
   computed: {
     chartOptions() {
@@ -54,6 +63,9 @@ export default defineComponent({
         { name: '진행중', value: this.getStatusCount('진행중') },
         { name: '완료', value: this.getStatusCount('완료') }
       ]
+    },
+    noData() {
+      return (this as any).$store.state.todos.length === 0
     }
   },
   methods: {
@@ -62,6 +74,9 @@ export default defineComponent({
     },
     getStatusCount(status: string): number {
       return (this as any).$store.state.todos.filter((todo: Todo) => todo.status === status).length
+    },
+    fetchTodos() {
+      ;(this as any).$store.dispatch('getTodos', {})
     }
   }
 })

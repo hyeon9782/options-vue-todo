@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { createApp } from 'vue'
+import EditFormVue from '../list/EditForm.vue'
+import AppVue from '@/App.vue'
 
 describe('HomeView', () => {
   it('할 일을 생성합니다.', () => {})

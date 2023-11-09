@@ -20,8 +20,8 @@
         <option disabled>선택</option>
         <option v-for="(status, index) in statusArray" :value="status" :key="index">
           <div v-if="status === '진행전'">🔴</div>
-          <div v-else-if="status === '진행중'">🟢</div>
-          <div v-else>🔵</div>
+          <div v-else-if="status === '진행중'">🔵</div>
+          <div v-else>🟢</div>
           {{ status }}
         </option>
       </select>
