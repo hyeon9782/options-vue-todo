@@ -1,88 +1,70 @@
 <template lang="">
   <main class="statistics-container">
-    <LineChart :options="options" :series="series" />
+    <LineChart :options="chartOptions" :series="chartSeries" />
     <DonutChart :data="donutData" />
   </main>
 </template>
 <script lang="ts">
+import { defineComponent } from 'vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
 import type { Todo } from '@/types'
 import dayjs from 'dayjs'
 
-export default {
+export default defineComponent({
   components: {
     LineChart,
     DonutChart
   },
+  data() {
+    return {
+      recentWeekDates: Array.from({ length: 7 }, (_, i) =>
+        dayjs().subtract(i, 'day').format('MM-DD')
+      )
+    }
+  },
   computed: {
-    recentWeekDates() {
-      const today = dayjs()
-      const recentWeekDates = []
-
-      for (let i = 0; i < 7; i++) {
-        const date = today.subtract(i, 'day')
-
-        recentWeekDates.push(date.format('MM-DD'))
-      }
-
-      console.log(recentWeekDates)
-
-      return recentWeekDates
-    },
-    options() {
+    chartOptions() {
       return {
         chart: {
           id: 'vuechart-example'
         },
         xaxis: {
           categories: this.recentWeekDates
+        },
+        stroke: {
+          show: true,
+          curve: 'smooth'
         }
       }
     },
-    series() {
-      const countList: number[] = []
-      this.recentWeekDates.forEach((date) => {
-        const todosCount = (this as any).$store.state.todos.filter((todo: Todo) => {
-          return todo.deadline.substring(5) === date
-        }).length
-        countList.push(todosCount)
-      })
+    chartSeries() {
       return [
         {
-          name: 'series-1',
-          data: countList
+          name: '할 일 수',
+          data: this.recentWeekDates.map((date) =>
+            this.getTodosCountByDate(date, (this as any).$store.state.todos)
+          )
         }
       ]
     },
     donutData() {
-      const pendingCount = (this as any).$store.state.todos.filter(
-        (todo: Todo) => todo.status === '진행전'
-      ).length
-      const progressCount = (this as any).$store.state.todos.filter(
-        (todo: Todo) => todo.status === '진행중'
-      ).length
-      const completeCount = (this as any).$store.state.todos.filter(
-        (todo: Todo) => todo.status === '완료'
-      ).length
-
       return [
-        {
-          name: '진행전',
-          value: pendingCount
-        },
-        {
-          name: '진행중',
-          value: progressCount
-        },
-        {
-          name: '완료',
-          value: completeCount
-        }
+        { name: '진행전', value: this.getStatusCount('진행전') },
+        { name: '진행중', value: this.getStatusCount('진행중') },
+        { name: '완료', value: this.getStatusCount('완료') }
       ]
     }
+  },
+  methods: {
+    getTodosCountByDate(date: string, todos: Todo[]): number {
+      return todos.filter((todo) => todo.deadline.substring(5) === date).length
+    },
+    getStatusCount(status: string): number {
+      return (this as any).$store.state.todos.filter((todo: Todo) => todo.status === status).length
+    }
   }
-}
+})
 </script>
 
 <style lang="css">

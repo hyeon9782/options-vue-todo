@@ -24,49 +24,26 @@ export default defineComponent({
   data() {
     return {
       categories: [
-        {
-          name: '제목',
-          value: 'title'
-        },
-        {
-          name: '설명',
-          value: 'description'
-        },
-        {
-          name: '날짜',
-          value: 'deadline'
-        },
-        {
-          name: '상태',
-          value: 'status'
-        }
+        { name: '제목', value: 'title' },
+        { name: '설명', value: 'description' },
+        { name: '날짜', value: 'deadline' },
+        { name: '상태', value: 'status' }
       ],
       keyword: ''
     }
   },
-  created() {
-    this.searchDebounce = debounce(() => {
-      this.searchTodos()
-    }, 1000)
-  },
   methods: {
     ...mapMutations(['updateState']),
-    // 이벤트 헨들러를 디바운스하는 것이 맞는지, watch와 함께 디바운스하는 것이 맞는지
+    searchDebounce: debounce(function (this: any) {
+      this.searchTodos()
+    }, 1000),
     searchTodos() {
-      console.log('검색')
-      console.log(this.keyword)
-      console.log(this.selectedCategory)
-
-      // this로 접근해서 값을 바인딩하는 것이 맞는 것인지
-      // event 객체를 받아서 form요소 안에 있는 input이나 select의 값을 가져오는 게 맞는 것인지
       this.$store.dispatch('getTodos', {
         keyword: this.keyword,
         category: this.selectedCategory
       })
     },
     changeCategory(event: Event) {
-      console.log((event.target as HTMLInputElement).value)
-
       this.updateState({
         selectedCategory: (event.target as HTMLInputElement).value
       })
@@ -76,6 +53,10 @@ export default defineComponent({
     selectedCategory() {
       return this.$store.state.selectedCategory
     }
+  },
+  watch: {
+    keyword: 'searchDebounce',
+    selectedCategory: 'searchDebounce'
   }
 })
 </script>

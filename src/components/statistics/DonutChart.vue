@@ -18,10 +18,8 @@ export default defineComponent({
   methods: {
     drawChart() {
       const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
-
       const height = 250
-      const margin = 0
-      const radius = Math.min(width, height) / 3 - margin
+      const radius = Math.min(width, height) / 2.5
 
       const svg = d3
         .select(this.$refs.chart)
@@ -63,7 +61,7 @@ export default defineComponent({
         .enter()
         .append('g')
         .attr('class', 'legend')
-        .attr('transform', function (d: any, i: any) {
+        .attr('transform', (_: any, i: any) => {
           const height = legendCircleSize + legendSpacing
           const offset = (height * color.domain().length) / 2
           const horz = 7 * legendCircleSize
@@ -81,7 +79,7 @@ export default defineComponent({
         .append('text')
         .attr('x', legendCircleSize + legendSpacing)
         .attr('y', 0 + legendSpacing / 2)
-        .text(function (d: any) {
+        .text((d: any) => {
           return `${d.data.name} ${d.data.value}개`
         })
     }
