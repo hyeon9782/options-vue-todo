@@ -7,49 +7,56 @@ let todos: Todo[] = [
     title: 'Vue 3 공부',
     description: 'Vue 2와 Vue 3의 차이점을 생각하며 공부해보자.',
     deadline: '2023-11-01',
-    status: '진행전'
+    status: '진행전',
+    category: 'Urgent'
   },
   {
     id: 1,
     title: 'Vuex 공부',
     description: '효율적인 상태관리를 위해 전역 상태 관리 라이브러리를 공부해보자',
     deadline: '2023-11-03',
-    status: '진행중'
+    status: '진행중',
+    category: 'Urgent'
   },
   {
     id: 2,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-08',
-    status: '완료'
+    status: '완료',
+    category: 'Office'
   },
   {
     id: 3,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 1',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-08',
-    status: '완료'
+    status: '완료',
+    category: 'Home'
   },
   {
     id: 4,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 2',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-08',
-    status: '완료'
+    status: '완료',
+    category: 'School'
   },
   {
     id: 5,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 3',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-10',
-    status: '완료'
+    status: '완료',
+    category: 'Work Out'
   },
   {
     id: 6,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-10',
-    status: '완료'
+    status: '완료',
+    category: 'ETC'
   }
 ]
 

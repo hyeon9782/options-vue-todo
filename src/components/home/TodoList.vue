@@ -39,6 +39,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 0 10px;
 }
 
 .no-data {
