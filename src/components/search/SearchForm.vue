@@ -32,6 +32,7 @@ import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 import SearchFilter from '@/components/search/SearchFilter.vue'
 import dayjs from 'dayjs'
+
 export default defineComponent({
   name: 'SearchForm',
   components: {

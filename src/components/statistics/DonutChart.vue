@@ -32,53 +32,45 @@
   </svg>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
 import * as d3 from 'd3'
-export default defineComponent({
-  name: 'DonutChart',
-  data() {
-    return {
-      width: window.innerWidth < 500 ? window.innerWidth - 25 : 500,
-      height: 250
-    }
-  },
-  props: {
-    data: {
-      type: Array,
-      required: true
-    }
-  },
-  computed: {
-    total(): number {
-      return this.data.reduce((sum: number, d: any) => sum + d.value, 0)
-    },
-    arcs() {
-      const pie = d3.pie().value((d: any) => d.value)
-      return pie(this.data)
-    },
-    color() {
-      const colorScale = d3
-        .scaleOrdinal()
-        .domain(this.data.map((d: any) => d.name))
-        .range(['rgb(141, 156, 248)', 'rgb(250, 169, 161)', 'rgb(253, 225, 113)'])
 
-      return (i: number) => colorScale(this.arcs[i].data.name)
-    },
-    arc() {
-      const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
-      const height = 250
-      const radius = Math.min(width, height) / 2.5
-      const arcGenerator = d3.arc().innerRadius(50).outerRadius(radius)
-      return arcGenerator
-    }
-  },
-  methods: {
-    getArcCentroid(_: any, i: number) {
-      return this.arc.centroid(this.arcs[i])
-    }
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true
   }
 })
+
+const width = ref(window.innerWidth < 500 ? window.innerWidth - 25 : 500)
+const height = ref(250)
+
+const total = computed(() => props.data.reduce((sum: number, d: any) => sum + d.value, 0))
+
+const arcs = computed(() => {
+  const pie = d3.pie().value((d: any) => d.value)
+  return pie(props.data)
+})
+
+const color = computed(() => {
+  const colorScale = d3
+    .scaleOrdinal()
+    .domain(props.data.map((d: any) => d.name))
+    .range(['rgb(141, 156, 248)', 'rgb(250, 169, 161)', 'rgb(253, 225, 113)'])
+
+  return (i: number) => colorScale(arcs.value[i].data.name)
+})
+
+const arc = computed(() => {
+  const radius = Math.min(width.value, height.value) / 2.5
+  const arcGenerator = d3.arc().innerRadius(50).outerRadius(radius)
+  return arcGenerator
+})
+
+const getArcCentroid = (_: any, i: number) => {
+  return arc.value.centroid(arcs.value[i])
+}
 </script>
 
 <style lang="css" scoped>

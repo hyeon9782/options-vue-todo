@@ -37,7 +37,6 @@ import { defineComponent } from 'vue'
 import SubHeader from '@/components/layouts/SubHeader.vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
-import BubbleChart from '@/components/statistics/BubbleChart.vue'
 import NoData from '@/components/statistics/NoData.vue'
 import type { Todo } from '@/types'
 import dayjs from 'dayjs'
@@ -45,7 +44,6 @@ import dayjs from 'dayjs'
 export default defineComponent({
   components: {
     LineChart,
-    BubbleChart,
     SubHeader,
     DonutChart,
     NoData

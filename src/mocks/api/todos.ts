@@ -1,25 +1,5 @@
 import type { Todo } from '@/types'
 import { HttpHandler, http } from 'msw'
-import dayjs from 'dayjs'
-
-const categories = ['Urgent', 'Office', 'Home', 'School', 'ETC', 'Work Out']
-
-// let todos = Array.from(Array(99).keys()).map((id) => {
-//   const deadline = dayjs()
-//     .add(Math.floor(Math.random() * 6), 'day')
-//     .format('YYYY-MM-DD')
-
-//   console.log(deadline + ' : ' + id)
-
-//   return {
-//     id,
-//     title: `테스트 제목입니다 ${id}`,
-//     description: `테스트 설명입니다 ${id}`,
-//     deadline,
-//     status: ['planned', 'ongoing', 'complete'][Math.floor(Math.random() * 3)],
-//     category: categories[Math.floor(Math.random() * 6)]
-//   }
-// })
 
 let todos: Todo[] = [
   {
@@ -72,6 +52,14 @@ let todos: Todo[] = [
   },
   {
     id: 6,
+    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
+    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
+    deadline: '2023-11-10',
+    status: 'complete',
+    category: 'ETC'
+  },
+  {
+    id: 7,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-10',

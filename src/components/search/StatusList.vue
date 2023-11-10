@@ -9,9 +9,9 @@
     <StatusTag
       v-for="(status, index) in statusList"
       :key="index"
-      :status="status.value"
-      :class="{ select: status.value === selectedStatus }"
-      @click.prevent="selectStatus(status.value)"
+      :status="status"
+      :class="{ select: status === selectedStatus }"
+      @click.prevent="selectStatus(status)"
     />
   </div>
 </template>
@@ -31,11 +31,7 @@ export default {
   },
   data() {
     return {
-      statusList: [
-        { name: 'Planned', value: 'planned' },
-        { name: 'On Going', value: 'ongoing' },
-        { name: 'Complete', value: 'complete' }
-      ]
+      statusList: ['planned', 'ongoing', 'complete']
     }
   },
   methods: {
