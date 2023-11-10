@@ -7,9 +7,9 @@
 .wrapper {
   position: relative;
   width: 500px;
-  height: 100%;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px 20px;
   background-color: white;
 }
 

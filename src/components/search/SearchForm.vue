@@ -1,6 +1,5 @@
 <template>
   <div class="search-container">
-    <AppBack />
     <form @submit.prevent="searchDebounce" class="search-form">
       <input
         v-model="keyword"
@@ -9,7 +8,9 @@
         type="text"
         class="search-input"
       />
-      <div class="search-option-box"></div>
+      <div class="search-option-box">
+        <RangePicker v-model="range" />
+      </div>
     </form>
   </div>
 </template>
@@ -18,15 +19,20 @@
 import { debounce } from '@/utils/utils'
 import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
-import AppBack from '@/components/layouts/AppBack.vue'
+import RangePicker from '@/components/search/RangePicker.vue'
 export default defineComponent({
   name: 'SearchForm',
   components: {
-    AppBack
+    RangePicker
   },
   data() {
     return {
-      keyword: ''
+      keyword: '',
+      date: new Date(),
+      range: {
+        start: new Date(2020, 9, 12),
+        end: new Date(2020, 9, 16)
+      }
     }
   },
   methods: {
@@ -37,7 +43,7 @@ export default defineComponent({
     searchTodos() {
       this.$store.dispatch('getTodos', {
         keyword: this.keyword,
-        category: this.selectedCategory
+        category: 'title'
       })
     }
   },
@@ -47,7 +53,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .search-container {
   display: flex;
   align-items: center;

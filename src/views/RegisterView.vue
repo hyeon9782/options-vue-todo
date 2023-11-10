@@ -1,13 +1,16 @@
 <template lang="">
+  <SubHeader>New Task</SubHeader>
   <main>
     <EditForm />
   </main>
 </template>
 <script lang="ts">
 import EditForm from '@/components/edit/EditForm.vue'
+import SubHeader from '@/components/layouts/SubHeader.vue'
 export default {
   components: {
-    EditForm
+    EditForm,
+    SubHeader
   }
 }
 </script>

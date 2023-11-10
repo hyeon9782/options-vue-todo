@@ -1,13 +1,20 @@
 <template lang="">
-  <VDatePicker v-model.range="range" borderless expanded />
+  <VDatePicker v-model="value" borderless expanded />
 </template>
-<script>
+<script lang="ts">
+import { formatDate } from '@/utils/utils'
 export default {
-  data() {
-    return {
-      range: {
-        start: new Date(),
-        end: new Date()
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
+  computed: {
+    value: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        console.log(formatDate(value, 'YYYY-MM-DD'))
+
+        this.$emit('update:modelValue', formatDate(value, 'YYYY-MM-DD'))
       }
     }
   }

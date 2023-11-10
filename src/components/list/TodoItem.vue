@@ -42,7 +42,7 @@ export default defineComponent({
       }
     },
     moveEdit() {
-      this.$router.push('/edit')
+      this.$router.push(`/edit/${this.todo.id}`)
     }
   }
 })

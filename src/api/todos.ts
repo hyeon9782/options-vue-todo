@@ -11,6 +11,16 @@ async function getTodosAPI({ keyword, category }: SearchTodos) {
   }).then((res) => res.json())
 }
 
+// 할 일 가져오기
+async function getTodoAPI(id: number) {
+  return await fetch(`/todos/${id}`, {
+    method: HTTP_METHOD.GET,
+    headers: {
+      ...COMMON_HEADERS
+    }
+  }).then((res) => res.json())
+}
+
 // 할 일 생성하기
 async function createTodoAPI(todo: NewTodo) {
   return await fetch('/todos', {
@@ -43,4 +53,4 @@ async function deleteTodoAPI(id: number) {
   }).then((res) => res.json())
 }
 
-export { getTodosAPI, createTodoAPI, updateTodoAPI, deleteTodoAPI }
+export { getTodosAPI, getTodoAPI, createTodoAPI, updateTodoAPI, deleteTodoAPI }

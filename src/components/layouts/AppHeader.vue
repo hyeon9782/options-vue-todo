@@ -1,11 +1,8 @@
 <template>
   <header class="header-container">
-    <font-awesome-icon :icon="['fas', 'bars']" class="header-menu" />
-    <select :value="selectedMonth" class="header-month-select">
-      <option v-for="(month, index) in months" :key="index" :value="month">{{ month }}</option>
-    </select>
+    <div class="header-title">Todo List</div>
     <router-link to="/search">
-      <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+      <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
     </router-link>
   </header>
 </template>
@@ -13,47 +10,28 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'AppHeader',
-  data() {
-    return {
-      months: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ],
-      selectedMonth: 'November'
-    }
-  }
+  name: 'AppHeader'
 })
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .header-container {
   padding: 10px 0;
-  font-size: 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.header-menu {
-  color: lightblue;
-}
-
-.header-month-select {
-  border: none;
-  outline: none;
-  padding: 10px 15px;
-  font-size: 1.5rem;
+.header-title {
   font-weight: bold;
+  width: 100%;
+  text-align: center;
+  font-size: 1.7rem;
+}
+
+.search-icon {
+  font-size: 1.8rem;
+  position: absolute;
+  top: 25px;
+  right: 20px;
 }
 </style>

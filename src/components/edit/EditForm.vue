@@ -1,6 +1,6 @@
 <template>
   <form class="edit-form" @submit.prevent="todo ? updateTodo($event) : addTodo()">
-    <AppCalender />
+    <AppCalender v-model="deadline" />
     <div class="input-box">
       <input
         type="text"
@@ -12,32 +12,38 @@
       <input
         type="text"
         v-model="description"
-        class="edit-input description-input"
+        class="description-input"
         placeholder="설명을 입력해주세요."
         required
       />
-      <select v-model="selectedStatus" class="edit-select">
-        <option value="선택">선택</option>
-        <option v-for="(status, index) in statusArray" :key="index" :value="status">
-          {{ status }}
-        </option>
-      </select>
-      <select v-model="selectedCategory" class="edit-select">
-        <option value="선택">선택</option>
-        <option v-for="(category, index) in categories" :key="index" :value="category">
-          {{ category }}
-        </option>
-      </select>
+      <div class="select-box">
+        <div class="date-box">{{ deadline }}</div>
+        <select v-model="selectedStatus" class="edit-select">
+          <option value="선택">선택</option>
+          <option v-for="(status, index) in statusArray" :key="index" :value="status">
+            {{ status }}
+          </option>
+        </select>
+        <select v-model="selectedCategory" class="edit-select">
+          <option value="선택">선택</option>
+          <option v-for="(category, index) in categories" :key="index" :value="category">
+            {{ category }}
+          </option>
+        </select>
+      </div>
     </div>
-    <button class="edit-button" @click.prevent="todo ? updateTodo($event) : addTodo()">
-      <sapn v-if="todo">수정</sapn>
-      <sapn v-else>추가</sapn>
-    </button>
+
+    <div class="button-box">
+      <button class="edit-button" @click.prevent="todo ? updateTodo($event) : addTodo()">
+        {{ todo ? '수정' : '추가' }}
+      </button>
+    </div>
   </form>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { formatDate } from '@/utils/utils'
 import AppCalender from '@/components/edit/AppCalender.vue'
 
 export default defineComponent({
@@ -54,7 +60,7 @@ export default defineComponent({
     return {
       title: '',
       description: '',
-      deadline: '',
+      deadline: formatDate(new Date(), 'YYYY-MM-DD'),
       selectedStatus: '선택',
       statusArray: ['진행전', '진행중', '완료'],
       selectedCategory: '선택',
@@ -73,6 +79,7 @@ export default defineComponent({
         })
         .then(() => {
           this.clearForm()
+          this.$router.push('/')
         })
     },
     updateTodo(e: Event) {
@@ -109,28 +116,52 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css" scope>
+<style lang="css" scoped>
 .edit-form {
   padding: 20px;
-  border-radius: 10px;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .input-box {
+  border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 10px;
+  padding: 20px;
 }
 
 .title-input {
-  padding: 10px 10px;
+  padding: 10px;
   width: 100%;
   border: none;
   outline: none;
   background: none;
   font-size: 1.5rem;
   border-bottom: 1px solid gray;
+}
+
+.description-input {
+  padding: 0px 10px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1rem;
+  border-bottom: 1px solid gray;
+}
+
+.select-box {
+  display: flex;
+}
+
+.date-box {
+  padding: 10px;
+}
+
+.button-box {
+  display: flex;
+  justify-content: center;
 }
 
 .edit-button {
@@ -150,41 +181,10 @@ export default defineComponent({
   padding: 10px;
 }
 
-.flex-box {
-  display: flex;
-  gap: 10px;
-}
-
 .edit-date {
   width: 75%;
   border: none;
   background-color: lightgreen;
   text-align: center;
-}
-
-.cancel-button {
-  background: gray;
-  border-radius: 15px;
-  border: none;
-  padding: 5px 0;
-  width: 25%;
-}
-
-.status-mark {
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-}
-
-.pending {
-  background-color: red;
-}
-
-.progress {
-  background-color: blue;
-}
-
-.completed {
-  background-color: greenyellow;
 }
 </style>

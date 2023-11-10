@@ -1,21 +1,28 @@
 <template>
   <main class="home-container">
-    <PlusButton />
-    <VCalendar view="weekly" expanded borderless />
-    <TodoList />
+    <WeeklyCanlender />
+    <div class="list-box">
+      <TodoList />
+    </div>
   </main>
 </template>
 
 <script lang="ts">
-import PlusButton from '@/components/list/PlusButton.vue'
 import TodoList from '@/components/list/TodoList.vue'
+import WeeklyCanlender from '@/components/list/WeeklyCanlender.vue'
 
 export default {
-  components: { PlusButton, TodoList }
+  components: { TodoList, WeeklyCanlender }
 }
 </script>
 
 <style lang="css">
 .home-container {
+  height: calc(100vh - 109px);
+}
+
+.list-box {
+  height: 80%;
+  overflow: auto;
 }
 </style>

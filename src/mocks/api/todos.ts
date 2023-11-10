@@ -22,6 +22,34 @@ let todos: Todo[] = [
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
     deadline: '2023-11-08',
     status: '완료'
+  },
+  {
+    id: 3,
+    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 1',
+    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
+    deadline: '2023-11-08',
+    status: '완료'
+  },
+  {
+    id: 4,
+    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 2',
+    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
+    deadline: '2023-11-08',
+    status: '완료'
+  },
+  {
+    id: 5,
+    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 3',
+    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
+    deadline: '2023-11-08',
+    status: '완료'
+  },
+  {
+    id: 6,
+    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
+    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
+    deadline: '2023-11-08',
+    status: '완료'
   }
 ]
 
@@ -35,30 +63,27 @@ const handlers: HttpHandler[] = [
     const keyword: string = url.searchParams.get('keyword') || ''
     const category: string = url.searchParams.get('category') || ''
 
-    console.log(keyword)
-    console.log(category)
-    console.log(typeof keyword)
-
     let newTodos: Todo[] = [...todos]
 
     if (keyword !== null && keyword !== 'undefined') {
-      console.log('있어?')
-
       newTodos = todos.filter((todo) => {
         return String(todo[category]).includes(keyword)
       })
     }
 
-    console.log(newTodos)
-
     return Response.json(newTodos)
+  }),
+
+  // 할일 조회
+  http.get('/todos/:id', ({ params }: { params: any }) => {
+    const { id } = params
+    const todo = todos.find((todo) => todo.id === Number(id))
+    return Response.json(todo)
   }),
 
   // 할일 추가
   http.post('/todos', async ({ request }: { request: Request }) => {
-    console.log('msw 추가')
     const body = await request.json()
-    console.log(body)
     todos.push({
       id: idx++,
       ...body
@@ -70,25 +95,21 @@ const handlers: HttpHandler[] = [
   }),
 
   // 할일 수정
-  http.put('/todos', async ({ request }: { request: Request }) => {
-    console.log('msw 수정')
+  http.put('/todos/:id', async ({ request, params }: { request: Request; params: any }) => {
     const body = await request.json()
-    console.log(body)
+    const { id } = params
     todos = todos.map((todo) => {
-      return todo.id === body.id ? body : todo
+      return todo.id === id ? body : todo
     })
 
     return Response.json(body)
   }),
 
   // 할일 삭제
-  http.delete('/todos', ({ params }) => {
-    console.log('msw 삭제')
-    console.log(params)
-    // todos = todos.filter((todo) => {
-    //   todo.id !== body.id
-    // })
-    return Response.json({})
+  http.delete('/todos/:id', ({ params }) => {
+    const { id } = params
+    todos = todos.filter((todo) => todo.id !== Number(id))
+    return Response.json(todos)
   })
 ]
 

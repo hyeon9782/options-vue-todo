@@ -1,7 +1,9 @@
 <template lang="">
-  <header>
+  <header class="sub-header">
     <AppBack />
-    <slot></slot>
+    <div class="title-box">
+      <slot></slot>
+    </div>
   </header>
 </template>
 <script lang="ts">
@@ -12,4 +14,17 @@ export default {
   }
 }
 </script>
-<style lang="css"></style>
+<style lang="css" scoped>
+.sub-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.title-box {
+  font-weight: bold;
+  font-size: 1.7rem;
+  width: calc(100% - 32px);
+  text-align: center;
+}
+</style>

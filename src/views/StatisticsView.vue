@@ -1,4 +1,5 @@
 <template lang="">
+  <SubHeader>Dashboard</SubHeader>
   <main class="statistics-container">
     <NoData v-if="noData" />
     <div v-else>
@@ -9,6 +10,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import SubHeader from '@/components/layouts/SubHeader.vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
 import NoData from '@/components/statistics/NoData.vue'
@@ -18,6 +20,7 @@ import dayjs from 'dayjs'
 export default defineComponent({
   components: {
     LineChart,
+    SubHeader,
     DonutChart,
     NoData
   },
