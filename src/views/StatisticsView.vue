@@ -3,8 +3,40 @@
   <main class="statistics-container">
     <NoData v-if="noData" />
     <div v-else>
-      <LineChart :options="chartOptions" :series="chartSeries" />
-      <DonutChart :data="donutData" />
+      <div class="line-chart-box">
+        <div class="chart-head">
+          <div class="chart-title">Task Count Over Time</div>
+          <div class="select-period">
+            <div
+              v-for="(period, index) in periodList"
+              :key="index"
+              class="period"
+              :class="{ active: selectedLinePeriod === period.value }"
+              @click="changePeriod(period.value, 'line')"
+            >
+              {{ period.name }}
+            </div>
+          </div>
+        </div>
+        <LineChart :options="chartOptions" :series="chartSeries" />
+      </div>
+      <div class="donut-chart-box">
+        <div class="chart-head">
+          <div class="chart-title">Percent By Task Status</div>
+          <div class="select-period">
+            <div
+              v-for="(period, index) in periodList"
+              :key="index"
+              class="period"
+              :class="{ active: selectedDonutPeriod === period.value }"
+              @click="changePeriod(period.value, 'donut')"
+            >
+              {{ period.name }}
+            </div>
+          </div>
+        </div>
+        <DonutChart :data="donutData" />
+      </div>
     </div>
   </main>
 </template>
@@ -28,7 +60,14 @@ export default defineComponent({
     return {
       recentWeekDates: Array.from({ length: 7 }, (_, i) =>
         dayjs().subtract(i, 'day').format('MM-DD')
-      )
+      ),
+      periodList: [
+        { name: 'W', value: 'week' },
+        { name: 'M', value: 'month' },
+        { name: 'Y', value: 'year' }
+      ],
+      selectedLinePeriod: 'week',
+      selectedDonutPeriod: 'week'
     }
   },
   created() {
@@ -88,6 +127,15 @@ export default defineComponent({
         startDate: week[6],
         endDate: week[0]
       })
+    },
+    changePeriod(period: string, category: string) {
+      console.log('클릭')
+
+      if (category === 'line') {
+        this.selectedLinePeriod = period
+      } else {
+        this.selectedDonutPeriod = period
+      }
     }
   }
 })
@@ -96,5 +144,49 @@ export default defineComponent({
 <style lang="css">
 .statistics-container {
   width: 100%;
+}
+
+.line-chart-box {
+  background-color: rgb(247, 249, 255);
+}
+
+.donut-chart-box {
+  background-color: rgb(247, 249, 255);
+}
+
+.chart-title {
+  font-weight: bold;
+  color: rgb(44, 62, 80);
+  font-size: small;
+}
+
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.select-period {
+  display: flex;
+  background-color: lightgray;
+  border-radius: 9px;
+}
+
+.period {
+  font-weight: bold;
+  background-color: lightgray;
+  color: black;
+  border-radius: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-small;
+  width: 41px;
+  height: 30px;
+}
+
+.active {
+  background-color: rgb(71, 91, 216);
+  color: rgb(255, 255, 255);
 }
 </style>

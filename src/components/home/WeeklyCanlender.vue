@@ -1,13 +1,5 @@
 <template lang="">
-  <VDatePicker
-    v-model="date"
-    mode="date"
-    view="weekly"
-    transparent
-    expanded
-    borderless
-    locale="es"
-  />
+  <VDatePicker v-model="date" mode="date" view="weekly" transparent expanded borderless />
 </template>
 <script lang="ts">
 import { formatDate } from '@/utils/utils'

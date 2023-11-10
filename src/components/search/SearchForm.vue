@@ -87,11 +87,12 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   border-radius: 0 7px 7px 0;
-  background-color: lightgray;
+  background-color: rgb(224, 224, 224);
   width: 10%;
 }
 
 .setting-icon {
-  font-size: x-large;
+  font-size: large;
+  color: rgb(44, 62, 80);
 }
 </style>

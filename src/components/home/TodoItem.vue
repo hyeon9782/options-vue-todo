@@ -45,6 +45,8 @@ export default defineComponent({
   },
   methods: {
     selectColor(status: string) {
+      console.log(status)
+
       switch (status) {
         case '진행전':
           return {

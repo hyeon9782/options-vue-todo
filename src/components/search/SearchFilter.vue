@@ -12,12 +12,12 @@
       <label for="">Status</label>
       <StatusList />
     </div>
-    <div class="category-box">
+    <div class="filter-category-box">
       <label for="">Category</label>
       <CategoryList />
     </div>
     <div class="button-box">
-      <button class="applay-button">Applay</button>
+      <button class="applay-button">Apply</button>
     </div>
   </div>
 </template>
