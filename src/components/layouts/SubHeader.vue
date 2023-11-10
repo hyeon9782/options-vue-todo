@@ -1,6 +1,7 @@
 <template lang="">
   <header>
     <AppBack />
+    <slot></slot>
   </header>
 </template>
 <script lang="ts">

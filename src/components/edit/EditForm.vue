@@ -1,52 +1,51 @@
 <template>
   <form class="edit-form" @submit.prevent="todo ? updateTodo($event) : addTodo()">
-    <input
-      type="text"
-      v-model="title"
-      class="edit-input title-input"
-      placeholder="제목을 입력해주세요."
-      required
-    />
-    <input
-      type="text"
-      v-model="description"
-      class="edit-input description-input"
-      placeholder="설명을 입력해주세요."
-      required
-    />
-    <div class="flex-box">
-      <input type="date" v-model="deadline" class="edit-date" required />
-      <select v-model="selectedStatus" class="edit-select" required>
-        <option disabled>선택</option>
-        <option v-for="(status, index) in statusArray" :value="status" :key="index">
-          <div v-if="status === '진행전'">🔴</div>
-          <div v-else-if="status === '진행중'">🔵</div>
-          <div v-else>🟢</div>
+    <AppCalender />
+    <div class="input-box">
+      <input
+        type="text"
+        v-model="title"
+        class="title-input"
+        placeholder="제목을 입력해주세요."
+        required
+      />
+      <input
+        type="text"
+        v-model="description"
+        class="edit-input description-input"
+        placeholder="설명을 입력해주세요."
+        required
+      />
+      <select v-model="selectedStatus" class="edit-select">
+        <option value="선택">선택</option>
+        <option v-for="(status, index) in statusArray" :key="index" :value="status">
           {{ status }}
         </option>
       </select>
+      <select v-model="selectedCategory" class="edit-select">
+        <option value="선택">선택</option>
+        <option v-for="(category, index) in categories" :key="index" :value="category">
+          {{ category }}
+        </option>
+      </select>
     </div>
-    <div class="flex-box">
-      <!-- 할 일 수정 또는 추가 -->
-      <button @submit.prevent="todo ? updateTodo($event) : addTodo()" class="edit-button">
-        {{ todo ? '수정' : '추가' }}
-      </button>
-      <button @click.prevent="cancelEdit" class="cancel-button">취소</button>
-    </div>
+    <button class="edit-button" @click.prevent="todo ? updateTodo($event) : addTodo()">
+      <sapn v-if="todo">수정</sapn>
+      <sapn v-else>추가</sapn>
+    </button>
   </form>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+import AppCalender from '@/components/edit/AppCalender.vue'
 
 export default defineComponent({
   name: 'EditForm',
+  components: {
+    AppCalender
+  },
   props: {
-    toggleEdit: {
-      type: Function as PropType<(event: Event) => void>,
-      required: true
-    },
     todo: {
       type: Object
     }
@@ -57,13 +56,13 @@ export default defineComponent({
       description: '',
       deadline: '',
       selectedStatus: '선택',
-      statusArray: ['진행전', '진행중', '완료']
+      statusArray: ['진행전', '진행중', '완료'],
+      selectedCategory: '선택',
+      categories: ['운동', '공부', '취미']
     }
   },
   methods: {
     addTodo() {
-      console.log(this.deadline)
-
       // 임시방편인데 더 좋은 방식은 없을까?
       ;(this as any).$store
         .dispatch('createTodo', {
@@ -89,10 +88,6 @@ export default defineComponent({
           this.toggleEdit(e)
         })
     },
-    cancelEdit(e: Event) {
-      this.toggleEdit(e)
-      this.clearForm()
-    },
     clearForm() {
       this.title = ''
       this.description = ''
@@ -114,23 +109,45 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style lang="css" scope>
 .edit-form {
   padding: 20px;
-  background: lightblue;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.edit-input {
-  padding: 5px 10px;
+.input-box {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+}
+
+.title-input {
+  padding: 10px 10px;
   width: 100%;
   border: none;
   outline: none;
   background: none;
-  border-bottom: 2px solid black;
+  font-size: 1.5rem;
+  border-bottom: 1px solid gray;
+}
+
+.edit-button {
+  color: white;
+  background-color: blue;
+  border: none;
+  border-radius: 5px;
+  padding: 15px 0;
+  font-size: 1.5rem;
+  width: 300px;
+}
+
+.edit-select {
+  border-radius: 5px;
+  border: none;
+  background: lightgray;
+  padding: 10px;
 }
 
 .flex-box {
@@ -143,22 +160,6 @@ export default defineComponent({
   border: none;
   background-color: lightgreen;
   text-align: center;
-}
-
-.edit-select {
-  width: 25%;
-  border-radius: 15px;
-  border: none;
-  background: lightgreen;
-  padding: 10px;
-}
-
-.edit-button {
-  background: blue;
-  border-radius: 15px;
-  border: none;
-  padding: 5px 0;
-  width: 75%;
 }
 
 .cancel-button {

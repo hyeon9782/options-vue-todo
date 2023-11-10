@@ -4,10 +4,9 @@
     <select :value="selectedMonth" class="header-month-select">
       <option v-for="(month, index) in months" :key="index" :value="month">{{ month }}</option>
     </select>
-    <div class="search-box" @click="toggleSearch">
+    <router-link to="/search">
       <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-      <input v-if="showSearch" type="text" class="search-input" placeholder="Type to search" />
-    </div>
+    </router-link>
   </header>
 </template>
 
@@ -31,13 +30,7 @@ export default defineComponent({
         'November',
         'December'
       ],
-      showSearch: false,
       selectedMonth: 'November'
-    }
-  },
-  methods: {
-    toggleSearch() {
-      this.showSearch = !this.showSearch
     }
   }
 })
@@ -62,8 +55,5 @@ export default defineComponent({
   padding: 10px 15px;
   font-size: 1.5rem;
   font-weight: bold;
-}
-
-.search-input {
 }
 </style>

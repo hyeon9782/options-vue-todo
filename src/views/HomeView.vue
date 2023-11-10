@@ -1,6 +1,7 @@
 <template>
   <main class="home-container">
     <PlusButton />
+    <VCalendar view="weekly" expanded borderless />
     <TodoList />
   </main>
 </template>

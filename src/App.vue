@@ -19,7 +19,7 @@ export default defineComponent({
   watch: {
     // 감시하여 현재 경로에 따라 isSub 업데이트
     $route(to, from) {
-      this.isSub = to.path !== '/edit' && to.path !== '/search'
+      this.isSub = to.path !== '/edit' && to.path !== '/edit/:id' && to.path !== '/search'
     }
   }
 })
@@ -28,7 +28,7 @@ export default defineComponent({
 <template>
   <AppWrapper>
     <AppHeader v-if="isSub" />
-    <SubHeader v-else />
+
     <RouterView />
   </AppWrapper>
 </template>

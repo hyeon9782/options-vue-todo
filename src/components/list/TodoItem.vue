@@ -1,6 +1,5 @@
 <template lang="">
-  <EditForm v-if="isEdit" :toggleEdit="toggleEdit" :todo="todo" />
-  <div v-else class="todo-item" @click="toggleEdit">
+  <div class="todo-item" @click="moveEdit">
     <div class="contents-box">
       <div class="todo-title">
         {{ todo.title }}
@@ -19,12 +18,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import EditForm from '@/components/list/EditForm.vue'
 export default defineComponent({
   name: 'TodoItem',
-  components: {
-    EditForm
-  },
   props: {
     todo: Object
   },
@@ -34,9 +29,6 @@ export default defineComponent({
     }
   },
   methods: {
-    toggleEdit(event: Event) {
-      this.isEdit = !this.isEdit
-    },
     selectColor(status: string) {
       switch (status) {
         case '진행전':
@@ -48,6 +40,9 @@ export default defineComponent({
         default:
           break
       }
+    },
+    moveEdit() {
+      this.$router.push('/edit')
     }
   }
 })
@@ -64,7 +59,7 @@ export default defineComponent({
 
 .contents-box {
   padding: 20px;
-  width: 100%;
+  width: calc(100% - 5px);
 }
 
 .contents-box .todo-title {

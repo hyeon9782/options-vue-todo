@@ -8,6 +8,8 @@ import { store } from './store'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VCalendar from 'v-calendar'
+import 'v-calendar/style.css'
 
 library.add(fas)
 
@@ -24,6 +26,8 @@ deferRender().then(() => {
   app.component('font-awesome-icon', FontAwesomeIcon)
 
   app.use(VueApexCharts)
+
+  app.use(VCalendar, {})
 
   app.use(store)
 

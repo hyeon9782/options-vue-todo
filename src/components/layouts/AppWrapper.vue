@@ -9,7 +9,7 @@
   width: 500px;
   height: 100%;
   margin: 0 auto;
-  padding: 20px 10px;
+  padding: 20px;
   background-color: white;
 }
 
