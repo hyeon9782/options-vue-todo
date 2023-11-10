@@ -10,9 +10,6 @@
           <div class="todo-deadline">
             {{ todo.deadline }}
           </div>
-          <div class="todo-status">
-            {{ todo.status }}
-          </div>
         </div>
       </div>
       <div class="todo-description">
@@ -20,6 +17,10 @@
       </div>
       <div class="category-box">
         <CategoryTag :category="todo.category" />
+        <!-- <StatusTag :status="todo.status" /> -->
+        <div class="status-box">
+          {{ todo.status }}
+        </div>
       </div>
     </div>
   </div>
@@ -27,10 +28,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import CategoryTag from '@/components/edit/CategoryTag.vue'
+import StatusTag from '@/components/search/StatusTag.vue'
 export default defineComponent({
   name: 'TodoItem',
   components: {
-    CategoryTag
+    CategoryTag,
+    StatusTag
   },
   props: {
     todo: {
@@ -48,15 +51,15 @@ export default defineComponent({
       console.log(status)
 
       switch (status) {
-        case '진행전':
+        case 'planned':
           return {
             backgroundColor: 'rgb(141, 156, 248)'
           }
-        case '진행중':
+        case 'ongoing':
           return {
             backgroundColor: 'rgb(250, 169, 161)'
           }
-        case '완료':
+        case 'complete':
           return {
             backgroundColor: 'rgb(253, 225, 113)'
           }
@@ -76,7 +79,7 @@ export default defineComponent({
   box-shadow: rgb(224, 224, 224) 10px 10px 10px 0px;
   box-sizing: border-box;
   display: flex;
-
+  width: 100%;
   background-color: rgb(247, 247, 253);
 }
 
@@ -88,7 +91,7 @@ export default defineComponent({
 }
 
 .todo-box {
-  width: 100%;
+  width: calc(100% - 5px);
   padding: 10px;
 }
 
@@ -99,8 +102,9 @@ export default defineComponent({
 
 .todo-info {
   display: flex;
+  justify-content: flex-end;
   gap: 10px;
-  width: 27%;
+  width: 20%;
   color: black;
 }
 
@@ -111,7 +115,7 @@ export default defineComponent({
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 73%;
+  width: 80%;
 }
 
 .todo-deadline {
@@ -132,6 +136,12 @@ export default defineComponent({
 
 .category-box {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 10px;
+}
+
+.status-box {
+  font-size: small;
 }
 </style>

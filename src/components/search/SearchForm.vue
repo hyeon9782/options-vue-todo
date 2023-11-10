@@ -11,7 +11,17 @@
       <div class="setting-box" @click.prevent="toggleFilter">
         <font-awesome-icon :icon="['fas', 'sliders']" class="setting-icon" />
       </div>
-      <SearchFilter v-show="showFilter" />
+      <SearchFilter
+        v-show="showFilter"
+        :selectedCategory="selectedCategory"
+        :selectCategory="selectCategory"
+        :selectedPeriod="selectedPeriod"
+        :selectPeriod="selectPeriod"
+        :selectedStatus="selectedStatus"
+        :selectStatus="selectStatus"
+        :toggleFilter="toggleFilter"
+        v-model="range"
+      />
     </form>
   </div>
 </template>
@@ -21,6 +31,7 @@ import { debounce, formatDate } from '@/utils/utils'
 import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 import SearchFilter from '@/components/search/SearchFilter.vue'
+import dayjs from 'dayjs'
 export default defineComponent({
   name: 'SearchForm',
   components: {
@@ -31,14 +42,48 @@ export default defineComponent({
       keyword: '',
       date: new Date(),
       range: {
-        start: new Date(2020, 9, 12),
-        end: new Date(2023, 12, 16)
+        start: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+        end: dayjs().format('YYYY-MM-DD')
       },
-      showFilter: false
+      showFilter: true,
+      selectedCategory: 'All',
+      selectedStatus: 'all',
+      selectedPeriod: '3 Month'
     }
   },
   methods: {
     ...mapMutations(['updateState']),
+    selectPeriod(period: string) {
+      this.selectedPeriod = period
+
+      switch (period) {
+        case 'Today':
+          this.setRange(dayjs(), dayjs())
+          break
+        case '1 Week':
+          this.setRange(dayjs().subtract(1, 'week'), dayjs())
+          break
+        case '1 Month':
+          this.setRange(dayjs().subtract(1, 'month'), dayjs())
+          break
+        case '3 Month':
+          this.setRange(dayjs().subtract(3, 'month'), dayjs())
+          break
+      }
+      console.log(this.range)
+    },
+    setRange(start: dayjs.Dayjs, end: dayjs.Dayjs) {
+      this.range = {
+        start: start.format('YYYY-MM-DD'),
+        end: end.format('YYYY-MM-DD')
+      }
+    },
+    selectCategory(category: string) {
+      this.selectedCategory = category
+    },
+    selectStatus(status: string) {
+      this.selectedStatus = status
+    },
     searchDebounce: debounce(function (this: any) {
       this.searchTodos()
     }, 1000),
@@ -46,7 +91,9 @@ export default defineComponent({
       this.$store.dispatch('getTodos', {
         keyword: this.keyword,
         startDate: this.keyword ? formatDate(this.range.start, 'YYYY-MM-DD') : '',
-        endDate: this.keyword ? formatDate(this.range.end, 'YYYY-MM-DD') : ''
+        endDate: this.keyword ? formatDate(this.range.end, 'YYYY-MM-DD') : '',
+        category: this.selectedCategory === 'All' ? '' : this.selectedCategory,
+        status: this.selectedStatus === 'all' ? '' : this.selectedStatus
       })
     },
     toggleFilter() {
@@ -55,7 +102,9 @@ export default defineComponent({
   },
   watch: {
     keyword: 'searchDebounce',
-    range: 'searchDebounce'
+    range: 'searchDebounce',
+    selectedCategory: 'searchDebounce',
+    selectedStatus: 'searchDebounce'
   }
 })
 </script>

@@ -40,7 +40,10 @@ export default {
             color: 'rgb(155, 89, 182)'
           }
         default:
-          break
+          return {
+            backgroundColor: 'lightgray',
+            color: 'black'
+          }
       }
     }
   }

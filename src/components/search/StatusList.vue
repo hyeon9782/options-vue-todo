@@ -1,15 +1,59 @@
 <template lang="">
   <div class="status-list">
-    <div class="status-tag done">Done</div>
-    <div class="status-tag delayed">Delayed</div>
-    <div class="status-tag planned">Planned</div>
+    <StatusTag
+      v-if="$route.path === '/search'"
+      status="all"
+      :class="{ select: 'all' === selectedStatus }"
+      @click.prevent="selectStatus('all')"
+    />
+    <StatusTag
+      v-for="(status, index) in statusList"
+      :key="index"
+      :status="status.value"
+      :class="{ select: status.value === selectedStatus }"
+      @click.prevent="selectStatus(status.value)"
+    />
   </div>
 </template>
 <script lang="ts">
+import StatusTag from '@/components/search/StatusTag.vue'
 export default {
+  components: {
+    StatusTag
+  },
+  props: {
+    selectStatus: {
+      type: Function
+    },
+    selectedStatus: {
+      type: String
+    }
+  },
   data() {
     return {
-      statusList: ['Done', 'Delayed', 'Planned']
+      statusList: [
+        { name: 'Planned', value: 'planned' },
+        { name: 'On Going', value: 'ongoing' },
+        { name: 'Complete', value: 'complete' }
+      ]
+    }
+  },
+  methods: {
+    selectColor(status: string) {
+      switch (status) {
+        case 'planned':
+          return {
+            backgroundColor: 'rgb(253, 225, 113)'
+          }
+        case 'ongoing':
+          return {
+            backgroundColor: 'rgb(250, 169, 161)'
+          }
+        case 'complete':
+          return {
+            backgroundColor: 'rgb(141, 156, 248)'
+          }
+      }
     }
   }
 }
@@ -18,7 +62,7 @@ export default {
 .status-list {
   display: flex;
   justify-content: space-around;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .status-tag {
@@ -29,15 +73,7 @@ export default {
   font-size: x-small;
 }
 
-.done {
-  background-color: rgb(141, 156, 248);
-}
-
-.delayed {
-  background-color: rgb(250, 169, 161);
-}
-
-.planned {
-  background-color: rgb(253, 225, 113);
+.select {
+  border: 2px solid rgb(71, 91, 216);
 }
 </style>

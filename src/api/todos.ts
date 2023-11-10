@@ -2,13 +2,16 @@ import { HTTP_METHOD, COMMON_HEADERS } from '@/constants/api'
 import type { NewTodo, SearchTodos, UpdateTodo } from '@/types'
 
 // 할 일 목록 가져오기
-async function getTodosAPI({ keyword, startDate, endDate }: SearchTodos) {
-  return await fetch(`/todos?keyword=${keyword}&startDate=${startDate}&endDate=${endDate}`, {
-    method: HTTP_METHOD.GET,
-    headers: {
-      ...COMMON_HEADERS
+async function getTodosAPI({ keyword, startDate, endDate, category, status }: SearchTodos) {
+  return await fetch(
+    `/todos?keyword=${keyword}&startDate=${startDate}&endDate=${endDate}&category=${category}&status=${status}`,
+    {
+      method: HTTP_METHOD.GET,
+      headers: {
+        ...COMMON_HEADERS
+      }
     }
-  }).then((res) => res.json())
+  ).then((res) => res.json())
 }
 
 // 할 일 가져오기

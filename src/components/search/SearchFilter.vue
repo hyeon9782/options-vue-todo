@@ -3,37 +3,82 @@
     <div class="filter-title">Search Filter</div>
     <div class="date-box">
       <label for="">Date</label>
-      <div class="date-list">
-        <div class="date-block" v-for="(date, index) in dateList" :key="index">{{ date }}</div>
-      </div>
-      <RangePicker />
+      <PeriodList :selectedPeriod="selectedPeriod" :selectPeriod="selectPeriod" />
+      <VDatePicker v-model="value" is-range>
+        <template #default="{ inputValue, inputEvents }">
+          <div class="flex justify-center items-center">
+            <input
+              class="date-input start-input"
+              :value="inputValue.start"
+              v-on="inputEvents.start"
+            />
+            <IconArrowRight />
+            <input class="date-input end-input" :value="inputValue.end" v-on="inputEvents.end" />
+          </div>
+        </template>
+      </VDatePicker>
     </div>
     <div class="status-box">
       <label for="">Status</label>
-      <StatusList />
+      <StatusList :selectedStatus="selectedStatus" :selectStatus="selectStatus" />
     </div>
     <div class="filter-category-box">
       <label for="">Category</label>
-      <CategoryList />
+      <CategoryList :selectedCategory="selectedCategory" :selectCategory="selectCategory" />
     </div>
     <div class="button-box">
-      <button class="applay-button">Apply</button>
+      <button class="applay-button" @click.prevent="toggleFilter">Apply</button>
     </div>
   </div>
 </template>
 <script lang="ts">
-import RangePicker from '@/components/search/RangePicker.vue'
 import StatusList from '@/components/search/StatusList.vue'
 import CategoryList from '@/components/edit/CategoryList.vue'
+import PeriodList from '@/components/search/PeriodList.vue'
 export default {
   components: {
-    RangePicker,
     StatusList,
+    PeriodList,
     CategoryList
   },
-  data() {
-    return {
-      dateList: ['Today', '1 Week', '1 Month', '3 Month']
+  props: {
+    selectedCategory: {
+      type: String
+    },
+    selectCategory: {
+      type: Function
+    },
+    selectedPeriod: {
+      type: String
+    },
+    selectPeriod: {
+      type: Function
+    },
+    selectedStatus: {
+      type: String
+    },
+    selectStatus: {
+      type: Function
+    },
+    range: {
+      type: Object
+    },
+    toggleFilter: {
+      type: Function
+    },
+    modelValue: {
+      type: Object
+    }
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    value: {
+      get() {
+        return this.modelValue
+      },
+      set(value: any) {
+        this.$emit('update:modelValue', value)
+      }
     }
   }
 }
@@ -66,23 +111,6 @@ label {
   font-size: medium;
 }
 
-.date-list {
-  display: flex;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  margin: 10px 0 0 0;
-}
-
-.date-block {
-  width: 200px;
-  text-align: center;
-  border-right: 1px solid lightgray;
-}
-
-.date-list .date-block:last-child {
-  border-right: none;
-}
-
 .button-box {
   display: flex;
   justify-content: center;
@@ -97,5 +125,24 @@ label {
   font-weight: 700;
   width: 208px;
   height: 44px;
+}
+
+.date-input {
+  border: 1px solid lightgray;
+  background-color: transparent;
+  width: 50%;
+  padding: 5px 0;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.start-input {
+  border-right: none;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.end-input {
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
 }
 </style>

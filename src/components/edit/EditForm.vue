@@ -20,16 +20,12 @@
         placeholder="Description optional"
         required
       />
-      <label for="category"> Category </label>
-      <CategoryList />
-      <div class="select-box">
-        <select v-if="todoId" v-model="selectedStatus" class="edit-select">
-          <option value="선택">선택</option>
-          <option v-for="(status, index) in statusArray" :key="index" :value="status">
-            {{ status }}
-          </option>
-        </select>
+      <div>
+        <label for="status"> Status </label>
+        <StatusList :selectStatus="selectStatus" :selectedStatus="selectedStatus" />
       </div>
+      <label for="category"> Category </label>
+      <CategoryList :selectCategory="selectCategory" :selectedCategory="selectedCategory" />
       <div class="button-box">
         <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
           {{ todoId ? 'Edit' : 'Create' }}
@@ -46,12 +42,14 @@ import { formatDate } from '@/utils/utils'
 import AppCalender from '@/components/edit/AppCalender.vue'
 import { getTodoAPI } from '@/api/todos'
 import CategoryList from '@/components/edit/CategoryList.vue'
+import StatusList from '@/components/search/StatusList.vue'
 
 export default defineComponent({
   name: 'EditForm',
   components: {
     AppCalender,
-    CategoryList
+    CategoryList,
+    StatusList
   },
   props: {
     todoId: {
@@ -62,14 +60,22 @@ export default defineComponent({
     return {
       title: '',
       description: '',
-      deadline: formatDate(new Date(), 'YYYY-MM-DD'),
+      deadline: formatDate(new Date().toDateString(), 'YYYY-MM-DD'),
       selectedStatus: '선택',
       statusArray: ['진행전', '진행중', '완료'],
-      selectedCategory: '선택',
-      categories: ['운동', '공부', '취미']
+      selectedCategory: '선택'
     }
   },
   methods: {
+    selectCategory(category: string) {
+      console.log('선택')
+      console.log(category)
+
+      this.selectedCategory = category
+    },
+    selectStatus(status: string) {
+      this.selectedStatus = status
+    },
     addTodo() {
       // 임시방편인데 더 좋은 방식은 없을까?
       ;(this as any).$store
@@ -77,7 +83,8 @@ export default defineComponent({
           title: this.title,
           description: this.description,
           deadline: this.deadline,
-          status: this.selectedStatus
+          status: '진행전',
+          category: this.selectedCategory
         })
         .then(() => {
           this.clearForm()
@@ -91,7 +98,8 @@ export default defineComponent({
           title: this.title,
           description: this.description,
           deadline: this.deadline,
-          status: this.selectedStatus
+          status: this.selectedStatus,
+          category: this.selectedCategory
         })
         .then(() => {
           this.clearForm()
@@ -126,6 +134,7 @@ export default defineComponent({
       this.description = todo.description
       this.deadline = todo.deadline
       this.selectedStatus = todo.status
+      this.selectedCategory = todo.category
     }
   },
   mounted() {
@@ -186,6 +195,7 @@ label {
 .button-box {
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
 
 .edit-button {
@@ -196,7 +206,19 @@ label {
   padding: 15px 0;
   font-weight: bold;
   font-size: medium;
-  width: 200px;
+  width: 50%;
+  margin-top: 10px;
+}
+
+.delete-button {
+  color: white;
+  background-color: rgb(71, 91, 216);
+  border: none;
+  border-radius: 30px;
+  padding: 15px 0;
+  font-weight: bold;
+  font-size: medium;
+  width: 50%;
   margin-top: 10px;
 }
 

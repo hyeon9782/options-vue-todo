@@ -4,6 +4,7 @@ export type Todo = {
   description: string
   deadline: string
   status: string
+  category: string
   [key: string]: string | number
 }
 
@@ -12,7 +13,9 @@ export type NewTodo = Omit<Todo, 'id'>
 export type UpdateTodo = Todo
 
 export type SearchTodos = {
-  keyword: string
-  startDate: string
-  endDate: string
+  keyword?: string
+  startDate?: string
+  endDate?: string
+  category?: string
+  status?: string
 }
