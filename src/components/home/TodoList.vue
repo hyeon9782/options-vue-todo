@@ -2,17 +2,17 @@
   <div class="todo-list" v-if="todos.length > 0">
     <TodoItem v-for="(todo, index) in todos" :key="index" :todo="todo" />
   </div>
-  <div class="no-data" v-else-if="todos.length === 0 && $route.path !== '/search'">
-    할 일을 추가해보세요!
-  </div>
+  <NoData v-else-if="todos.length === 0 && $route.path !== '/search'" />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import TodoItem from '@/components/home/TodoItem.vue'
+import NoData from '@/components/statistics/NoData.vue'
 export default defineComponent({
   name: 'TodoList',
   components: {
-    TodoItem
+    TodoItem,
+    NoData
   },
   created() {
     // 할 일 목록 조회하기
@@ -40,18 +40,5 @@ export default defineComponent({
   flex-direction: column;
   gap: 10px;
   padding: 0 10px;
-}
-
-.no-data {
-  background-color: lightgray;
-  height: 400px;
-  font-size: 2rem;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: gray;
-  margin: 10px 0;
-  border-radius: 5px;
 }
 </style>

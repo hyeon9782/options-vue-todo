@@ -22,11 +22,11 @@
       <g
         class="legend"
         v-for="(d, i) in arcs"
-        :transform="'translate(' + (140 - 10) + ',' + (-45 + i * 30) + ')'"
+        :transform="'translate(' + 150 + ',' + (-45 + i * 30) + ')'"
         :key="i"
       >
         <circle r="10" :style="{ fill: color(i) }"></circle>
-        <text x="20" y="5">{{ `${d.data.name} ${d.data.value}개` }}</text>
+        <text x="20" y="5">{{ d.data.name }}</text>
       </g>
     </g>
   </svg>

@@ -62,7 +62,7 @@ export default {
 .status-list {
   display: flex;
   justify-content: space-around;
-  margin: 5px 0;
+  margin: 15px 0;
 }
 
 .status-tag {

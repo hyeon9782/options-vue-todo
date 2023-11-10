@@ -48,7 +48,7 @@ export default defineComponent({
       showFilter: false,
       selectedCategory: 'All',
       selectedStatus: 'all',
-      selectedPeriod: '3 Month'
+      selectedPeriod: '3 M'
     }
   },
   methods: {
@@ -60,13 +60,13 @@ export default defineComponent({
         case 'Today':
           this.setRange(dayjs(), dayjs())
           break
-        case '1 Week':
+        case '1 W':
           this.setRange(dayjs().subtract(1, 'week'), dayjs())
           break
-        case '1 Month':
+        case '1 M':
           this.setRange(dayjs().subtract(1, 'month'), dayjs())
           break
-        case '3 Month':
+        case '3 M':
           this.setRange(dayjs().subtract(3, 'month'), dayjs())
           break
       }

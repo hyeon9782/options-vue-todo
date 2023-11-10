@@ -95,8 +95,8 @@ const handlers: HttpHandler[] = [
       // 기간 , 카테고리, 상태 설정 후 검색
       newTodos = newTodos.filter((todo) => {
         const matchCategory = todo.category === category
-        const matchStatus = todo.category === status
-        return filterByKeyword(todo) || matchCategory || matchStatus
+        const matchStatus = todo.status === status
+        return filterByKeyword(todo) && matchCategory && matchStatus
       })
 
       newTodos = newTodos.filter(filterByDateRange)

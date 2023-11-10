@@ -22,16 +22,16 @@ export default defineComponent({
 }
 
 .header-title {
-  font-weight: bold;
   width: 100%;
   text-align: center;
-  font-size: 1.7rem;
+  font-weight: bold;
+  font-size: large;
 }
 
 .search-icon {
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   position: absolute;
-  top: 25px;
-  right: 20px;
+  top: 15px;
+  right: 15px;
 }
 </style>

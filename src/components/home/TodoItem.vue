@@ -17,7 +17,6 @@
       </div>
       <div class="category-box">
         <CategoryTag :category="todo.category" />
-        <!-- <StatusTag :status="todo.status" /> -->
         <div class="status-box">
           {{ todo.status.charAt(0).toUpperCase() + todo.status.slice(1) }}
         </div>
@@ -28,12 +27,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import CategoryTag from '@/components/edit/CategoryTag.vue'
-import StatusTag from '@/components/search/StatusTag.vue'
 export default defineComponent({
   name: 'TodoItem',
   components: {
-    CategoryTag,
-    StatusTag
+    CategoryTag
   },
   props: {
     todo: {

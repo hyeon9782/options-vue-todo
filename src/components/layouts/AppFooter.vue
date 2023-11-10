@@ -1,5 +1,8 @@
 <template lang="">
-  <footer class="footer-container" v-if="!$route.path.startsWith('/edit')">
+  <footer
+    class="footer-container"
+    v-if="!$route.path.startsWith('/edit') && $route.path !== '/search'"
+  >
     <router-link to="/">
       <font-awesome-icon :icon="['fas', 'house']" class="footer-home" />
     </router-link>

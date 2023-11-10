@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      periodList: ['Today', '1 Week', '1 Month', '3 Month']
+      periodList: ['Today', '1 W', '1 M', '3 M']
     }
   },
   props: {
@@ -40,6 +40,8 @@ export default {
   width: 200px;
   text-align: center;
   border-radius: 5px;
+  font-size: small;
+  font-weight: bold;
 }
 
 .select {

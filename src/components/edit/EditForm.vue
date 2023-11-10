@@ -1,31 +1,39 @@
 <template>
   <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo()">
-    <AppCalender v-model="deadline" />
+    <div class="deadline-box">
+      <AppCalender v-model="deadline" />
+    </div>
     <div class="input-box">
-      <label for="title"> Title </label>
-      <input
-        type="text"
-        id="title"
-        v-model="title"
-        class="title-input"
-        placeholder="Title must be inserted"
-        required
-      />
-      <label for="description"> Description </label>
-      <input
-        type="text"
-        id="description"
-        v-model="description"
-        class="description-input"
-        placeholder="Description optional"
-        required
-      />
+      <div>
+        <label for="title"> Title </label>
+        <input
+          type="text"
+          id="title"
+          v-model="title"
+          class="title-input"
+          placeholder="Title must be inserted"
+          required
+        />
+      </div>
+      <div>
+        <label for="description"> Description </label>
+        <input
+          type="text"
+          id="description"
+          v-model="description"
+          class="description-input"
+          placeholder="Description optional"
+          required
+        />
+      </div>
       <div>
         <label for="status"> Status </label>
         <StatusList :selectStatus="selectStatus" :selectedStatus="selectedStatus" />
       </div>
-      <label for="category"> Category </label>
-      <CategoryList :selectCategory="selectCategory" :selectedCategory="selectedCategory" />
+      <div>
+        <label for="category"> Category </label>
+        <CategoryList :selectCategory="selectCategory" :selectedCategory="selectedCategory" />
+      </div>
       <div class="button-box">
         <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
           {{ todoId ? 'Edit' : 'Create' }}
@@ -61,9 +69,8 @@ export default defineComponent({
       title: '',
       description: '',
       deadline: formatDate(new Date().toDateString(), 'YYYY-MM-DD'),
-      selectedStatus: '선택',
-      statusArray: ['진행전', '진행중', '완료'],
-      selectedCategory: '선택'
+      selectedStatus: 'planned',
+      selectedCategory: 'Urgent'
     }
   },
   methods: {
@@ -78,12 +85,16 @@ export default defineComponent({
     },
     addTodo() {
       // 임시방편인데 더 좋은 방식은 없을까?
+      if (!this.title) {
+        alert('제목을 입력해주세요!')
+        return
+      }
       ;(this as any).$store
         .dispatch('createTodo', {
           title: this.title,
           description: this.description,
           deadline: this.deadline,
-          status: '진행전',
+          status: 'planned',
           category: this.selectedCategory
         })
         .then(() => {
@@ -92,6 +103,10 @@ export default defineComponent({
         })
     },
     updateTodo(e: Event) {
+      if (!this.title) {
+        alert('제목을 입력해주세요!')
+        return
+      }
       ;(this as any).$store
         .dispatch('updateTodo', {
           id: this.todoId,
@@ -153,12 +168,19 @@ export default defineComponent({
   height: calc(100vh - 48.8px);
 }
 
+.deadline-box {
+  height: 30%;
+}
+
 .input-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border-radius: 25px 25px 0px 0px;
   background-color: rgb(239, 240, 251);
   box-shadow: rgb(224, 224, 224) 0px 3px 14px 10px;
   padding: 30px 30px;
-  height: 80%;
+  height: 70%;
 }
 
 .title-input {
@@ -173,7 +195,7 @@ export default defineComponent({
 
 label {
   font-weight: bold;
-  margin-bottom: 10px;
+
   font-size: medium;
   color: rgb(49, 69, 113);
 }

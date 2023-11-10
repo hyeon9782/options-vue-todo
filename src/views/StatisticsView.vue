@@ -3,37 +3,28 @@
   <main class="statistics-container">
     <NoData v-if="noData" />
     <div v-else>
+      <div class="period-box">
+        <div class="select-period">
+          <div
+            v-for="(period, index) in periodList"
+            :key="index"
+            class="period"
+            :class="{ active: selectedPeriod === period.value }"
+            @click="changePeriod(period.value, 'line')"
+          >
+            {{ period.name }}
+          </div>
+        </div>
+      </div>
       <div class="line-chart-box">
         <div class="chart-head">
           <div class="chart-title">Task Count Over Time</div>
-          <div class="select-period">
-            <div
-              v-for="(period, index) in periodList"
-              :key="index"
-              class="period"
-              :class="{ active: selectedLinePeriod === period.value }"
-              @click="changePeriod(period.value, 'line')"
-            >
-              {{ period.name }}
-            </div>
-          </div>
         </div>
         <LineChart :options="chartOptions" :series="chartSeries" />
       </div>
       <div class="donut-chart-box">
         <div class="chart-head">
           <div class="chart-title">Percent By Task Status</div>
-          <div class="select-period">
-            <div
-              v-for="(period, index) in periodList"
-              :key="index"
-              class="period"
-              :class="{ active: selectedDonutPeriod === period.value }"
-              @click="changePeriod(period.value, 'donut')"
-            >
-              {{ period.name }}
-            </div>
-          </div>
         </div>
         <DonutChart :data="donutData" />
       </div>
@@ -66,8 +57,7 @@ export default defineComponent({
         { name: 'M', value: 'month' },
         { name: 'Y', value: 'year' }
       ],
-      selectedLinePeriod: 'week',
-      selectedDonutPeriod: 'week',
+      selectedPeriod: 'week',
       startDate: dayjs().subtract(1, 'week').format('YYYY-MM-DD'),
       endDate: dayjs().format('YYYY-MM-DD')
     }
@@ -96,7 +86,8 @@ export default defineComponent({
               return Number(count) + ' 개'
             }
           }
-        }
+        },
+        colors: ['#2E93fA', 'rgb(71, 91, 216)']
       }
     },
     chartSeries() {
@@ -104,9 +95,9 @@ export default defineComponent({
         {
           name: 'Total Tasks',
           data: this.referenceDate.map((date) => {
-            if (this.selectedLinePeriod === 'week') {
+            if (this.selectedPeriod === 'week') {
               return this.getTodosCountByDate(date, (this as any).$store.state.todos)
-            } else if (this.selectedLinePeriod === 'month') {
+            } else if (this.selectedPeriod === 'month') {
               return this.getTodosCountByWeek(date, (this as any).$store.state.todos)
             }
 
@@ -164,14 +155,10 @@ export default defineComponent({
         status: ''
       })
     },
-    changePeriod(period: 'week' | 'month' | 'year', category: string) {
+    changePeriod(period: 'week' | 'month' | 'year') {
       console.log('클릭')
 
-      if (category === 'line') {
-        this.selectedLinePeriod = period
-      } else {
-        this.selectedDonutPeriod = period
-      }
+      this.selectedPeriod = period
 
       this.startDate = dayjs().subtract(1, period).format('YYYY-MM-DD')
       this.endDate = dayjs().format('YYYY-MM-DD')
@@ -195,7 +182,7 @@ export default defineComponent({
     }
   },
   watch: {
-    selectedLinePeriod: 'fetchTodos'
+    selectedPeriod: 'fetchTodos'
   }
 })
 </script>
@@ -218,7 +205,7 @@ export default defineComponent({
 .chart-title {
   font-weight: bold;
   color: rgb(44, 62, 80);
-  font-size: small;
+  font-size: large;
 }
 
 .chart-head {
@@ -249,5 +236,10 @@ export default defineComponent({
 .active {
   background-color: rgb(71, 91, 216);
   color: rgb(255, 255, 255);
+}
+
+.period-box {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
