@@ -1,5 +1,7 @@
 <template lang="">
-  <div class="status-tag" :style="selectColor(status)">{{ status }}</div>
+  <div class="status-tag" :style="selectColor(status)">
+    {{ status.charAt(0).toUpperCase() + status.slice(1) }}
+  </div>
 </template>
 <script lang="ts">
 export default {
@@ -39,5 +41,6 @@ export default {
   padding: 5px 0;
   text-align: center;
   font-size: x-small;
+  font-weight: bold;
 }
 </style>

@@ -45,7 +45,7 @@ export default defineComponent({
         start: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
         end: dayjs().format('YYYY-MM-DD')
       },
-      showFilter: true,
+      showFilter: false,
       selectedCategory: 'All',
       selectedStatus: 'all',
       selectedPeriod: '3 Month'

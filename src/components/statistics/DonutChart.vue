@@ -1,6 +1,6 @@
-<template lang="">
+<template>
   <svg :width="width" :height="height">
-    <g :transform="'translate(' + width / 3 + ',' + height / 2 + ')'">
+    <g :transform="'translate(' + (width / 2 - 60) + ',' + height / 2 + ')'">
       <path
         :fill="color(i)"
         :stroke="color(i)"
@@ -9,18 +9,29 @@
         v-for="(d, i) in arcs"
         :key="i"
       ></path>
+      <text
+        class="percent"
+        v-for="(d, i) in arcs"
+        :key="i"
+        :transform="'translate(' + getArcCentroid(d, i) + ')'"
+        dy=".35em"
+        text-anchor="middle"
+      >
+        {{ ((d.data.value / total) * 100).toFixed(2) + '%' }}
+      </text>
       <g
         class="legend"
         v-for="(d, i) in arcs"
-        :transform="'translate(140,' + (-45 + i * 30) + ')'"
+        :transform="'translate(' + (140 - 10) + ',' + (-45 + i * 30) + ')'"
         :key="i"
       >
         <circle r="10" :style="{ fill: color(i) }"></circle>
-        <text x="30" y="5">{{ `${d.data.name} ${d.data.value}개` }}</text>
+        <text x="20" y="5">{{ `${d.data.name} ${d.data.value}개` }}</text>
       </g>
     </g>
   </svg>
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import * as d3 from 'd3'
@@ -39,6 +50,9 @@ export default defineComponent({
     }
   },
   computed: {
+    total() {
+      return this.data.reduce((sum, d: any) => sum + d.value, 0)
+    },
     arcs() {
       const pie = d3.pie().value((d: any) => d.value)
       return pie(this.data)
@@ -47,16 +61,30 @@ export default defineComponent({
       const colorScale = d3
         .scaleOrdinal()
         .domain(this.data.map((d: any) => d.name))
-        .range(d3.schemeDark2)
+        .range(['rgb(141, 156, 248)', 'rgb(250, 169, 161)', 'rgb(253, 225, 113)'])
+
       return (i: number) => colorScale(this.arcs[i].data.name)
     },
     arc() {
       const width = window.innerWidth < 500 ? window.innerWidth - 25 : 500
       const height = 250
       const radius = Math.min(width, height) / 2.5
-      const arcGenerator = d3.arc().innerRadius(70).outerRadius(radius)
-      return (_: any, i: number) => arcGenerator(this.arcs[i])
+      const arcGenerator = d3.arc().innerRadius(50).outerRadius(radius)
+      return arcGenerator
+    }
+  },
+  methods: {
+    getArcCentroid(_: any, i: number) {
+      return this.arc.centroid(this.arcs[i])
     }
   }
 })
 </script>
+
+<style lang="css" scoped>
+.percent {
+  font-weight: bold;
+  font-size: small;
+  color: rgb(52, 73, 94);
+}
+</style>

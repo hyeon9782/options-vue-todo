@@ -19,7 +19,7 @@
         <CategoryTag :category="todo.category" />
         <!-- <StatusTag :status="todo.status" /> -->
         <div class="status-box">
-          {{ todo.status }}
+          {{ todo.status.charAt(0).toUpperCase() + todo.status.slice(1) }}
         </div>
       </div>
     </div>
@@ -142,6 +142,7 @@ export default defineComponent({
 }
 
 .status-box {
-  font-size: small;
+  font-size: x-small;
+  font-weight: bold;
 }
 </style>

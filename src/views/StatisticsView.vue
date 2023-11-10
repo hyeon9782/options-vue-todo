@@ -58,7 +58,7 @@ export default defineComponent({
   },
   data() {
     return {
-      recentWeekDates: Array.from({ length: 7 }, (_, i) =>
+      referenceDate: Array.from({ length: 7 }, (_, i) =>
         dayjs().subtract(i, 'day').format('MM-DD')
       ),
       periodList: [
@@ -67,7 +67,9 @@ export default defineComponent({
         { name: 'Y', value: 'year' }
       ],
       selectedLinePeriod: 'week',
-      selectedDonutPeriod: 'week'
+      selectedDonutPeriod: 'week',
+      startDate: dayjs().subtract(1, 'week').format('YYYY-MM-DD'),
+      endDate: dayjs().format('YYYY-MM-DD')
     }
   },
   created() {
@@ -81,29 +83,49 @@ export default defineComponent({
           id: 'vuechart-example'
         },
         xaxis: {
-          categories: this.recentWeekDates
+          categories: this.referenceDate
         },
         stroke: {
           show: true,
+          width: 2,
           curve: 'smooth'
+        },
+        tooltip: {
+          y: {
+            formatter: function (count: number) {
+              return Number(count) + ' 개'
+            }
+          }
         }
       }
     },
     chartSeries() {
       return [
         {
-          name: '할 일 수',
-          data: this.recentWeekDates.map((date) =>
-            this.getTodosCountByDate(date, (this as any).$store.state.todos)
-          )
+          name: 'Total Tasks',
+          data: this.referenceDate.map((date) => {
+            if (this.selectedLinePeriod === 'week') {
+              return this.getTodosCountByDate(date, (this as any).$store.state.todos)
+            } else if (this.selectedLinePeriod === 'month') {
+              return this.getTodosCountByWeek(date, (this as any).$store.state.todos)
+            }
+
+            return this.getTodosCountByYear(date, (this as any).$store.state.todos)
+          })
+        },
+        {
+          name: 'Complete Tasks',
+          data: this.referenceDate.map((date) => {
+            return this.getTodosCountByStatus(date, (this as any).$store.state.todos)
+          })
         }
       ]
     },
     donutData() {
       return [
-        { name: '진행전', value: this.getStatusCount('진행전') },
-        { name: '진행중', value: this.getStatusCount('진행중') },
-        { name: '완료', value: this.getStatusCount('완료') }
+        { name: 'Complete', value: this.getStatusCount('complete') },
+        { name: 'On Going', value: this.getStatusCount('ongoing') },
+        { name: 'Planned', value: this.getStatusCount('planned') }
       ]
     },
     noData() {
@@ -114,21 +136,35 @@ export default defineComponent({
     getTodosCountByDate(date: string, todos: Todo[]): number {
       return todos.filter((todo) => todo.deadline.substring(5) === date).length
     },
+    getTodosCountByWeek(date: string, todos: Todo[]): number {
+      const sevenDaysAgo = new Date(date)
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+      return todos.filter((todo) => {
+        const todoDeadline = new Date(todo.deadline)
+        return todoDeadline >= sevenDaysAgo && todoDeadline <= new Date(date)
+      }).length
+    },
+    getTodosCountByYear(date: string, todos: Todo[]) {
+      return todos.filter((todo) => todo.deadline.includes(date)).length
+    },
+    getTodosCountByStatus(date: string, todos: Todo[]) {
+      return todos.filter(
+        (todo) => todo.deadline.substring(5) === date && todo.status === 'complete'
+      ).length
+    },
     getStatusCount(status: string): number {
       return (this as any).$store.state.todos.filter((todo: Todo) => todo.status === status).length
     },
     fetchTodos() {
-      const week = Array.from({ length: 7 }, (_, i) =>
-        dayjs().subtract(i, 'day').format('YYYY-MM-DD')
-      )
-
       ;(this as any).$store.dispatch('getTodos', {
         keyword: '',
-        startDate: week[6],
-        endDate: week[0]
+        startDate: this.startDate,
+        endDate: this.endDate,
+        category: '',
+        status: ''
       })
     },
-    changePeriod(period: string, category: string) {
+    changePeriod(period: 'week' | 'month' | 'year', category: string) {
       console.log('클릭')
 
       if (category === 'line') {
@@ -136,7 +172,30 @@ export default defineComponent({
       } else {
         this.selectedDonutPeriod = period
       }
+
+      this.startDate = dayjs().subtract(1, period).format('YYYY-MM-DD')
+      this.endDate = dayjs().format('YYYY-MM-DD')
+
+      if (period === 'week') {
+        this.referenceDate = Array.from({ length: 7 }, (_, i) =>
+          dayjs().subtract(i, 'day').format('MM-DD')
+        )
+        console.log(this.referenceDate)
+      } else if (period === 'month') {
+        this.referenceDate = Array.from({ length: 4 }, (_, i) =>
+          dayjs().subtract(i, 'week').format('YYYY-MM-DD')
+        )
+        console.log(this.referenceDate)
+      } else {
+        this.referenceDate = Array.from({ length: 12 }, (_, i) =>
+          dayjs().subtract(i, 'month').format('YYYY-MM')
+        )
+        console.log(this.referenceDate)
+      }
     }
+  },
+  watch: {
+    selectedLinePeriod: 'fetchTodos'
   }
 })
 </script>
@@ -148,10 +207,12 @@ export default defineComponent({
 
 .line-chart-box {
   background-color: rgb(247, 249, 255);
+  margin: 10px 0;
 }
 
 .donut-chart-box {
   background-color: rgb(247, 249, 255);
+  margin: 10px 0;
 }
 
 .chart-title {
