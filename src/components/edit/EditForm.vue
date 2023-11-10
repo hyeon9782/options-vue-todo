@@ -113,7 +113,7 @@ export default defineComponent({
       this.selectedStatus = '선택'
     },
     deleteTodo() {
-      this.$store
+      ;(this as any).$store
         .dispatch('deleteTodo', this.todoId)
         .then(() => {
           this.clearForm()

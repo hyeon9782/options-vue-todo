@@ -15,8 +15,8 @@ export default {
   methods: {
     // 날짜를 선택했을 때 선택한 날짜가 포함된 모든 할 일을 가져온다
     searchTodos() {
-      const formattedDate = formatDate(this.date, 'YYYY-MM-DD')
-      this.$store.dispatch('getTodos', {
+      const formattedDate = formatDate(this.date.toDateString(), 'YYYY-MM-DD')
+      ;(this as any).$store.dispatch('getTodos', {
         keyword: '',
         startDate: '',
         endDate: formattedDate

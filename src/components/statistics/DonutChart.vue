@@ -50,8 +50,8 @@ export default defineComponent({
     }
   },
   computed: {
-    total() {
-      return this.data.reduce((sum, d: any) => sum + d.value, 0)
+    total(): number {
+      return this.data.reduce((sum: number, d: any) => sum + d.value, 0)
     },
     arcs() {
       const pie = d3.pie().value((d: any) => d.value)
