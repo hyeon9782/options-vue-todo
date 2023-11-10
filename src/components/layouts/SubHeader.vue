@@ -18,7 +18,7 @@ export default {
 .sub-header {
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 15px;
 }
 
 .title-box {

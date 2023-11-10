@@ -1,5 +1,5 @@
 <template lang="">
-  <SubHeader>New Task</SubHeader>
+  <SubHeader>Add Task</SubHeader>
   <main>
     <EditForm />
   </main>

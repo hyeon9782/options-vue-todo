@@ -5,6 +5,7 @@
   height: 100vh;
   overflow: auto;
   background-color: lightgray;
+  color: rgb(49, 69, 113);
 }
 
 a {

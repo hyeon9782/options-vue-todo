@@ -2,42 +2,40 @@
   <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo()">
     <AppCalender v-model="deadline" />
     <div class="input-box">
+      <label for="title"> Title </label>
       <input
         type="text"
+        id="title"
         v-model="title"
         class="title-input"
-        placeholder="제목을 입력해주세요."
+        placeholder="Title must be inserted"
         required
       />
+      <label for="description"> Description </label>
       <input
         type="text"
+        id="description"
         v-model="description"
         class="description-input"
-        placeholder="설명을 입력해주세요."
+        placeholder="Description optional"
         required
       />
+      <label for="category"> Category </label>
+      <CategoryList />
       <div class="select-box">
-        <div class="date-box">{{ deadline }}</div>
-        <select v-model="selectedStatus" class="edit-select">
+        <select v-if="todoId" v-model="selectedStatus" class="edit-select">
           <option value="선택">선택</option>
           <option v-for="(status, index) in statusArray" :key="index" :value="status">
             {{ status }}
           </option>
         </select>
-        <select v-model="selectedCategory" class="edit-select">
-          <option value="선택">선택</option>
-          <option v-for="(category, index) in categories" :key="index" :value="category">
-            {{ category }}
-          </option>
-        </select>
       </div>
-    </div>
-
-    <div class="button-box">
-      <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
-        {{ todo ? '수정' : '추가' }}
-      </button>
-      <button class="delete-button" @click.prevent="deleteTodo">삭제</button>
+      <div class="button-box">
+        <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
+          {{ todoId ? 'Edit' : 'Create' }}
+        </button>
+        <button v-if="todoId" class="delete-button" @click.prevent="deleteTodo">Delete</button>
+      </div>
     </div>
   </form>
 </template>
@@ -47,11 +45,13 @@ import { defineComponent } from 'vue'
 import { formatDate } from '@/utils/utils'
 import AppCalender from '@/components/edit/AppCalender.vue'
 import { getTodoAPI } from '@/api/todos'
+import CategoryList from './CategoryList.vue'
 
 export default defineComponent({
   name: 'EditForm',
   components: {
-    AppCalender
+    AppCalender,
+    CategoryList
   },
   props: {
     todoId: {
@@ -122,8 +122,6 @@ export default defineComponent({
       const todo = await getTodoAPI(Number(id))
       console.log(todo)
 
-      this.todo = { ...todo }
-
       this.title = todo.title
       this.description = todo.description
       this.deadline = todo.deadline
@@ -140,45 +138,49 @@ export default defineComponent({
 
 <style lang="css" scoped>
 .edit-form {
-  padding: 20px;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: calc(100vh - 63.52px);
 }
 
 .input-box {
-  border-radius: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 20px;
+  border-radius: 25px 25px 0px 0px;
+  background-color: rgb(239, 240, 251);
+  box-shadow: rgb(224, 224, 224) 0px 3px 14px 10px;
+  padding: 30px 30px;
+  height: 80%;
 }
 
 .title-input {
-  padding: 10px;
-  width: 100%;
-  border: none;
-  outline: none;
-  background: none;
-  font-size: 1.5rem;
-  border-bottom: 1px solid gray;
-}
-
-.description-input {
-  padding: 0px 10px;
   width: 100%;
   border: none;
   outline: none;
   background: none;
   font-size: 1rem;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid lightgray;
+  margin: 15px 0;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: medium;
+  color: rgb(49, 69, 113);
+}
+
+.description-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1rem;
+  border-bottom: 1px solid lightgray;
+  margin: 15px 0;
 }
 
 .select-box {
   display: flex;
-}
-
-.date-box {
-  padding: 10px;
 }
 
 .button-box {
@@ -188,12 +190,14 @@ export default defineComponent({
 
 .edit-button {
   color: white;
-  background-color: blue;
+  background-color: rgb(71, 91, 216);
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   padding: 15px 0;
-  font-size: 1.5rem;
-  width: 300px;
+  font-weight: bold;
+  font-size: medium;
+  width: 200px;
+  margin-top: 10px;
 }
 
 .edit-select {
@@ -201,12 +205,5 @@ export default defineComponent({
   border: none;
   background: lightgray;
   padding: 10px;
-}
-
-.edit-date {
-  width: 75%;
-  border: none;
-  background-color: lightgreen;
-  text-align: center;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <header class="header-container">
-    <div class="header-title">Todo List</div>
+    <div class="header-title">Task</div>
     <router-link to="/search">
       <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
     </router-link>

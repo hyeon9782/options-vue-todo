@@ -43,8 +43,8 @@ export default defineComponent({
     searchTodos() {
       this.$store.dispatch('getTodos', {
         keyword: this.keyword,
-        startDate: formatDate(this.range.start, 'YYYY-MM-DD'),
-        endDate: formatDate(this.range.end, 'YYYY-MM-DD')
+        startDate: this.keyword ? formatDate(this.range.start, 'YYYY-MM-DD') : '',
+        endDate: this.keyword ? formatDate(this.range.end, 'YYYY-MM-DD') : ''
       })
     }
   },

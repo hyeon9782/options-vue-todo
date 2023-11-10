@@ -1,5 +1,6 @@
 <template lang="">
   <div class="todo-item" @click="moveEdit">
+    <div class="todo-status" :style="{ backgroundColor: selectColor(todo.status) }"></div>
     <div class="contents-box">
       <div class="todo-title">
         {{ todo.title }}
@@ -13,7 +14,6 @@
         </div>
       </div>
     </div>
-    <div class="todo-status" :style="{ backgroundColor: selectColor(todo.status) }"></div>
   </div>
 </template>
 <script lang="ts">
@@ -51,10 +51,11 @@ export default defineComponent({
 .todo-item {
   border-radius: 5px;
   height: 120px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: rgb(224, 224, 224) 10px 10px 10px 0px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  background-color: rgb(247, 247, 253);
 }
 
 .contents-box {
@@ -64,7 +65,7 @@ export default defineComponent({
 
 .contents-box .todo-title {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -90,5 +91,6 @@ export default defineComponent({
 .todo-status {
   height: 80%;
   width: 5px;
+  border-radius: 15px;
 }
 </style>

@@ -13,6 +13,6 @@ export default {
 <style lang="css" scoped>
 .back {
   font-size: 2rem;
-  color: blue;
+  color: #333;
 }
 </style>

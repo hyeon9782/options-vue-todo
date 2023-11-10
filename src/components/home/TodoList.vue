@@ -2,7 +2,9 @@
   <div class="todo-list" v-if="todos.length > 0">
     <TodoItem v-for="(todo, index) in todos" :key="index" :todo="todo" />
   </div>
-  <div class="no-data" v-else>할 일을 추가해보세요!</div>
+  <div class="no-data" v-else-if="todos.length === 0 && $route.path !== '/search'">
+    할 일을 추가해보세요!
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

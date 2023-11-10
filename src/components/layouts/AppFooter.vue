@@ -1,5 +1,5 @@
 <template lang="">
-  <footer class="footer-container">
+  <footer class="footer-container" v-if="$route.path !== '/edit'">
     <router-link to="/">
       <font-awesome-icon :icon="['fas', 'house']" class="footer-home" />
     </router-link>
@@ -20,29 +20,29 @@ export default {}
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: white;
+  background-color: rgb(71, 91, 216);
+  box-shadow: rgb(94, 94, 94) 10px 10px 10px 0px;
   display: flex;
   justify-content: space-around;
   border-radius: 30px;
   align-items: center;
-  border: 1px solid lightgray;
-  width: 80%;
+  width: 50%;
   align-self: center;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .footer-home {
-  color: blue;
+  color: white;
   font-size: 1.8rem;
 }
 
 .footer-edit {
-  color: blue;
+  color: white;
   font-size: 2rem;
 }
 
 .footer-statistics {
-  color: blue;
+  color: white;
   font-size: 2rem;
 }
 </style>

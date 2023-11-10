@@ -81,6 +81,14 @@ const handlers: HttpHandler[] = [
 
         return todoDeadline >= start && todoDeadline <= end
       })
+    } else if (startDate && endDate && !keyword) {
+      newTodos = newTodos.filter((todo) => {
+        const todoDeadline = new Date(todo.deadline)
+        const start = new Date(startDate)
+        const end = new Date(endDate)
+
+        return todoDeadline >= start && todoDeadline <= end
+      })
     } else if (!startDate && !endDate && keyword) {
       newTodos = newTodos.filter((todo) => {
         const titleIncludesKeyword = String(todo.title).includes(keyword)
@@ -95,16 +103,6 @@ const handlers: HttpHandler[] = [
     } else {
       newTodos = []
     }
-
-    // else if (startDate && endDate && !keyword) {
-    //   newTodos = newTodos.filter((todo) => {
-    //     const todoDeadline = new Date(todo.deadline)
-    //     const start = new Date(startDate)
-    //     const end = new Date(endDate)
-
-    //     return todoDeadline >= start && todoDeadline <= end
-    //   })
-    // }
 
     return Response.json(newTodos)
   }),

@@ -19,6 +19,7 @@ export default {
 <style lang="css">
 .home-container {
   height: calc(100vh - 109px);
+  padding: 0 20px;
 }
 
 .list-box {
