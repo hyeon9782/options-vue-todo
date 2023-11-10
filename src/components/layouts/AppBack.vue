@@ -12,7 +12,7 @@ export default {
 </script>
 <style lang="css" scoped>
 .back {
-  font-size: 2rem;
+  font-size: large;
   color: #333;
 }
 </style>

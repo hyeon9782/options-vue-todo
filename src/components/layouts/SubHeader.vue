@@ -23,7 +23,7 @@ export default {
 
 .title-box {
   font-weight: bold;
-  font-size: 1.7rem;
+  font-size: large;
   width: calc(100% - 32px);
   text-align: center;
 }

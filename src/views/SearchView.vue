@@ -1,5 +1,5 @@
 <template lang="">
-  <SubHeader>Search Task</SubHeader>
+  <SubHeader>Search</SubHeader>
   <main class="search-container">
     <SearchForm />
     <div class="list-box">

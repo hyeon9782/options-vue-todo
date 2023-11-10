@@ -45,7 +45,7 @@ import { defineComponent } from 'vue'
 import { formatDate } from '@/utils/utils'
 import AppCalender from '@/components/edit/AppCalender.vue'
 import { getTodoAPI } from '@/api/todos'
-import CategoryList from './CategoryList.vue'
+import CategoryList from '@/components/edit/CategoryList.vue'
 
 export default defineComponent({
   name: 'EditForm',
@@ -141,7 +141,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: calc(100vh - 63.52px);
+  height: calc(100vh - 48.8px);
 }
 
 .input-box {

@@ -4,13 +4,14 @@
       <input
         v-model="keyword"
         @input="searchDebounce"
-        placeholder="검색어를 입력해주세요."
+        placeholder="Search for tasks"
         type="text"
         class="search-input"
       />
-      <div class="search-option-box">
-        <RangePicker v-model="range" />
+      <div class="setting-box" @click.prevent="toggleFilter">
+        <font-awesome-icon :icon="['fas', 'sliders']" class="setting-icon" />
       </div>
+      <SearchFilter v-show="showFilter" />
     </form>
   </div>
 </template>
@@ -19,11 +20,11 @@
 import { debounce, formatDate } from '@/utils/utils'
 import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
-import RangePicker from '@/components/search/RangePicker.vue'
+import SearchFilter from '@/components/search/SearchFilter.vue'
 export default defineComponent({
   name: 'SearchForm',
   components: {
-    RangePicker
+    SearchFilter
   },
   data() {
     return {
@@ -32,7 +33,8 @@ export default defineComponent({
       range: {
         start: new Date(2020, 9, 12),
         end: new Date(2023, 12, 16)
-      }
+      },
+      showFilter: false
     }
   },
   methods: {
@@ -46,6 +48,9 @@ export default defineComponent({
         startDate: this.keyword ? formatDate(this.range.start, 'YYYY-MM-DD') : '',
         endDate: this.keyword ? formatDate(this.range.end, 'YYYY-MM-DD') : ''
       })
+    },
+    toggleFilter() {
+      this.showFilter = !this.showFilter
     }
   },
   watch: {
@@ -63,16 +68,30 @@ export default defineComponent({
 
 .search-form {
   display: flex;
-  gap: 10px;
   padding: 10px;
+  width: 100%;
 }
 
 .search-input {
-  padding: 5px 10px;
-  border-radius: 15px;
-  border: none;
+  padding: 10px;
+  border-radius: 7px 0 0 7px;
+  border: 1px solid rgb(224, 224, 224);
   outline: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   background: white;
+  width: 90%;
+}
+
+.setting-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 7px 7px 0;
+  background-color: lightgray;
+  width: 10%;
+}
+
+.setting-icon {
+  font-size: x-large;
 }
 </style>
