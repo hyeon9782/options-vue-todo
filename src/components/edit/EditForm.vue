@@ -94,7 +94,7 @@ export default defineComponent({
           title: this.title,
           description: this.description,
           deadline: this.deadline,
-          status: 'planned',
+          status: this.selectedStatus,
           category: this.selectedCategory
         })
         .then(() => {

@@ -2,7 +2,7 @@
   <SubHeader>Dashboard</SubHeader>
   <main class="statistics-container">
     <NoData v-if="noData" />
-    <div v-else>
+    <div v-else class="chart-container">
       <div class="period-box">
         <div class="select-period">
           <div
@@ -20,6 +20,7 @@
         <div class="chart-head">
           <div class="chart-title">Task Count Over Time</div>
         </div>
+        <!-- <BubbleChart :options="bubbleChartOptions" :series="bubbleChartSeries" /> -->
         <LineChart :options="chartOptions" :series="chartSeries" />
       </div>
       <div class="donut-chart-box">
@@ -36,6 +37,7 @@ import { defineComponent } from 'vue'
 import SubHeader from '@/components/layouts/SubHeader.vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
+import BubbleChart from '@/components/statistics/BubbleChart.vue'
 import NoData from '@/components/statistics/NoData.vue'
 import type { Todo } from '@/types'
 import dayjs from 'dayjs'
@@ -43,6 +45,7 @@ import dayjs from 'dayjs'
 export default defineComponent({
   components: {
     LineChart,
+    BubbleChart,
     SubHeader,
     DonutChart,
     NoData
@@ -70,7 +73,7 @@ export default defineComponent({
     chartOptions() {
       return {
         chart: {
-          id: 'vuechart-example'
+          id: 'line-chart'
         },
         xaxis: {
           categories: this.referenceDate
@@ -89,6 +92,40 @@ export default defineComponent({
         },
         colors: ['#2E93fA', 'rgb(71, 91, 216)']
       }
+    },
+    bubbleChartOptions() {
+      return {
+        chart: {
+          id: 'bubble-chart'
+        },
+        xaxis: {
+          categories: this.referenceDate
+        },
+        fill: {
+          opacity: 0.8
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          curve: 'smooth'
+        }
+      }
+    },
+    bubbleChartSeries() {
+      return [
+        {
+          name: 'Bubble 1',
+          data: this.generateData(15)
+        },
+        {
+          name: 'Bubble 2',
+          data: this.generateData(15)
+        },
+        {
+          name: 'Bubble 3',
+          data: this.generateData(15)
+        }
+      ]
     },
     chartSeries() {
       return [
@@ -179,6 +216,17 @@ export default defineComponent({
         )
         console.log(this.referenceDate)
       }
+    },
+    generateData(count: number) {
+      const seriesData = []
+      const baseTime = new Date().getTime()
+      for (let i = 0; i < count; i++) {
+        const x = baseTime + i * 1000 * 3600 * 24
+        const y = Math.floor(Math.random() * 90) + 10
+        const z = Math.floor(Math.random() * 20) + 1
+        seriesData.push([x, y, z])
+      }
+      return seriesData
     }
   },
   watch: {
@@ -190,16 +238,22 @@ export default defineComponent({
 <style lang="css">
 .statistics-container {
   width: 100%;
+  height: 100%;
+}
+
+.chart-container {
+  min-height: 100%;
+  overflow: auto;
 }
 
 .line-chart-box {
   background-color: rgb(247, 249, 255);
-  margin: 10px 0;
+  margin-bottom: 30px;
 }
 
 .donut-chart-box {
   background-color: rgb(247, 249, 255);
-  margin: 10px 0;
+  margin-bottom: 50px;
 }
 
 .chart-title {
@@ -241,5 +295,6 @@ export default defineComponent({
 .period-box {
   display: flex;
   justify-content: flex-end;
+  padding: 10px 20px;
 }
 </style>

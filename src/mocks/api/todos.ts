@@ -1,5 +1,25 @@
 import type { Todo } from '@/types'
 import { HttpHandler, http } from 'msw'
+import dayjs from 'dayjs'
+
+const categories = ['Urgent', 'Office', 'Home', 'School', 'ETC', 'Work Out']
+
+// let todos = Array.from(Array(99).keys()).map((id) => {
+//   const deadline = dayjs()
+//     .add(Math.floor(Math.random() * 6), 'day')
+//     .format('YYYY-MM-DD')
+
+//   console.log(deadline + ' : ' + id)
+
+//   return {
+//     id,
+//     title: `테스트 제목입니다 ${id}`,
+//     description: `테스트 설명입니다 ${id}`,
+//     deadline,
+//     status: ['planned', 'ongoing', 'complete'][Math.floor(Math.random() * 3)],
+//     category: categories[Math.floor(Math.random() * 6)]
+//   }
+// })
 
 let todos: Todo[] = [
   {
@@ -60,7 +80,7 @@ let todos: Todo[] = [
   }
 ]
 
-let idx = 7
+let idx = 100
 
 const handlers: HttpHandler[] = [
   // 할일 목록

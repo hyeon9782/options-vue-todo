@@ -42,7 +42,7 @@ export default {
         default:
           return {
             backgroundColor: 'lightgray',
-            color: 'black'
+            color: 'rgb(49, 69, 113)'
           }
       }
     }

@@ -4,7 +4,7 @@
     <div class="date-box">
       <label for="">Date</label>
       <PeriodList :selectedPeriod="selectedPeriod" :selectPeriod="selectPeriod" />
-      <VDatePicker v-model="value" is-range>
+      <VDatePicker v-model="value" is-range locale="en-US">
         <template #default="{ inputValue, inputEvents }">
           <div class="flex justify-center items-center">
             <input

@@ -2,10 +2,33 @@
 
 ## Point!
 
-- MSW를 사용해 MOCK API를 구현했어요!
-- TypeScript를 사용해 타입 안정성을 강화했어요!
-- 검색 기능을 구현할 때 debouce를 사용해 API 호출을 절약했어요!
-- DonutChart에서 UI 로직과 데이터 전처리 로직을 분리해 가독성을 높였어요!
+- MSW를 사용해 MOCK API를 구현했습니다.
+- TypeScript를 사용해 타입 안정성을 강화했습니다.
+- 검색 기능을 구현할 때 debouce를 사용해 API 호출을 절약했습니다.
+- DonutChart에서 UI 로직과 데이터 전처리 로직을 분리해 가독성을 높였습니다.
+- 처음에 주신 요구사항과 동일한 version은 original branch에 있습니다.
+- main branch에는 추가 구현사항과 변경된 UI가 있습니다.
+
+## 기본 구현 (original branch)
+
+- 할 일 목록 조회
+- 할 일 생성
+- 할 일 수정
+- 할 일 삭제
+- Line Chart 구현
+- Donut Chart 구현
+
+## 추가 구현 (main branch)
+
+- 통계 페이지에서 기간을 변경하여 시각화된 데이터를 확인할 수 있습니다.
+- UX를 높이기 위해 전체적인 UI를 변경했습니다.
+- 검색 기능에 다양한 Filter를 추가했습니다.
+- Task를 삭제할 수 있습니다.
+
+## 아쉬운 점 & 보완할 점
+
+- Test 코드를 통해 코드의 안정성을 높이고 싶습니다.
+- Component 분리를 좀 더 세분화하고 싶습니다.
 
 ## Stack
 
@@ -15,15 +38,6 @@
 - Day.js
 - D3
 - ApexCharts
-
-## 주요 기능
-
-- 할 일 목록 조회
-- 할 일 생성
-- 할 일 수정
-- 할 일 삭제
-- Line Chart 구현
-- Donut Chart 구현
 
 ## Project Setup
 
@@ -41,12 +55,6 @@ npm run dev
 
 ```sh
 npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
 ```
 
 # 과제 2번
