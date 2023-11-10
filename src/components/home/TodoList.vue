@@ -6,7 +6,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import TodoItem from '@/components/list/TodoItem.vue'
+import TodoItem from '@/components/home/TodoItem.vue'
 export default defineComponent({
   name: 'TodoList',
   components: {
@@ -18,7 +18,11 @@ export default defineComponent({
   },
   methods: {
     fetchTodos() {
-      ;(this as any).$store.dispatch('getTodos', {})
+      ;(this as any).$store.dispatch('getTodos', {
+        keyword: '',
+        startDate: '',
+        endDate: ''
+      })
     }
   },
   computed: {

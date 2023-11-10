@@ -1,5 +1,5 @@
 <template>
-  <div class="search-container">
+  <div class="search-box">
     <form @submit.prevent="searchDebounce" class="search-form">
       <input
         v-model="keyword"
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { debounce } from '@/utils/utils'
+import { debounce, formatDate } from '@/utils/utils'
 import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 import RangePicker from '@/components/search/RangePicker.vue'
@@ -31,7 +31,7 @@ export default defineComponent({
       date: new Date(),
       range: {
         start: new Date(2020, 9, 12),
-        end: new Date(2020, 9, 16)
+        end: new Date(2023, 12, 16)
       }
     }
   },
@@ -43,18 +43,20 @@ export default defineComponent({
     searchTodos() {
       this.$store.dispatch('getTodos', {
         keyword: this.keyword,
-        category: 'title'
+        startDate: formatDate(this.range.start, 'YYYY-MM-DD'),
+        endDate: formatDate(this.range.end, 'YYYY-MM-DD')
       })
     }
   },
   watch: {
-    keyword: 'searchDebounce'
+    keyword: 'searchDebounce',
+    range: 'searchDebounce'
   }
 })
 </script>
 
 <style lang="css" scoped>
-.search-container {
+.search-box {
   display: flex;
   align-items: center;
 }

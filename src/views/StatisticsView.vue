@@ -79,7 +79,15 @@ export default defineComponent({
       return (this as any).$store.state.todos.filter((todo: Todo) => todo.status === status).length
     },
     fetchTodos() {
-      ;(this as any).$store.dispatch('getTodos', {})
+      const week = Array.from({ length: 7 }, (_, i) =>
+        dayjs().subtract(i, 'day').format('YYYY-MM-DD')
+      )
+
+      ;(this as any).$store.dispatch('getTodos', {
+        keyword: '',
+        startDate: week[6],
+        endDate: week[0]
+      })
     }
   }
 })

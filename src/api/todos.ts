@@ -2,8 +2,8 @@ import { HTTP_METHOD, COMMON_HEADERS } from '@/constants/api'
 import type { NewTodo, SearchTodos, UpdateTodo } from '@/types'
 
 // 할 일 목록 가져오기
-async function getTodosAPI({ keyword, category }: SearchTodos) {
-  return await fetch(`/todos?keyword=${keyword}&category=${category}`, {
+async function getTodosAPI({ keyword, startDate, endDate }: SearchTodos) {
+  return await fetch(`/todos?keyword=${keyword}&startDate=${startDate}&endDate=${endDate}`, {
     method: HTTP_METHOD.GET,
     headers: {
       ...COMMON_HEADERS
@@ -34,7 +34,7 @@ async function createTodoAPI(todo: NewTodo) {
 
 // 할 일 수정하기
 async function updateTodoAPI(todo: UpdateTodo) {
-  return await fetch('/todos', {
+  return await fetch(`/todos/${todo.id}`, {
     method: HTTP_METHOD.PUT,
     body: JSON.stringify(todo),
     headers: {

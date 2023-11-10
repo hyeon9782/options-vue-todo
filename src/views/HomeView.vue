@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import TodoList from '@/components/list/TodoList.vue'
-import WeeklyCanlender from '@/components/list/WeeklyCanlender.vue'
+import TodoList from '@/components/home/TodoList.vue'
+import WeeklyCanlender from '@/components/home/WeeklyCanlender.vue'
 
 export default {
   components: { TodoList, WeeklyCanlender }

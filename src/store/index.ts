@@ -66,9 +66,14 @@ export const store = new Vuex.Store({
       }
     },
     // 할 일 삭제하기
-    deleteTodo({ commit }: { commit: Commit }, id: number) {
+    deleteTodo({ commit, state }: { commit: Commit; state: State }, id: number) {
       try {
-        const res = deleteTodoAPI(id)
+        deleteTodoAPI(id)
+        commit('updateState', {
+          todos: state.todos.filter((todo) => {
+            return todo.id !== id
+          })
+        })
       } catch (error) {
         console.error(error)
       }

@@ -11,7 +11,7 @@ export default {
       get() {
         return this.modelValue
       },
-      set(value) {
+      set(value: string) {
         console.log(formatDate(value, 'YYYY-MM-DD'))
 
         this.$emit('update:modelValue', formatDate(value, 'YYYY-MM-DD'))

@@ -1,5 +1,5 @@
 <template>
-  <form class="edit-form" @submit.prevent="todo ? updateTodo($event) : addTodo()">
+  <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo()">
     <AppCalender v-model="deadline" />
     <div class="input-box">
       <input
@@ -34,9 +34,10 @@
     </div>
 
     <div class="button-box">
-      <button class="edit-button" @click.prevent="todo ? updateTodo($event) : addTodo()">
+      <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
         {{ todo ? '수정' : '추가' }}
       </button>
+      <button class="delete-button" @click.prevent="deleteTodo">삭제</button>
     </div>
   </form>
 </template>
@@ -45,6 +46,7 @@
 import { defineComponent } from 'vue'
 import { formatDate } from '@/utils/utils'
 import AppCalender from '@/components/edit/AppCalender.vue'
+import { getTodoAPI } from '@/api/todos'
 
 export default defineComponent({
   name: 'EditForm',
@@ -52,8 +54,8 @@ export default defineComponent({
     AppCalender
   },
   props: {
-    todo: {
-      type: Object
+    todoId: {
+      type: Number
     }
   },
   data() {
@@ -85,14 +87,15 @@ export default defineComponent({
     updateTodo(e: Event) {
       ;(this as any).$store
         .dispatch('updateTodo', {
-          id: this.todo?.id,
+          id: this.todoId,
           title: this.title,
           description: this.description,
           deadline: this.deadline,
           status: this.selectedStatus
         })
         .then(() => {
-          this.toggleEdit(e)
+          this.clearForm()
+          this.$router.push('/')
         })
     },
     clearForm() {
@@ -100,17 +103,36 @@ export default defineComponent({
       this.description = ''
       this.deadline = ''
       this.selectedStatus = '선택'
+    },
+    deleteTodo() {
+      this.$store
+        .dispatch('deleteTodo', this.todoId)
+        .then(() => {
+          this.clearForm()
+          this.$router.push('/')
+        })
+        .then(() => {
+          this.clearForm()
+          this.$router.push('/')
+        })
+    },
+    async getTodo() {
+      const id = this.$route.params.id
+      console.log(id)
+      const todo = await getTodoAPI(Number(id))
+      console.log(todo)
+
+      this.todo = { ...todo }
+
+      this.title = todo.title
+      this.description = todo.description
+      this.deadline = todo.deadline
+      this.selectedStatus = todo.status
     }
   },
-  created() {
-    console.log('todo 있니?')
-
-    if (this.todo) {
-      console.log('todo 있다!')
-      this.title = this.todo.title
-      this.description = this.todo.description
-      this.deadline = this.todo.deadline
-      this.selectedStatus = this.todo.status
+  mounted() {
+    if (this.todoId) {
+      this.getTodo()
     }
   }
 })

@@ -41,19 +41,19 @@ let todos: Todo[] = [
     id: 5,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 3',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-08',
+    deadline: '2023-11-10',
     status: '완료'
   },
   {
     id: 6,
     title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
     description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-08',
+    deadline: '2023-11-10',
     status: '완료'
   }
 ]
 
-let idx = 3
+let idx = 7
 
 const handlers: HttpHandler[] = [
   // 할일 목록
@@ -61,15 +61,50 @@ const handlers: HttpHandler[] = [
     const url = new URL(request.url)
 
     const keyword: string = url.searchParams.get('keyword') || ''
-    const category: string = url.searchParams.get('category') || ''
+    const startDate: string = url.searchParams.get('startDate') || ''
+    const endDate: string = url.searchParams.get('endDate') || ''
 
     let newTodos: Todo[] = [...todos]
 
-    if (keyword !== null && keyword !== 'undefined') {
-      newTodos = todos.filter((todo) => {
-        return String(todo[category]).includes(keyword)
+    if (startDate && endDate && keyword) {
+      newTodos = newTodos.filter((todo) => {
+        const titleIncludesKeyword = String(todo.title).includes(keyword)
+        const descriptionIncludesKeyword = String(todo.description).includes(keyword)
+
+        return titleIncludesKeyword || descriptionIncludesKeyword
       })
+
+      newTodos = newTodos.filter((todo) => {
+        const todoDeadline = new Date(todo.deadline)
+        const start = new Date(startDate)
+        const end = new Date(endDate)
+
+        return todoDeadline >= start && todoDeadline <= end
+      })
+    } else if (!startDate && !endDate && keyword) {
+      newTodos = newTodos.filter((todo) => {
+        const titleIncludesKeyword = String(todo.title).includes(keyword)
+        const descriptionIncludesKeyword = String(todo.description).includes(keyword)
+
+        return titleIncludesKeyword || descriptionIncludesKeyword
+      })
+    } else if (!startDate && endDate && !keyword) {
+      newTodos = newTodos.filter((todo) => {
+        return todo.deadline === endDate
+      })
+    } else {
+      newTodos = []
     }
+
+    // else if (startDate && endDate && !keyword) {
+    //   newTodos = newTodos.filter((todo) => {
+    //     const todoDeadline = new Date(todo.deadline)
+    //     const start = new Date(startDate)
+    //     const end = new Date(endDate)
+
+    //     return todoDeadline >= start && todoDeadline <= end
+    //   })
+    // }
 
     return Response.json(newTodos)
   }),
@@ -98,8 +133,14 @@ const handlers: HttpHandler[] = [
   http.put('/todos/:id', async ({ request, params }: { request: Request; params: any }) => {
     const body = await request.json()
     const { id } = params
+
+    const updatedTodo = {
+      ...body,
+      id: Number(id)
+    }
+
     todos = todos.map((todo) => {
-      return todo.id === id ? body : todo
+      return todo.id === Number(id) ? updatedTodo : todo
     })
 
     return Response.json(body)

@@ -17,8 +17,9 @@ export default {
     searchTodos() {
       const formattedDate = formatDate(this.date, 'YYYY-MM-DD')
       this.$store.dispatch('getTodos', {
-        keyword: formattedDate,
-        category: 'deadline'
+        keyword: '',
+        startDate: '',
+        endDate: formattedDate
       })
       console.log(formattedDate)
     }

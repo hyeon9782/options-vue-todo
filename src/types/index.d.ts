@@ -13,5 +13,6 @@ export type UpdateTodo = Todo
 
 export type SearchTodos = {
   keyword: string
-  category: string
+  startDate: string
+  endDate: string
 }
