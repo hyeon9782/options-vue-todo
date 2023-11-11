@@ -9,23 +9,23 @@
     locale="en-US"
   />
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue'
 import { formatDate } from '@/utils/utils'
-export default {
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  computed: {
-    value: {
-      get() {
-        return this.modelValue
-      },
-      set(value: string) {
-        console.log(formatDate(value, 'YYYY-MM-DD'))
 
-        this.$emit('update:modelValue', formatDate(value, 'YYYY-MM-DD'))
-      }
-    }
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true
   }
-}
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const value = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    emit('update:modelValue', formatDate(value, 'YYYY-MM-DD'))
+  }
+})
 </script>
-<style lang="css"></style>

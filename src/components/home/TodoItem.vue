@@ -59,7 +59,7 @@ const moveEdit = () => {
   router.push(`/edit/${props.todo.id}`)
 }
 </script>
-<style lang="css">
+<style lang="css" scoped>
 .todo-item {
   border-radius: 5px;
   box-shadow: rgb(224, 224, 224) 10px 10px 10px 0px;

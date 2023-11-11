@@ -5,23 +5,13 @@
   <NoData v-else-if="todos.length === 0 && $route.path !== '/search'" />
 </template>
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import TodoItem from '@/components/home/TodoItem.vue'
 import NoData from '@/components/statistics/NoData.vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
 const todos = computed(() => store.state.todos)
-
-const fetchTodos = () => {
-  store.dispatch('getTodos', {
-    keyword: '',
-    startDate: '',
-    endDate: ''
-  })
-}
-
-onMounted(fetchTodos)
 </script>
 <style lang="css" scoped>
 .todo-list {

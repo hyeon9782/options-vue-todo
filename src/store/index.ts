@@ -31,6 +31,8 @@ export const store = new Vuex.Store({
     // 할 일 목록 가져오기
     async getTodos({ commit }: { commit: Commit }, payload: SearchTodos) {
       try {
+        console.log('store')
+
         const todos = await getTodosAPI(payload)
         commit('updateState', {
           todos

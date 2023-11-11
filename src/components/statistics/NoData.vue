@@ -2,7 +2,7 @@
   <div class="no-data">Add a New Task</div>
 </template>
 
-<style lang="css">
+<style lang="css" scoped>
 .no-data {
   height: 400px;
   font-size: 1.5rem;

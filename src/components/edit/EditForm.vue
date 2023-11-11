@@ -1,5 +1,5 @@
 <template>
-  <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo()">
+  <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo($event)">
     <div class="deadline-box">
       <AppCalender v-model="deadline" />
     </div>
@@ -35,129 +35,233 @@
         <CategoryList :selectCategory="selectCategory" :selectedCategory="selectedCategory" />
       </div>
       <div class="button-box">
-        <button class="edit-button" @click.prevent="todoId ? updateTodo($event) : addTodo()">
+        <button class="edit-button" type="submit">
           {{ todoId ? 'Edit' : 'Create' }}
         </button>
-        <button v-if="todoId" class="delete-button" @click.prevent="deleteTodo">Delete</button>
+        <button v-if="todoId" class="delete-button" @click="deleteTodo">Delete</button>
       </div>
     </div>
   </form>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import { formatDate } from '@/utils/utils'
-import AppCalender from '@/components/edit/AppCalender.vue'
 import { getTodoAPI } from '@/api/todos'
+import AppCalender from '@/components/edit/AppCalender.vue'
 import CategoryList from '@/components/edit/CategoryList.vue'
 import StatusList from '@/components/search/StatusList.vue'
 
-export default defineComponent({
-  name: 'EditForm',
-  components: {
-    AppCalender,
-    CategoryList,
-    StatusList
-  },
-  props: {
-    todoId: {
-      type: Number
-    }
-  },
-  data() {
-    return {
-      title: '',
-      description: '',
-      deadline: formatDate(new Date().toDateString(), 'YYYY-MM-DD'),
-      selectedStatus: 'planned',
-      selectedCategory: 'Urgent'
-    }
-  },
-  methods: {
-    selectCategory(category: string) {
-      console.log('선택')
-      console.log(category)
+const props = defineProps({
+  todoId: Number
+})
 
-      this.selectedCategory = category
-    },
-    selectStatus(status: string) {
-      this.selectedStatus = status
-    },
-    addTodo() {
-      // 임시방편인데 더 좋은 방식은 없을까?
-      if (!this.title) {
-        alert('제목을 입력해주세요!')
-        return
-      }
-      ;(this as any).$store
-        .dispatch('createTodo', {
-          title: this.title,
-          description: this.description,
-          deadline: this.deadline,
-          status: this.selectedStatus,
-          category: this.selectedCategory
-        })
-        .then(() => {
-          this.clearForm()
-          this.$router.push('/')
-        })
-    },
-    updateTodo(e: Event) {
-      if (!this.title) {
-        alert('제목을 입력해주세요!')
-        return
-      }
-      ;(this as any).$store
-        .dispatch('updateTodo', {
-          id: this.todoId,
-          title: this.title,
-          description: this.description,
-          deadline: this.deadline,
-          status: this.selectedStatus,
-          category: this.selectedCategory
-        })
-        .then(() => {
-          this.clearForm()
-          this.$router.push('/')
-        })
-    },
-    clearForm() {
-      this.title = ''
-      this.description = ''
-      this.deadline = ''
-      this.selectedStatus = '선택'
-    },
-    deleteTodo() {
-      ;(this as any).$store
-        .dispatch('deleteTodo', this.todoId)
-        .then(() => {
-          this.clearForm()
-          this.$router.push('/')
-        })
-        .then(() => {
-          this.clearForm()
-          this.$router.push('/')
-        })
-    },
-    async getTodo() {
-      const id = this.$route.params.id
-      console.log(id)
-      const todo = await getTodoAPI(Number(id))
-      console.log(todo)
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
 
-      this.title = todo.title
-      this.description = todo.description
-      this.deadline = todo.deadline
-      this.selectedStatus = todo.status
-      this.selectedCategory = todo.category
-    }
-  },
-  mounted() {
-    if (this.todoId) {
-      this.getTodo()
-    }
+const title = ref('')
+const description = ref('')
+const deadline = ref(formatDate(new Date().toDateString(), 'YYYY-MM-DD'))
+const selectedStatus = ref('planned')
+const selectedCategory = ref('Urgent')
+
+const selectCategory = (category: string) => {
+  selectedCategory.value = category
+}
+
+const selectStatus = (status: string) => {
+  selectedStatus.value = status
+}
+
+const addTodo = (e: Event) => {
+  console.log('addTodo')
+
+  e.preventDefault()
+  if (!title.value) {
+    alert('제목을 입력해주세요!')
+    return
+  }
+  store
+    .dispatch('createTodo', {
+      title: title.value,
+      description: description.value,
+      deadline: deadline.value,
+      status: selectedStatus.value,
+      category: selectedCategory.value
+    })
+    .then(() => {
+      clearForm()
+      router.push('/')
+    })
+}
+
+const updateTodo = (e: Event) => {
+  e.preventDefault()
+  if (!title.value) {
+    alert('제목을 입력해주세요!')
+    return
+  }
+  store
+    .dispatch('updateTodo', {
+      id: props.todoId,
+      title: title.value,
+      description: description.value,
+      deadline: deadline.value,
+      status: selectedStatus.value,
+      category: selectedCategory.value
+    })
+    .then(() => {
+      clearForm()
+      router.push('/')
+    })
+}
+
+const clearForm = () => {
+  title.value = ''
+  description.value = ''
+  deadline.value = ''
+  selectedStatus.value = '선택'
+}
+
+const deleteTodo = () => {
+  store.dispatch('deleteTodo', props.todoId).then(() => {
+    clearForm()
+    router.push('/')
+  })
+}
+
+const getTodo = async () => {
+  const id = route.params.id
+  const todo = await getTodoAPI(Number(id))
+  title.value = todo.title
+  description.value = todo.description
+  deadline.value = todo.deadline
+  selectedStatus.value = todo.status
+  selectedCategory.value = todo.category
+}
+
+onMounted(() => {
+  if (props.todoId) {
+    getTodo()
   }
 })
+
+// import { defineComponent } from 'vue'
+// import { formatDate } from '@/utils/utils'
+// import AppCalender from '@/components/edit/AppCalender.vue'
+// import { getTodoAPI } from '@/api/todos'
+// import CategoryList from '@/components/edit/CategoryList.vue'
+// import StatusList from '@/components/search/StatusList.vue'
+
+// export default defineComponent({
+//   name: 'EditForm',
+//   components: {
+//     AppCalender,
+//     CategoryList,
+//     StatusList
+//   },
+//   props: {
+//     todoId: {
+//       type: Number
+//     }
+//   },
+//   data() {
+//     return {
+//       title: '',
+//       description: '',
+//       deadline: formatDate(new Date().toDateString(), 'YYYY-MM-DD'),
+//       selectedStatus: 'planned',
+//       selectedCategory: 'Urgent'
+//     }
+//   },
+//   methods: {
+//     selectCategory(category: string) {
+//       console.log('선택')
+//       console.log(category)
+
+//       this.selectedCategory = category
+//     },
+//     selectStatus(status: string) {
+//       this.selectedStatus = status
+//     },
+//     addTodo() {
+//       // 임시방편인데 더 좋은 방식은 없을까?
+//       if (!this.title) {
+//         alert('제목을 입력해주세요!')
+//         return
+//       }
+//       ;(this as any).$store
+//         .dispatch('createTodo', {
+//           title: this.title,
+//           description: this.description,
+//           deadline: this.deadline,
+//           status: this.selectedStatus,
+//           category: this.selectedCategory
+//         })
+//         .then(() => {
+//           this.clearForm()
+//           this.$router.push('/')
+//         })
+//     },
+//     updateTodo(e: Event) {
+//       if (!this.title) {
+//         alert('제목을 입력해주세요!')
+//         return
+//       }
+//       ;(this as any).$store
+//         .dispatch('updateTodo', {
+//           id: this.todoId,
+//           title: this.title,
+//           description: this.description,
+//           deadline: this.deadline,
+//           status: this.selectedStatus,
+//           category: this.selectedCategory
+//         })
+//         .then(() => {
+//           this.clearForm()
+//           this.$router.push('/')
+//         })
+//     },
+//     clearForm() {
+//       this.title = ''
+//       this.description = ''
+//       this.deadline = ''
+//       this.selectedStatus = '선택'
+//     },
+//     deleteTodo() {
+//       ;(this as any).$store
+//         .dispatch('deleteTodo', this.todoId)
+//         .then(() => {
+//           this.clearForm()
+//           this.$router.push('/')
+//         })
+//         .then(() => {
+//           this.clearForm()
+//           this.$router.push('/')
+//         })
+//     },
+//     async getTodo() {
+//       const id = this.$route.params.id
+//       console.log(id)
+//       const todo = await getTodoAPI(Number(id))
+//       console.log(todo)
+
+//       this.title = todo.title
+//       this.description = todo.description
+//       this.deadline = todo.deadline
+//       this.selectedStatus = todo.status
+//       this.selectedCategory = todo.category
+//     }
+//   },
+//   mounted() {
+//     if (this.todoId) {
+//       this.getTodo()
+//     }
+//   }
+// })
 </script>
 
 <style lang="css" scoped>

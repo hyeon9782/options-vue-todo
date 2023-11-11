@@ -23,9 +23,10 @@ const searchTodos = () => {
   store.dispatch('getTodos', {
     keyword: '',
     startDate: '',
-    endDate: formattedDate
+    endDate: formattedDate,
+    category: '',
+    status: ''
   })
-  console.log(formattedDate)
 }
 
 onMounted(searchTodos)
@@ -34,4 +35,3 @@ watchEffect(() => {
   searchTodos()
 })
 </script>
-<style lang=""></style>

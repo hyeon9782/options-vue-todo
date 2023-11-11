@@ -15,26 +15,21 @@
     />
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
 import CategoryTag from '@/components/edit/CategoryTag.vue'
-export default {
-  props: {
-    selectCategory: {
-      type: Function
-    },
-    selectedCategory: {
-      type: String
-    }
+const categories = ref(['Urgent', 'Office', 'Home', 'School', 'ETC', 'Work Out'])
+
+defineProps({
+  selectCategory: {
+    type: Function,
+    required: true
   },
-  data() {
-    return {
-      categories: ['Urgent', 'Office', 'Home', 'School', 'ETC', 'Work Out']
-    }
-  },
-  components: {
-    CategoryTag
+  selectedCategory: {
+    type: String,
+    required: true
   }
-}
+})
 </script>
 <style lang="css" scoped>
 .category-list {
