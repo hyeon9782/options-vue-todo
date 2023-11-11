@@ -3,34 +3,32 @@
     {{ status.charAt(0).toUpperCase() + status.slice(1) }}
   </div>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    status: {
-      type: String
-    }
-  },
-  methods: {
-    selectColor(status: string) {
-      switch (status) {
-        case 'planned':
-          return {
-            backgroundColor: 'rgb(253, 225, 113)'
-          }
-        case 'ongoing':
-          return {
-            backgroundColor: 'rgb(250, 169, 161)'
-          }
-        case 'complete':
-          return {
-            backgroundColor: 'rgb(141, 156, 248)'
-          }
-        default:
-          return {
-            backgroundColor: 'lightgray'
-          }
+<script setup lang="ts">
+defineProps({
+  status: {
+    type: String,
+    required: true
+  }
+})
+
+function selectColor(status: string) {
+  switch (status) {
+    case 'planned':
+      return {
+        backgroundColor: 'rgb(253, 225, 113)'
       }
-    }
+    case 'ongoing':
+      return {
+        backgroundColor: 'rgb(250, 169, 161)'
+      }
+    case 'complete':
+      return {
+        backgroundColor: 'rgb(141, 156, 248)'
+      }
+    default:
+      return {
+        backgroundColor: 'lightgray'
+      }
   }
 }
 </script>

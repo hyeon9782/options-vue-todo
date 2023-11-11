@@ -11,22 +11,21 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-export default {
-  data() {
-    return {
-      periodList: ['Today', '1 W', '1 M', '3 M']
-    }
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const periodList = ref(['Today', '1 W', '1 M', '3 M'])
+
+defineProps({
+  selectedPeriod: {
+    type: String,
+    required: true
   },
-  props: {
-    selectedPeriod: {
-      type: String
-    },
-    selectPeriod: {
-      type: Function
-    }
+  selectPeriod: {
+    type: Function,
+    required: true
   }
-}
+})
 </script>
 <style lang="css" scoped>
 .period-list {

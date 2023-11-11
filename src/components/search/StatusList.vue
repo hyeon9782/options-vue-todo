@@ -15,44 +15,22 @@
     />
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
 import StatusTag from '@/components/search/StatusTag.vue'
-export default {
-  components: {
-    StatusTag
+
+defineProps({
+  selectStatus: {
+    type: Function,
+    required: true
   },
-  props: {
-    selectStatus: {
-      type: Function
-    },
-    selectedStatus: {
-      type: String
-    }
-  },
-  data() {
-    return {
-      statusList: ['planned', 'ongoing', 'complete']
-    }
-  },
-  methods: {
-    selectColor(status: string) {
-      switch (status) {
-        case 'planned':
-          return {
-            backgroundColor: 'rgb(253, 225, 113)'
-          }
-        case 'ongoing':
-          return {
-            backgroundColor: 'rgb(250, 169, 161)'
-          }
-        case 'complete':
-          return {
-            backgroundColor: 'rgb(141, 156, 248)'
-          }
-      }
-    }
+  selectedStatus: {
+    type: String,
+    required: true
   }
-}
+})
+
+const statusList = ref<string[]>(['planned', 'ongoing', 'complete'])
 </script>
 <style lang="css" scoped>
 .status-list {

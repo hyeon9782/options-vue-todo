@@ -26,88 +26,80 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { debounce, formatDate } from '@/utils/utils'
-import { mapMutations } from 'vuex'
-import { defineComponent } from 'vue'
+import { useStore } from 'vuex'
+import { ref, watch } from 'vue'
 import SearchFilter from '@/components/search/SearchFilter.vue'
 import dayjs from 'dayjs'
 
-export default defineComponent({
-  name: 'SearchForm',
-  components: {
-    SearchFilter
-  },
-  data() {
-    return {
-      keyword: '',
-      date: new Date(),
-      range: {
-        start: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-        end: dayjs().format('YYYY-MM-DD')
-      },
-      showFilter: false,
-      selectedCategory: 'All',
-      selectedStatus: 'all',
-      selectedPeriod: '3 M'
-    }
-  },
-  methods: {
-    ...mapMutations(['updateState']),
-    selectPeriod(period: string) {
-      this.selectedPeriod = period
+const store = useStore()
 
-      switch (period) {
-        case 'Today':
-          this.setRange(dayjs(), dayjs())
-          break
-        case '1 W':
-          this.setRange(dayjs().subtract(1, 'week'), dayjs())
-          break
-        case '1 M':
-          this.setRange(dayjs().subtract(1, 'month'), dayjs())
-          break
-        case '3 M':
-          this.setRange(dayjs().subtract(3, 'month'), dayjs())
-          break
-      }
-      console.log(this.range)
-    },
-    setRange(start: dayjs.Dayjs, end: dayjs.Dayjs) {
-      this.range = {
-        start: start.format('YYYY-MM-DD'),
-        end: end.format('YYYY-MM-DD')
-      }
-    },
-    selectCategory(category: string) {
-      this.selectedCategory = category
-    },
-    selectStatus(status: string) {
-      this.selectedStatus = status
-    },
-    searchDebounce: debounce(function (this: any) {
-      this.searchTodos()
-    }, 1000),
-    searchTodos() {
-      this.$store.dispatch('getTodos', {
-        keyword: this.keyword,
-        startDate: this.keyword ? formatDate(this.range.start, 'YYYY-MM-DD') : '',
-        endDate: this.keyword ? formatDate(this.range.end, 'YYYY-MM-DD') : '',
-        category: this.selectedCategory === 'All' ? '' : this.selectedCategory,
-        status: this.selectedStatus === 'all' ? '' : this.selectedStatus
-      })
-    },
-    toggleFilter() {
-      this.showFilter = !this.showFilter
-    }
-  },
-  watch: {
-    keyword: 'searchDebounce',
-    range: 'searchDebounce',
-    selectedCategory: 'searchDebounce',
-    selectedStatus: 'searchDebounce'
-  }
+const keyword = ref('')
+const range = ref({
+  start: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+  end: dayjs().format('YYYY-MM-DD')
 })
+const showFilter = ref(false)
+const selectedCategory = ref('All')
+const selectedStatus = ref('all')
+const selectedPeriod = ref('3 M')
+
+const selectPeriod = (period: string) => {
+  selectedPeriod.value = period
+
+  switch (period) {
+    case 'Today':
+      setRange(dayjs(), dayjs())
+      break
+    case '1 W':
+      setRange(dayjs().subtract(1, 'week'), dayjs())
+      break
+    case '1 M':
+      setRange(dayjs().subtract(1, 'month'), dayjs())
+      break
+    case '3 M':
+      setRange(dayjs().subtract(3, 'month'), dayjs())
+      break
+  }
+  console.log(range.value)
+}
+
+const setRange = (start: dayjs.Dayjs, end: dayjs.Dayjs) => {
+  range.value = {
+    start: start.format('YYYY-MM-DD'),
+    end: end.format('YYYY-MM-DD')
+  }
+}
+
+const selectCategory = (category: string) => {
+  selectedCategory.value = category
+}
+
+const selectStatus = (status: string) => {
+  selectedStatus.value = status
+}
+
+const searchTodos = () => {
+  store.dispatch('getTodos', {
+    keyword: keyword.value,
+    startDate: keyword.value ? formatDate(range.value.start, 'YYYY-MM-DD') : '',
+    endDate: keyword.value ? formatDate(range.value.end, 'YYYY-MM-DD') : '',
+    category: selectedCategory.value === 'All' ? '' : selectedCategory.value,
+    status: selectedStatus.value === 'all' ? '' : selectedStatus.value
+  })
+}
+
+const searchDebounce = debounce(searchTodos, 1000)
+
+const toggleFilter = () => {
+  showFilter.value = !showFilter.value
+}
+
+watch(keyword, searchDebounce)
+watch(range, searchDebounce)
+watch(selectedCategory, searchDebounce)
+watch(selectedStatus, searchDebounce)
 </script>
 
 <style lang="css" scoped>

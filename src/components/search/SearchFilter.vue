@@ -31,57 +31,30 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { defineProps, defineEmits, computed } from 'vue'
 import StatusList from '@/components/search/StatusList.vue'
 import CategoryList from '@/components/edit/CategoryList.vue'
 import PeriodList from '@/components/search/PeriodList.vue'
-export default {
-  components: {
-    StatusList,
-    PeriodList,
-    CategoryList
-  },
-  props: {
-    selectedCategory: {
-      type: String
-    },
-    selectCategory: {
-      type: Function
-    },
-    selectedPeriod: {
-      type: String
-    },
-    selectPeriod: {
-      type: Function
-    },
-    selectedStatus: {
-      type: String
-    },
-    selectStatus: {
-      type: Function
-    },
-    range: {
-      type: Object
-    },
-    toggleFilter: {
-      type: Function
-    },
-    modelValue: {
-      type: Object
-    }
-  },
-  emits: ['update:modelValue'],
-  computed: {
-    value: {
-      get() {
-        return this.modelValue
-      },
-      set(value: any) {
-        this.$emit('update:modelValue', value)
-      }
-    }
-  }
-}
+
+const props = defineProps({
+  selectedCategory: String,
+  selectCategory: Function,
+  selectedPeriod: String,
+  selectPeriod: Function,
+  selectedStatus: String,
+  selectStatus: Function,
+  range: Object,
+  toggleFilter: Function,
+  modelValue: Object
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const value = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
 </script>
 <style lang="css" scoped>
 .filter-container {
