@@ -1,74 +1,160 @@
 import type { Todo } from '@/types'
 import { HttpHandler, http } from 'msw'
 
-let todos: Todo[] = [
+let todos: Todo[] = []
+
+function getRandomDate(startDate: string, endDate: string) {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+}
+
+function getRandomStatus() {
+  const statuses = ['planned', 'ongoing', 'complete']
+  const randomIndex = Math.floor(Math.random() * statuses.length)
+  return statuses[randomIndex]
+}
+
+function getRandomCategory() {
+  const categories = ['Urgent', 'Office', 'Home', 'ETC', 'Work Out', 'School']
+  const randomIndex = Math.floor(Math.random() * categories.length)
+  return categories[randomIndex]
+}
+
+function generateRandomTodo(
+  id: number,
+  title: string,
+  description: string,
+  startDate: string,
+  endDate: string
+) {
+  const deadline = getRandomDate(startDate, endDate).toISOString().split('T')[0]
+  const status = getRandomStatus()
+  const category = getRandomCategory()
+
+  return {
+    id,
+    title,
+    description,
+    deadline,
+    status,
+    category
+  }
+}
+
+// Generate 120 random todos
+for (let i = 0; i < 120; i++) {
+  const todo = generateRandomTodo(
+    i,
+    `Task ${i + 2}`,
+    `Description for Task ${i + 2}`,
+    '2023-08-01',
+    '2023-11-11'
+  )
+  todos.push(todo)
+}
+
+// Additional tasks
+todos.push(
   {
-    id: 0,
-    title: 'Vue 3 공부',
-    description: 'Vue 2와 Vue 3의 차이점을 생각하며 공부해보자.',
-    deadline: '2023-11-01',
-    status: 'planned',
-    category: 'Urgent'
-  },
-  {
-    id: 1,
-    title: 'Vuex 공부',
-    description: '효율적인 상태관리를 위해 전역 상태 관리 라이브러리를 공부해보자',
-    deadline: '2023-11-03',
-    status: 'planned',
-    category: 'Urgent'
-  },
-  {
-    id: 2,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-08',
-    status: 'complete',
-    category: 'Office'
-  },
-  {
-    id: 3,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 1',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-08',
+    id: 121,
+    title: '선풍기, 에어컨 정리',
+    description: '보관함 열쇠는 커뮤니티실에 있음',
+    deadline: '2022-11-05',
     status: 'complete',
     category: 'Home'
   },
   {
-    id: 4,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 2',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-08',
+    id: 122,
+    title: '보고서 작성',
+    description: '시사점을 중심으로',
+    deadline: '2022-11-06',
     status: 'planned',
-    category: 'School'
+    category: 'Office'
   },
   {
-    id: 5,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 3',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-10',
-    status: 'ongoing',
+    id: 123,
+    title: 'PT',
+    description: '12차',
+    deadline: '2022-11-08',
+    status: 'complete',
     category: 'Work Out'
   },
   {
-    id: 6,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-10',
+    id: 124,
+    title: 'PT',
+    description: '13회차',
+    deadline: '2022-11-09',
+    status: 'complete',
+    category: 'Work Out'
+  },
+  {
+    id: 125,
+    title: '벨로그글 쓰기',
+    description: '시리즈 3탄',
+    deadline: '2022-11-09',
+    status: 'ongoing',
+    category: 'School'
+  },
+  {
+    id: 126,
+    title: '데이트',
+    description: '2시 영화예약!!!',
+    deadline: '2022-11-10',
     status: 'complete',
     category: 'ETC'
   },
   {
-    id: 7,
-    title: 'ApexChart와 D3 라이브러리 공부를 빡세게 해보자 4',
-    description: 'ApexChart와 D3 라이브러리와 Vue 3의 라이플사이클을 생각하며 공부해보자.',
-    deadline: '2023-11-10',
+    id: 127,
+    title: '대학동기 모임',
+    description: '파자마 파티, 음식 하나씩 가져오기',
+    deadline: '2023-11-12',
+    status: 'planned',
+    category: 'Home'
+  },
+  {
+    id: 128,
+    title: '고등학교 모임',
+    description: '판교역',
+    deadline: '2023-11-12',
+    status: 'planned',
+    category: 'Home'
+  },
+  {
+    id: 129,
+    title: '민증 재발급',
+    description: '재발급 민증 언제 받을수 있는지 문의',
+    deadline: '2023-11-13',
     status: 'complete',
-    category: 'ETC'
+    category: 'Urgent'
+  },
+  {
+    id: 130,
+    title: '시험 공부',
+    description: '202 ~ 278쪽 복습',
+    deadline: '2023-11-14',
+    status: 'ongoing',
+    category: 'Urgent'
+  },
+  {
+    id: 131,
+    title: '가족모임',
+    description: '아버지 생일 기념',
+    deadline: '2023-11-14',
+    status: 'complete',
+    category: 'Home'
+  },
+  {
+    id: 132,
+    title: '회사 회식',
+    description: '회식 경비 받아두기',
+    deadline: '2023-11-15',
+    status: 'complete',
+    category: 'Office'
   }
-]
+)
 
-let idx = 100
+let idx = 300
 
 const handlers: HttpHandler[] = [
   // 할일 목록
@@ -137,6 +223,8 @@ const handlers: HttpHandler[] = [
     } else if (startDate && endDate && !keyword) {
       console.log('차트')
       newTodos = newTodos.filter(filterByDateRange)
+
+      console.log(newTodos.length)
     } else if (!startDate && !endDate && keyword) {
       console.log('검색어')
       newTodos = newTodos.filter(filterByKeyword)

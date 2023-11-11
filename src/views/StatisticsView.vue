@@ -96,12 +96,12 @@ const changePeriod = (period: 'week' | 'month' | 'year') => {
   }
 }
 
-const getStatusCount = (status: string) => {
-  return todos.value.filter((todo: Todo) => todo.status === status).length
+const getStatusCount = (status: string, todos: Todo[]) => {
+  return todos.filter((todo: Todo) => todo.status === status)
 }
 
 const getTodosCountByDate = (date: string) => {
-  return todos.value.filter((todo: Todo) => todo.deadline.substring(5) === date).length
+  return todos.value.filter((todo: Todo) => todo.deadline.substring(5) === date)
 }
 
 const getTodosCountByWeek = (date: string) => {
@@ -110,23 +110,21 @@ const getTodosCountByWeek = (date: string) => {
   return todos.value.filter((todo: Todo) => {
     const todoDeadline = new Date(todo.deadline)
     return todoDeadline >= sevenDaysAgo && todoDeadline <= new Date(date)
-  }).length
+  })
 }
 
 const getTodosCountByYear = (date: string) => {
-  return todos.value.filter((todo: Todo) => todo.deadline.includes(date)).length
+  return todos.value.filter((todo: Todo) => todo.deadline.includes(date))
 }
 
-const getTodosCountByStatus = (date: string) => {
-  return todos.value.filter(
-    (todo: Todo) => todo.deadline.substring(5) === date && todo.status === 'complete'
-  ).length
-}
+// const getTodosCountByStatus = (status: string) => {
+//   return todos.value.filter((todo: Todo) => todo.status === status)
+// }
 
 const donutData = computed(() => [
-  { name: 'Complete', value: getStatusCount('complete') },
-  { name: 'On Going', value: getStatusCount('ongoing') },
-  { name: 'Planned', value: getStatusCount('planned') }
+  { name: 'Complete', value: getStatusCount('complete', todos.value).length },
+  { name: 'On Going', value: getStatusCount('ongoing', todos.value).length },
+  { name: 'Planned', value: getStatusCount('planned', todos.value).length }
 ])
 
 const noData = computed(() => todos.value.length === 0)
@@ -136,7 +134,7 @@ const lineChartOptions = computed(() => ({
     id: 'line-chart'
   },
   xaxis: {
-    categories: referenceDate
+    categories: referenceDate.value
   },
   stroke: {
     show: true,
@@ -158,18 +156,26 @@ const lineChartSeries = computed(() => [
     name: 'Total Tasks',
     data: referenceDate.value.map((date) => {
       if (selectedPeriod.value === 'week') {
-        return getTodosCountByDate(date)
+        return getTodosCountByDate(date).length
       } else if (selectedPeriod.value === 'month') {
-        return getTodosCountByWeek(date)
+        return getTodosCountByWeek(date).length
       }
-
-      return getTodosCountByYear(date)
+      return getTodosCountByYear(date).length
     })
   },
   {
     name: 'Complete Tasks',
     data: referenceDate.value.map((date) => {
-      return getTodosCountByStatus(date)
+      let newTodos = []
+      if (selectedPeriod.value === 'week') {
+        newTodos = getTodosCountByDate(date)
+      } else if (selectedPeriod.value === 'month') {
+        newTodos = getTodosCountByWeek(date)
+      } else {
+        newTodos = getTodosCountByYear(date)
+      }
+
+      return getStatusCount('complete', newTodos).length
     })
   }
 ])

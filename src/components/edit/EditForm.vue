@@ -23,7 +23,6 @@
           v-model="description"
           class="description-input"
           placeholder="Description optional"
-          required
         />
       </div>
       <div>
@@ -77,8 +76,6 @@ const selectStatus = (status: string) => {
 }
 
 const addTodo = (e: Event) => {
-  console.log('addTodo')
-
   e.preventDefault()
   if (!title.value) {
     alert('제목을 입력해주세요!')
@@ -148,120 +145,6 @@ onMounted(() => {
     getTodo()
   }
 })
-
-// import { defineComponent } from 'vue'
-// import { formatDate } from '@/utils/utils'
-// import AppCalender from '@/components/edit/AppCalender.vue'
-// import { getTodoAPI } from '@/api/todos'
-// import CategoryList from '@/components/edit/CategoryList.vue'
-// import StatusList from '@/components/search/StatusList.vue'
-
-// export default defineComponent({
-//   name: 'EditForm',
-//   components: {
-//     AppCalender,
-//     CategoryList,
-//     StatusList
-//   },
-//   props: {
-//     todoId: {
-//       type: Number
-//     }
-//   },
-//   data() {
-//     return {
-//       title: '',
-//       description: '',
-//       deadline: formatDate(new Date().toDateString(), 'YYYY-MM-DD'),
-//       selectedStatus: 'planned',
-//       selectedCategory: 'Urgent'
-//     }
-//   },
-//   methods: {
-//     selectCategory(category: string) {
-//       console.log('선택')
-//       console.log(category)
-
-//       this.selectedCategory = category
-//     },
-//     selectStatus(status: string) {
-//       this.selectedStatus = status
-//     },
-//     addTodo() {
-//       // 임시방편인데 더 좋은 방식은 없을까?
-//       if (!this.title) {
-//         alert('제목을 입력해주세요!')
-//         return
-//       }
-//       ;(this as any).$store
-//         .dispatch('createTodo', {
-//           title: this.title,
-//           description: this.description,
-//           deadline: this.deadline,
-//           status: this.selectedStatus,
-//           category: this.selectedCategory
-//         })
-//         .then(() => {
-//           this.clearForm()
-//           this.$router.push('/')
-//         })
-//     },
-//     updateTodo(e: Event) {
-//       if (!this.title) {
-//         alert('제목을 입력해주세요!')
-//         return
-//       }
-//       ;(this as any).$store
-//         .dispatch('updateTodo', {
-//           id: this.todoId,
-//           title: this.title,
-//           description: this.description,
-//           deadline: this.deadline,
-//           status: this.selectedStatus,
-//           category: this.selectedCategory
-//         })
-//         .then(() => {
-//           this.clearForm()
-//           this.$router.push('/')
-//         })
-//     },
-//     clearForm() {
-//       this.title = ''
-//       this.description = ''
-//       this.deadline = ''
-//       this.selectedStatus = '선택'
-//     },
-//     deleteTodo() {
-//       ;(this as any).$store
-//         .dispatch('deleteTodo', this.todoId)
-//         .then(() => {
-//           this.clearForm()
-//           this.$router.push('/')
-//         })
-//         .then(() => {
-//           this.clearForm()
-//           this.$router.push('/')
-//         })
-//     },
-//     async getTodo() {
-//       const id = this.$route.params.id
-//       console.log(id)
-//       const todo = await getTodoAPI(Number(id))
-//       console.log(todo)
-
-//       this.title = todo.title
-//       this.description = todo.description
-//       this.deadline = todo.deadline
-//       this.selectedStatus = todo.status
-//       this.selectedCategory = todo.category
-//     }
-//   },
-//   mounted() {
-//     if (this.todoId) {
-//       this.getTodo()
-//     }
-//   }
-// })
 </script>
 
 <style lang="css" scoped>
