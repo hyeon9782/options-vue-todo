@@ -1,21 +1,21 @@
 <template lang="">
   <SubHeader>Dashboard</SubHeader>
   <main class="statistics-container">
-    <NoData v-if="noData" />
-    <div v-else class="chart-container">
-      <div class="period-box">
-        <div class="select-period">
-          <div
-            v-for="(period, index) in periodList"
-            :key="index"
-            class="period"
-            :class="{ active: selectedPeriod === period.value }"
-            @click="changePeriod(period.value, 'line')"
-          >
-            {{ period.name }}
-          </div>
+    <div class="period-box">
+      <div class="select-period">
+        <div
+          v-for="(period, index) in periodList"
+          :key="index"
+          class="period"
+          :class="{ active: selectedPeriod === period.value }"
+          @click="changePeriod(period.value, 'line')"
+        >
+          {{ period.name }}
         </div>
       </div>
+    </div>
+    <NoData v-if="noData" />
+    <div v-else class="chart-container">
       <div class="line-chart-box">
         <div class="chart-head">
           <div class="chart-title">Task Count Over Time</div>
@@ -117,13 +117,9 @@ const getTodosCountByYear = (date: string) => {
   return todos.value.filter((todo: Todo) => todo.deadline.includes(date))
 }
 
-// const getTodosCountByStatus = (status: string) => {
-//   return todos.value.filter((todo: Todo) => todo.status === status)
-// }
-
 const donutData = computed(() => [
   { name: 'Complete', value: getStatusCount('complete', todos.value).length },
-  { name: 'On Going', value: getStatusCount('ongoing', todos.value).length },
+  { name: 'Ongoing', value: getStatusCount('ongoing', todos.value).length },
   { name: 'Planned', value: getStatusCount('planned', todos.value).length }
 ])
 
@@ -184,12 +180,12 @@ const lineChartSeries = computed(() => [
 <style lang="css" scoped>
 .statistics-container {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 48.8px);
+  overflow: auto;
 }
 
 .chart-container {
   min-height: 100%;
-  overflow: auto;
 }
 
 .line-chart-box {
@@ -242,5 +238,10 @@ const lineChartSeries = computed(() => [
   display: flex;
   justify-content: flex-end;
   padding: 10px 20px;
+  background-color: rgb(250, 249, 249);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99;
 }
 </style>

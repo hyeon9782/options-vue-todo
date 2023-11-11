@@ -40,7 +40,7 @@ const selectColor = (status: string) => {
   switch (status) {
     case 'planned':
       return {
-        backgroundColor: 'rgb(141, 156, 248)'
+        backgroundColor: 'rgb(253, 225, 113)'
       }
     case 'ongoing':
       return {
@@ -48,7 +48,7 @@ const selectColor = (status: string) => {
       }
     case 'complete':
       return {
-        backgroundColor: 'rgb(253, 225, 113)'
+        backgroundColor: 'rgb(141, 156, 248)'
       }
     default:
       break

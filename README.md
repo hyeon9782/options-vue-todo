@@ -105,6 +105,5 @@ words.forEach((word) => {
   trie.insert(word)
 })
 
-// Display the Trie structure
 trie.display()
 ```
