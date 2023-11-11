@@ -8,17 +8,10 @@
   </main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SearchForm from '@/components/search/SearchForm.vue'
 import SubHeader from '@/components/layouts/SubHeader.vue'
 import TodoList from '@/components/home/TodoList.vue'
-export default {
-  components: {
-    SearchForm,
-    TodoList,
-    SubHeader
-  }
-}
 </script>
 <style lang="css" scoped>
 .search-container {

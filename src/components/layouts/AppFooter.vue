@@ -14,9 +14,7 @@
     </router-link>
   </footer>
 </template>
-<script lang="ts">
-export default {}
-</script>
+
 <style lang="css">
 .footer-container {
   position: absolute;

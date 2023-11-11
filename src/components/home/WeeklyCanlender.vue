@@ -1,6 +1,6 @@
 <template lang="">
   <VDatePicker
-    v-model="date"
+    v-model="value"
     mode="date"
     view="weekly"
     transparent
@@ -12,26 +12,20 @@
 </template>
 <script setup lang="ts">
 import { formatDate } from '@/utils/utils'
-import { ref, onMounted, watchEffect } from 'vue'
-import { useStore } from 'vuex'
+import { computed } from 'vue'
 
-const date = ref(new Date())
-const store = useStore()
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true
+  }
+})
+const emit = defineEmits(['update:modelValue'])
 
-const searchTodos = () => {
-  const formattedDate = formatDate(date.value.toDateString(), 'YYYY-MM-DD')
-  store.dispatch('getTodos', {
-    keyword: '',
-    startDate: '',
-    endDate: formattedDate,
-    category: '',
-    status: ''
-  })
-}
-
-onMounted(searchTodos)
-
-watchEffect(() => {
-  searchTodos()
+const value = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    emit('update:modelValue', formatDate(value, 'YYYY-MM-DD'))
+  }
 })
 </script>

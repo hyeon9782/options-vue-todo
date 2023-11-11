@@ -20,8 +20,7 @@
         <div class="chart-head">
           <div class="chart-title">Task Count Over Time</div>
         </div>
-        <!-- <BubbleChart :options="bubbleChartOptions" :series="bubbleChartSeries" /> -->
-        <LineChart :options="chartOptions" :series="chartSeries" />
+        <LineChart :options="lineChartOptions" :series="lineChartSeries" />
       </div>
       <div class="donut-chart-box">
         <div class="chart-head">
@@ -32,208 +31,151 @@
     </div>
   </main>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+import { onMounted } from 'vue'
+import dayjs from 'dayjs'
+
 import SubHeader from '@/components/layouts/SubHeader.vue'
 import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
 import NoData from '@/components/statistics/NoData.vue'
 import type { Todo } from '@/types'
-import dayjs from 'dayjs'
 
-export default defineComponent({
-  components: {
-    LineChart,
-    SubHeader,
-    DonutChart,
-    NoData
-  },
-  data() {
-    return {
-      referenceDate: Array.from({ length: 7 }, (_, i) =>
-        dayjs().subtract(i, 'day').format('MM-DD')
-      ),
-      periodList: [
-        { name: 'W', value: 'week' },
-        { name: 'M', value: 'month' },
-        { name: 'Y', value: 'year' }
-      ],
-      selectedPeriod: 'week',
-      startDate: dayjs().subtract(1, 'week').format('YYYY-MM-DD'),
-      endDate: dayjs().format('YYYY-MM-DD')
-    }
-  },
-  created() {
-    // todos 데이터 조회 (새로 고침시 데이터를 가져오기 위해)
-    this.fetchTodos()
-  },
-  computed: {
-    chartOptions() {
-      return {
-        chart: {
-          id: 'line-chart'
-        },
-        xaxis: {
-          categories: this.referenceDate
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          curve: 'smooth'
-        },
-        tooltip: {
-          y: {
-            formatter: function (count: number) {
-              return Number(count) + ' 개'
-            }
-          }
-        },
-        colors: ['#2E93fA', 'rgb(71, 91, 216)']
-      }
-    },
-    bubbleChartOptions() {
-      return {
-        chart: {
-          id: 'bubble-chart'
-        },
-        xaxis: {
-          categories: this.referenceDate
-        },
-        fill: {
-          opacity: 0.8
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          curve: 'smooth'
-        }
-      }
-    },
-    bubbleChartSeries() {
-      return [
-        {
-          name: 'Bubble 1',
-          data: this.generateData(15)
-        },
-        {
-          name: 'Bubble 2',
-          data: this.generateData(15)
-        },
-        {
-          name: 'Bubble 3',
-          data: this.generateData(15)
-        }
-      ]
-    },
-    chartSeries() {
-      return [
-        {
-          name: 'Total Tasks',
-          data: this.referenceDate.map((date) => {
-            if (this.selectedPeriod === 'week') {
-              return this.getTodosCountByDate(date, (this as any).$store.state.todos)
-            } else if (this.selectedPeriod === 'month') {
-              return this.getTodosCountByWeek(date, (this as any).$store.state.todos)
-            }
+const store = useStore()
+const todos = computed(() => store.state.todos)
 
-            return this.getTodosCountByYear(date, (this as any).$store.state.todos)
-          })
-        },
-        {
-          name: 'Complete Tasks',
-          data: this.referenceDate.map((date) => {
-            return this.getTodosCountByStatus(date, (this as any).$store.state.todos)
-          })
-        }
-      ]
-    },
-    donutData() {
-      return [
-        { name: 'Complete', value: this.getStatusCount('complete') },
-        { name: 'On Going', value: this.getStatusCount('ongoing') },
-        { name: 'Planned', value: this.getStatusCount('planned') }
-      ]
-    },
-    noData() {
-      return (this as any).$store.state.todos.length === 0
-    }
-  },
-  methods: {
-    getTodosCountByDate(date: string, todos: Todo[]): number {
-      return todos.filter((todo) => todo.deadline.substring(5) === date).length
-    },
-    getTodosCountByWeek(date: string, todos: Todo[]): number {
-      const sevenDaysAgo = new Date(date)
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-      return todos.filter((todo) => {
-        const todoDeadline = new Date(todo.deadline)
-        return todoDeadline >= sevenDaysAgo && todoDeadline <= new Date(date)
-      }).length
-    },
-    getTodosCountByYear(date: string, todos: Todo[]) {
-      return todos.filter((todo) => todo.deadline.includes(date)).length
-    },
-    getTodosCountByStatus(date: string, todos: Todo[]) {
-      return todos.filter(
-        (todo) => todo.deadline.substring(5) === date && todo.status === 'complete'
-      ).length
-    },
-    getStatusCount(status: string): number {
-      return (this as any).$store.state.todos.filter((todo: Todo) => todo.status === status).length
-    },
-    fetchTodos() {
-      ;(this as any).$store.dispatch('getTodos', {
-        keyword: '',
-        startDate: this.startDate,
-        endDate: this.endDate,
-        category: '',
-        status: ''
-      })
-    },
-    changePeriod(period: 'week' | 'month' | 'year') {
-      console.log('클릭')
+const periodList = ref([
+  { name: 'W', value: 'week' },
+  { name: 'M', value: 'month' },
+  { name: 'Y', value: 'year' }
+])
 
-      this.selectedPeriod = period
+const selectedPeriod = ref('week')
+const referenceDate = ref(
+  Array.from({ length: 7 }, (_, i) => dayjs().subtract(i, 'day').format('MM-DD'))
+)
+const startDate = ref(dayjs().subtract(1, 'week').format('YYYY-MM-DD'))
+const endDate = ref(dayjs().format('YYYY-MM-DD'))
 
-      this.startDate = dayjs().subtract(1, period).format('YYYY-MM-DD')
-      this.endDate = dayjs().format('YYYY-MM-DD')
+const fetchTodos = () => {
+  store.dispatch('getTodos', {
+    keyword: '',
+    startDate: startDate.value,
+    endDate: endDate.value,
+    category: '',
+    status: ''
+  })
+}
 
-      if (period === 'week') {
-        this.referenceDate = Array.from({ length: 7 }, (_, i) =>
-          dayjs().subtract(i, 'day').format('MM-DD')
-        )
-        console.log(this.referenceDate)
-      } else if (period === 'month') {
-        this.referenceDate = Array.from({ length: 4 }, (_, i) =>
-          dayjs().subtract(i, 'week').format('YYYY-MM-DD')
-        )
-        console.log(this.referenceDate)
-      } else {
-        this.referenceDate = Array.from({ length: 12 }, (_, i) =>
-          dayjs().subtract(i, 'month').format('YYYY-MM')
-        )
-        console.log(this.referenceDate)
-      }
-    },
-    generateData(count: number) {
-      const seriesData = []
-      const baseTime = new Date().getTime()
-      for (let i = 0; i < count; i++) {
-        const x = baseTime + i * 1000 * 3600 * 24
-        const y = Math.floor(Math.random() * 90) + 10
-        const z = Math.floor(Math.random() * 20) + 1
-        seriesData.push([x, y, z])
-      }
-      return seriesData
-    }
-  },
-  watch: {
-    selectedPeriod: 'fetchTodos'
-  }
+// 데이터 패칭
+onMounted(fetchTodos)
+watchEffect(() => {
+  fetchTodos()
 })
+
+const changePeriod = (period: 'week' | 'month' | 'year') => {
+  selectedPeriod.value = period
+
+  startDate.value = dayjs().subtract(1, period).format('YYYY-MM-DD')
+  endDate.value = dayjs().format('YYYY-MM-DD')
+
+  if (period === 'week') {
+    referenceDate.value = Array.from({ length: 7 }, (_, i) =>
+      dayjs().subtract(i, 'day').format('MM-DD')
+    )
+  } else if (period === 'month') {
+    referenceDate.value = Array.from({ length: 4 }, (_, i) =>
+      dayjs().subtract(i, 'week').format('YYYY-MM-DD')
+    )
+  } else {
+    referenceDate.value = Array.from({ length: 12 }, (_, i) =>
+      dayjs().subtract(i, 'month').format('YYYY-MM')
+    )
+  }
+}
+
+const getStatusCount = (status: string) => {
+  return todos.value.filter((todo: Todo) => todo.status === status).length
+}
+
+const getTodosCountByDate = (date: string) => {
+  return todos.value.filter((todo: Todo) => todo.deadline.substring(5) === date).length
+}
+
+const getTodosCountByWeek = (date: string) => {
+  const sevenDaysAgo = new Date(date)
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+  return todos.value.filter((todo: Todo) => {
+    const todoDeadline = new Date(todo.deadline)
+    return todoDeadline >= sevenDaysAgo && todoDeadline <= new Date(date)
+  }).length
+}
+
+const getTodosCountByYear = (date: string) => {
+  return todos.value.filter((todo: Todo) => todo.deadline.includes(date)).length
+}
+
+const getTodosCountByStatus = (date: string) => {
+  return todos.value.filter(
+    (todo: Todo) => todo.deadline.substring(5) === date && todo.status === 'complete'
+  ).length
+}
+
+const donutData = computed(() => [
+  { name: 'Complete', value: getStatusCount('complete') },
+  { name: 'On Going', value: getStatusCount('ongoing') },
+  { name: 'Planned', value: getStatusCount('planned') }
+])
+
+const noData = computed(() => todos.value.length === 0)
+
+const lineChartOptions = computed(() => ({
+  chart: {
+    id: 'line-chart'
+  },
+  xaxis: {
+    categories: referenceDate
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    curve: 'smooth'
+  },
+  tooltip: {
+    y: {
+      formatter: function (count: number) {
+        return Number(count) + ' 개'
+      }
+    }
+  },
+  colors: ['#2E93fA', 'rgb(71, 91, 216)']
+}))
+
+const lineChartSeries = computed(() => [
+  {
+    name: 'Total Tasks',
+    data: referenceDate.value.map((date) => {
+      if (selectedPeriod.value === 'week') {
+        return getTodosCountByDate(date)
+      } else if (selectedPeriod.value === 'month') {
+        return getTodosCountByWeek(date)
+      }
+
+      return getTodosCountByYear(date)
+    })
+  },
+  {
+    name: 'Complete Tasks',
+    data: referenceDate.value.map((date) => {
+      return getTodosCountByStatus(date)
+    })
+  }
+])
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .statistics-container {
   width: 100%;
   height: 100%;
