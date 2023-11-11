@@ -24,51 +24,40 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
 import CategoryTag from '@/components/edit/CategoryTag.vue'
-export default defineComponent({
-  name: 'TodoItem',
-  components: {
-    CategoryTag
-  },
-  props: {
-    todo: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isEdit: false
-    }
-  },
-  methods: {
-    selectColor(status: string) {
-      console.log(status)
-
-      switch (status) {
-        case 'planned':
-          return {
-            backgroundColor: 'rgb(141, 156, 248)'
-          }
-        case 'ongoing':
-          return {
-            backgroundColor: 'rgb(250, 169, 161)'
-          }
-        case 'complete':
-          return {
-            backgroundColor: 'rgb(253, 225, 113)'
-          }
-        default:
-          break
-      }
-    },
-    moveEdit() {
-      this.$router.push(`/edit/${this.todo.id}`)
-    }
+const props = defineProps({
+  todo: {
+    type: Object,
+    required: true
   }
 })
+
+const router = useRouter()
+
+const selectColor = (status: string) => {
+  switch (status) {
+    case 'planned':
+      return {
+        backgroundColor: 'rgb(141, 156, 248)'
+      }
+    case 'ongoing':
+      return {
+        backgroundColor: 'rgb(250, 169, 161)'
+      }
+    case 'complete':
+      return {
+        backgroundColor: 'rgb(253, 225, 113)'
+      }
+    default:
+      break
+  }
+}
+
+const moveEdit = () => {
+  router.push(`/edit/${props.todo.id}`)
+}
 </script>
 <style lang="css">
 .todo-item {

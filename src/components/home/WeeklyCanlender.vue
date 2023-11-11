@@ -10,32 +10,28 @@
     color="indigo"
   />
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { formatDate } from '@/utils/utils'
-export default {
-  data() {
-    return {
-      date: new Date()
-    }
-  },
-  mounted() {
-    this.searchTodos()
-  },
-  methods: {
-    // 날짜를 선택했을 때 선택한 날짜가 포함된 모든 할 일을 가져온다
-    searchTodos() {
-      const formattedDate = formatDate(this.date.toDateString(), 'YYYY-MM-DD')
-      ;(this as any).$store.dispatch('getTodos', {
-        keyword: '',
-        startDate: '',
-        endDate: formattedDate
-      })
-      console.log(formattedDate)
-    }
-  },
-  watch: {
-    date: 'searchTodos'
-  }
+import { ref, onMounted, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+
+const date = ref(new Date())
+const store = useStore()
+
+const searchTodos = () => {
+  const formattedDate = formatDate(date.value.toDateString(), 'YYYY-MM-DD')
+  store.dispatch('getTodos', {
+    keyword: '',
+    startDate: '',
+    endDate: formattedDate
+  })
+  console.log(formattedDate)
 }
+
+onMounted(searchTodos)
+
+watchEffect(() => {
+  searchTodos()
+})
 </script>
 <style lang=""></style>

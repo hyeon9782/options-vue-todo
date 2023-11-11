@@ -32,7 +32,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
+import { defineEmits, computed } from 'vue'
 import StatusList from '@/components/search/StatusList.vue'
 import CategoryList from '@/components/edit/CategoryList.vue'
 import PeriodList from '@/components/search/PeriodList.vue'

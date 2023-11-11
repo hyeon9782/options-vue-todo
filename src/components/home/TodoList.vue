@@ -4,35 +4,24 @@
   </div>
   <NoData v-else-if="todos.length === 0 && $route.path !== '/search'" />
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed, onMounted } from 'vue'
 import TodoItem from '@/components/home/TodoItem.vue'
 import NoData from '@/components/statistics/NoData.vue'
-export default defineComponent({
-  name: 'TodoList',
-  components: {
-    TodoItem,
-    NoData
-  },
-  created() {
-    // 할 일 목록 조회하기
-    this.fetchTodos()
-  },
-  methods: {
-    fetchTodos() {
-      ;(this as any).$store.dispatch('getTodos', {
-        keyword: '',
-        startDate: '',
-        endDate: ''
-      })
-    }
-  },
-  computed: {
-    todos() {
-      return (this as any).$store.state.todos
-    }
-  }
-})
+import { useStore } from 'vuex'
+
+const store = useStore()
+const todos = computed(() => store.state.todos)
+
+const fetchTodos = () => {
+  store.dispatch('getTodos', {
+    keyword: '',
+    startDate: '',
+    endDate: ''
+  })
+}
+
+onMounted(fetchTodos)
 </script>
 <style lang="css" scoped>
 .todo-list {
