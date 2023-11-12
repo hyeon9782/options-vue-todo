@@ -156,7 +156,7 @@ onMounted(() => {
 }
 
 .deadline-box {
-  height: 30%;
+  height: 20%;
 }
 
 .input-box {
@@ -167,7 +167,7 @@ onMounted(() => {
   background-color: rgb(239, 240, 251);
   box-shadow: rgb(224, 224, 224) 0px 3px 14px 10px;
   padding: 30px 30px;
-  height: 70%;
+  height: 80%;
 }
 
 .title-input {
