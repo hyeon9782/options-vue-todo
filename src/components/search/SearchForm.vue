@@ -11,17 +11,19 @@
       <div class="setting-box" @click.prevent="toggleFilter">
         <font-awesome-icon :icon="['fas', 'sliders']" class="setting-icon" />
       </div>
-      <SearchFilter
-        v-show="showFilter"
-        :selectedCategory="selectedCategory"
-        :selectCategory="selectCategory"
-        :selectedPeriod="selectedPeriod"
-        :selectPeriod="selectPeriod"
-        :selectedStatus="selectedStatus"
-        :selectStatus="selectStatus"
-        :toggleFilter="toggleFilter"
-        v-model="range"
-      />
+      <Transition name="fade" mode="out-in">
+        <SearchFilter
+          v-show="showFilter"
+          :selectedCategory="selectedCategory"
+          :selectCategory="selectCategory"
+          :selectedPeriod="selectedPeriod"
+          :selectPeriod="selectPeriod"
+          :selectedStatus="selectedStatus"
+          :selectStatus="selectStatus"
+          :toggleFilter="toggleFilter"
+          v-model="range"
+        />
+      </Transition>
     </form>
   </div>
 </template>
@@ -136,5 +138,16 @@ watch(selectedStatus, searchDebounce)
 .setting-icon {
   font-size: large;
   color: rgb(44, 62, 80);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.8s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  transform: translateY(434px);
+  /* opacity: 0; */
 }
 </style>

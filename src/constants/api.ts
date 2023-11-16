@@ -6,5 +6,6 @@ export const HTTP_METHOD = {
 }
 
 export const COMMON_HEADERS = {
-  'Content-Type': 'application/json; charset=utf-8'
+  'Content-Type': 'application/json; charset=utf-8',
+  'Accept-Encoding': 'gzip'
 }

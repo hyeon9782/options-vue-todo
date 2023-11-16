@@ -235,14 +235,22 @@ const handlers: HttpHandler[] = [
       newTodos = []
     }
 
-    return Response.json(newTodos)
+    return Response.json(newTodos, {
+      headers: {
+        'Content-Encoding': 'gzip'
+      }
+    })
   }),
 
   // 할일 조회
   http.get('/todos/:id', ({ params }: { params: any }) => {
     const { id } = params
     const todo = todos.find((todo) => todo.id === Number(id))
-    return Response.json(todo)
+    return Response.json(todo, {
+      headers: {
+        'Content-Encoding': 'gzip'
+      }
+    })
   }),
 
   // 할일 추가
@@ -255,7 +263,11 @@ const handlers: HttpHandler[] = [
 
     console.log(todos)
 
-    return Response.json(body)
+    return Response.json(body, {
+      headers: {
+        'Content-Encoding': 'gzip'
+      }
+    })
   }),
 
   // 할일 수정
@@ -272,14 +284,22 @@ const handlers: HttpHandler[] = [
       return todo.id === Number(id) ? updatedTodo : todo
     })
 
-    return Response.json(body)
+    return Response.json(body, {
+      headers: {
+        'Content-Encoding': 'gzip'
+      }
+    })
   }),
 
   // 할일 삭제
   http.delete('/todos/:id', ({ params }) => {
     const { id } = params
     todos = todos.filter((todo) => todo.id !== Number(id))
-    return Response.json(todos)
+    return Response.json(todos, {
+      headers: {
+        'Content-Encoding': 'gzip'
+      }
+    })
   })
 ]
 
