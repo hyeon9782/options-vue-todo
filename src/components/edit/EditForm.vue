@@ -46,7 +46,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from 'vuex'
+
+import { useTodosStore } from '@/stores/todos'
 import { formatDate } from '@/utils/utils'
 import { getTodoAPI } from '@/api/todos'
 import AppCalender from '@/components/edit/AppCalender.vue'
@@ -57,7 +58,8 @@ const props = defineProps({
   todoId: Number
 })
 
-const store = useStore()
+const todosStore = useTodosStore()
+
 const router = useRouter()
 const route = useRoute()
 
@@ -81,8 +83,8 @@ const addTodo = (e: Event) => {
     alert('제목을 입력해주세요!')
     return
   }
-  store
-    .dispatch('createTodo', {
+  todosStore
+    .createTodo({
       title: title.value,
       description: description.value,
       deadline: deadline.value,
@@ -101,8 +103,9 @@ const updateTodo = (e: Event) => {
     alert('제목을 입력해주세요!')
     return
   }
-  store
-    .dispatch('updateTodo', {
+
+  todosStore
+    .updateTodo({
       id: props.todoId,
       title: title.value,
       description: description.value,
@@ -124,7 +127,7 @@ const clearForm = () => {
 }
 
 const deleteTodo = () => {
-  store.dispatch('deleteTodo', props.todoId).then(() => {
+  todosStore.deleteTodo(props.todoId).then(() => {
     clearForm()
     router.push('/')
   })

@@ -1,11 +1,10 @@
 export type Todo = {
-  id: number
+  id?: number
   title: string
   description: string
   deadline: string
   status: string
   category: string
-  [key: string]: string | number
 }
 
 export type NewTodo = Omit<Todo, 'id'>

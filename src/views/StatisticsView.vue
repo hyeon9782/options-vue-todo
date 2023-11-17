@@ -33,7 +33,8 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
-import { useStore } from 'vuex'
+
+import { useTodosStore } from '@/stores/todos'
 import { onMounted } from 'vue'
 import dayjs from 'dayjs'
 
@@ -42,9 +43,9 @@ import LineChart from '@/components/statistics/LineChart.vue'
 import DonutChart from '@/components/statistics/DonutChart.vue'
 import NoData from '@/components/statistics/NoData.vue'
 import type { Todo } from '@/types'
+const todosStore = useTodosStore()
 
-const store = useStore()
-const todos = computed(() => store.state.todos)
+const todos = computed(() => todosStore.todos)
 
 const periodList = ref([
   { name: 'W', value: 'week' },
@@ -60,7 +61,7 @@ const startDate = ref(dayjs().subtract(1, 'week').format('YYYY-MM-DD'))
 const endDate = ref(dayjs().format('YYYY-MM-DD'))
 
 const fetchTodos = () => {
-  store.dispatch('getTodos', {
+  todosStore.getTodos({
     keyword: '',
     startDate: startDate.value,
     endDate: endDate.value,
