@@ -17,6 +17,7 @@ export default defineConfig({
     globals: true,
     // happy-dom으로 DOM 시뮬레이션
     // (피어 의존성으로 happy-dom을 설치해야 함)
-    environment: 'happy-dom'
+    environment: 'happy-dom',
+    setupFiles: ['./src/vitest-setup.ts']
   }
 })

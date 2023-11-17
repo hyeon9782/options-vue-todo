@@ -14,8 +14,13 @@ import { createPinia } from 'pinia'
 library.add(fas)
 
 async function deferRender() {
-  const { worker } = await import('@/mocks/browser')
-  worker.start()
+  if (typeof window === 'undefined') {
+    const { server } = await import('@/mocks/server')
+    server.listen()
+  } else {
+    const { worker } = await import('@/mocks/browser')
+    worker.start()
+  }
 }
 
 deferRender().then(() => {

@@ -4,7 +4,7 @@ import type { NewTodo, SearchTodos, UpdateTodo } from '@/types'
 // 할 일 목록 가져오기
 async function getTodosAPI({ keyword, startDate, endDate, category, status }: SearchTodos) {
   return await fetch(
-    `/todos?keyword=${keyword}&startDate=${startDate}&endDate=${endDate}&category=${category}&status=${status}`,
+    `http://localhost:5173/todos?keyword=${keyword}&startDate=${startDate}&endDate=${endDate}&category=${category}&status=${status}`,
     {
       method: HTTP_METHOD.GET,
       headers: {
@@ -16,7 +16,7 @@ async function getTodosAPI({ keyword, startDate, endDate, category, status }: Se
 
 // 할 일 가져오기
 async function getTodoAPI(id: number) {
-  return await fetch(`/todos/${id}`, {
+  return await fetch(`http://localhost:5173/todos/${id}`, {
     method: HTTP_METHOD.GET,
     headers: {
       ...COMMON_HEADERS
@@ -26,7 +26,7 @@ async function getTodoAPI(id: number) {
 
 // 할 일 생성하기
 async function createTodoAPI(todo: NewTodo) {
-  return await fetch('/todos', {
+  return await fetch('http://localhost:5173/todos', {
     method: HTTP_METHOD.POST,
     body: JSON.stringify(todo),
     headers: {
@@ -37,7 +37,7 @@ async function createTodoAPI(todo: NewTodo) {
 
 // 할 일 수정하기
 async function updateTodoAPI(todo: UpdateTodo) {
-  return await fetch(`/todos/${todo.id}`, {
+  return await fetch(`http://localhost:5173/todos/${todo.id}`, {
     method: HTTP_METHOD.PUT,
     body: JSON.stringify(todo),
     headers: {
@@ -48,7 +48,7 @@ async function updateTodoAPI(todo: UpdateTodo) {
 
 // 할 일 삭제하기
 async function deleteTodoAPI(id: number) {
-  return await fetch(`/todos/${id}`, {
+  return await fetch(`http://localhost:5173/todos/${id}`, {
     method: HTTP_METHOD.DELETE,
     headers: {
       ...COMMON_HEADERS

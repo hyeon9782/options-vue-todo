@@ -158,7 +158,7 @@ let idx = 300
 
 const handlers: HttpHandler[] = [
   // 할일 목록
-  http.get('/todos', ({ request }) => {
+  http.get('http://localhost:5173/todos', ({ request }) => {
     const url = new URL(request.url)
     const keyword = url.searchParams.get('keyword') || ''
     const startDate = url.searchParams.get('startDate') || ''
@@ -243,7 +243,7 @@ const handlers: HttpHandler[] = [
   }),
 
   // 할일 조회
-  http.get('/todos/:id', ({ params }: { params: any }) => {
+  http.get('http://localhost:5173/todos/:id', ({ params }: { params: any }) => {
     const { id } = params
     const todo = todos.find((todo) => todo.id === Number(id))
     return Response.json(todo, {
@@ -254,7 +254,7 @@ const handlers: HttpHandler[] = [
   }),
 
   // 할일 추가
-  http.post('/todos', async ({ request }: { request: Request }) => {
+  http.post('http://localhost:5173/todos', async ({ request }: { request: Request }) => {
     const body = await request.json()
     todos.push({
       id: idx++,
@@ -271,28 +271,31 @@ const handlers: HttpHandler[] = [
   }),
 
   // 할일 수정
-  http.put('/todos/:id', async ({ request, params }: { request: Request; params: any }) => {
-    const body = await request.json()
-    const { id } = params
+  http.put(
+    'http://localhost:5173/todos/:id',
+    async ({ request, params }: { request: Request; params: any }) => {
+      const body = await request.json()
+      const { id } = params
 
-    const updatedTodo = {
-      ...body,
-      id: Number(id)
-    }
-
-    todos = todos.map((todo) => {
-      return todo.id === Number(id) ? updatedTodo : todo
-    })
-
-    return Response.json(body, {
-      headers: {
-        'Content-Encoding': 'gzip'
+      const updatedTodo = {
+        ...body,
+        id: Number(id)
       }
-    })
-  }),
+
+      todos = todos.map((todo) => {
+        return todo.id === Number(id) ? updatedTodo : todo
+      })
+
+      return Response.json(body, {
+        headers: {
+          'Content-Encoding': 'gzip'
+        }
+      })
+    }
+  ),
 
   // 할일 삭제
-  http.delete('/todos/:id', ({ params }) => {
+  http.delete('http://localhost:5173/todos/:id', ({ params }) => {
     const { id } = params
     todos = todos.filter((todo) => todo.id !== Number(id))
     return Response.json(todos, {
