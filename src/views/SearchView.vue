@@ -12,6 +12,11 @@
 import SearchForm from '@/components/search/SearchForm.vue'
 import SubHeader from '@/components/layouts/SubHeader.vue'
 import TodoList from '@/components/home/TodoList.vue'
+import { onUnmounted } from 'vue'
+import { useTodos } from '@/composables/todos'
+const { clearTodos } = useTodos()
+
+onUnmounted(clearTodos)
 </script>
 <style lang="css" scoped>
 .search-container {

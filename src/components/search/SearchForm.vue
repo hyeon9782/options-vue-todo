@@ -30,12 +30,15 @@
 
 <script setup lang="ts">
 import { debounce, formatDate } from '@/utils/utils'
-import { useTodosStore } from '@/stores/todos'
+// import { useTodosStore } from '@/stores/todos'
 import { ref, watch } from 'vue'
 import SearchFilter from '@/components/search/SearchFilter.vue'
 import dayjs from 'dayjs'
+import { useTodos } from '@/composables/todos'
 
-const todosStore = useTodosStore()
+// const todosStore = useTodosStore()
+
+const { getTodos } = useTodos()
 
 const keyword = ref('')
 const range = ref({
@@ -83,7 +86,7 @@ const selectStatus = (status: string) => {
 }
 
 const searchTodos = () => {
-  todosStore.getTodos({
+  getTodos({
     keyword: keyword.value,
     startDate: keyword.value ? formatDate(range.value.start, 'YYYY-MM-DD') : '',
     endDate: keyword.value ? formatDate(range.value.end, 'YYYY-MM-DD') : '',

@@ -12,14 +12,14 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { formatDate } from '@/utils/utils'
 import TodoList from '@/components/home/TodoList.vue'
 import WeeklyCanlender from '@/components/home/WeeklyCanlender.vue'
-import { useTodosStore } from '@/stores/todos'
+import { useTodos } from '@/composables/todos'
 
-const todosStore = useTodosStore()
 const date = ref(new Date().toDateString())
+const { getTodos, clearTodos } = useTodos()
 const searchTodos = () => {
   const formattedDate = formatDate(date.value, 'YYYY-MM-DD')
 
-  todosStore.getTodos({
+  getTodos({
     keyword: '',
     startDate: '',
     endDate: formattedDate,
@@ -32,7 +32,7 @@ const searchTodos = () => {
 watch(date, searchTodos)
 onMounted(searchTodos)
 
-onUnmounted(todosStore.clearTodos)
+onUnmounted(clearTodos)
 </script>
 
 <style lang="css" scoped>
