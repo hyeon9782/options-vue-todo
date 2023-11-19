@@ -1,5 +1,5 @@
 <template>
-  <form class="edit-form" @submit.prevent="todoId ? updateTodo($event) : addTodo($event)">
+  <form class="edit-form" @submit.prevent="todoId ? updateTodoClick($event) : addTodo($event)">
     <div class="deadline-box">
       <AppCalender v-model="deadline" />
     </div>
@@ -37,7 +37,7 @@
         <button class="edit-button" type="submit">
           {{ todoId ? 'Edit' : 'Create' }}
         </button>
-        <button v-if="todoId" class="delete-button" @click="deleteTodo">Delete</button>
+        <button v-if="todoId" class="delete-button" @click="deleteTodoClick">Delete</button>
       </div>
     </div>
   </form>
@@ -47,18 +47,21 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-import { useTodosStore } from '@/stores/todos'
+// import { useTodosStore } from '@/stores/todos'
 import { formatDate } from '@/utils/utils'
 import { getTodoAPI } from '@/api/todos'
 import AppCalender from '@/components/edit/AppCalender.vue'
 import CategoryList from '@/components/edit/CategoryList.vue'
 import StatusList from '@/components/search/StatusList.vue'
+import { useTodos } from '@/composables/todos'
 
 const props = defineProps({
   todoId: Number
 })
 
-const todosStore = useTodosStore()
+const { createTodo, updateTodo, deleteTodo } = useTodos()
+
+// const todosStore = useTodosStore()
 
 const router = useRouter()
 const route = useRoute()
@@ -83,40 +86,36 @@ const addTodo = (e: Event) => {
     alert('제목을 입력해주세요!')
     return
   }
-  todosStore
-    .createTodo({
-      title: title.value,
-      description: description.value,
-      deadline: deadline.value,
-      status: selectedStatus.value,
-      category: selectedCategory.value
-    })
-    .then(() => {
-      clearForm()
-      router.push('/')
-    })
+  createTodo({
+    title: title.value,
+    description: description.value,
+    deadline: deadline.value,
+    status: selectedStatus.value,
+    category: selectedCategory.value
+  }).then(() => {
+    clearForm()
+    router.push('/')
+  })
 }
 
-const updateTodo = (e: Event) => {
+const updateTodoClick = (e: Event) => {
   e.preventDefault()
   if (!title.value) {
     alert('제목을 입력해주세요!')
     return
   }
 
-  todosStore
-    .updateTodo({
-      id: props.todoId,
-      title: title.value,
-      description: description.value,
-      deadline: deadline.value,
-      status: selectedStatus.value,
-      category: selectedCategory.value
-    })
-    .then(() => {
-      clearForm()
-      router.push('/')
-    })
+  updateTodo({
+    id: props.todoId,
+    title: title.value,
+    description: description.value,
+    deadline: deadline.value,
+    status: selectedStatus.value,
+    category: selectedCategory.value
+  }).then(() => {
+    clearForm()
+    router.push('/')
+  })
 }
 
 const clearForm = () => {
@@ -126,8 +125,8 @@ const clearForm = () => {
   selectedStatus.value = '선택'
 }
 
-const deleteTodo = () => {
-  todosStore.deleteTodo(props.todoId).then(() => {
+const deleteTodoClick = () => {
+  deleteTodo(props.todoId).then(() => {
     clearForm()
     router.push('/')
   })
